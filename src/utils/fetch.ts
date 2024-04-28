@@ -10,13 +10,13 @@ const config = (method = 'GET') => ({
 
 interface Fetch {
   get: () => Promise<Response>
-  post: () => Promise<Response>
+  post: (body: any) => Promise<Response>
 }
 
-export const $fetch = (url: string, body: any): Fetch => {
+export const $fetch = (url: string): Fetch => {
   return {
-    get: () => fetch(url, body),
-    post: () =>
+    get: () => fetch(url),
+    post: (body: any) =>
       fetch(url, {
         ...config('POST'),
         body: JSON.stringify(body),

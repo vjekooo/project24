@@ -1,9 +1,4 @@
-import {
-  createEffect,
-  createResource,
-  createSignal,
-  useContext,
-} from 'solid-js'
+import { useContext } from 'solid-js'
 import { useForm } from '../../utils/validation'
 import { createStore } from 'solid-js/store'
 import { AppContext } from '../../index'
@@ -23,15 +18,14 @@ export const LoginForm = () => {
     password: '',
   })
 
-  const fn = (form) => {
+  const fn = async (form) => {
     // form.submit()
-    $fetch(url, fields)
-      .post()
-      .then((data) => {
-        localStorage.setItem('token', data.token)
-        setState({ user: { token: data.token } })
-      })
-    console.log('Done')
+    const data = await $fetch(url).post(form)
+    const token = data?.token
+    if (token) {
+      localStorage.setItem('token', token)
+      setState({ user: { token: token } })
+    }
   }
 
   return (

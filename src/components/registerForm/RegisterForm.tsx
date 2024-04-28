@@ -1,26 +1,22 @@
 import { createResource, createSignal } from 'solid-js'
+import { $fetch } from '../../utils/fetch'
+import { createStore } from 'solid-js/store'
 
 const url = 'http://0.0.0.0:8080/api/auth/register'
 
-const fetchUser = async (formData) => {
-  console.log(formData)
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-    body: JSON.stringify(formData),
-  })
-  return response.json()
+const registerUser = async (formData) => {
+  return $fetch(url).post(formData)
 }
 
 export const RegisterForm = () => {
-  const [formData, setFormData] = createSignal({})
-  const [fetchData, setFetchData] = createSignal(false)
+  const [fields, setFields] = createStore({
+    email: '',
+    password: '',
+    repeatPassword: '',
+  })
+  const [validatedFields, setValidatedFields] = createSignal(false)
 
-  const [data] = createResource(fetchData, () => fetchUser(formData()))
+  createResource(validatedFields, registerUser)
 
   return (
     <div class="flex justify-center">
@@ -28,24 +24,25 @@ export const RegisterForm = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            setFetchData(!fetchData())
           }}
         >
           <input
             class="input"
             type="email"
             placeholder="Email"
-            onChange={(e) =>
-              setFormData({ ...formData(), email: e.target.value })
-            }
+            onInput={(e) => setFields('email', e.target.value)}
           />
           <input
             class="input"
             type="password"
             placeholder="Password"
-            onChange={(e) =>
-              setFormData({ ...formData(), password: e.target.value })
-            }
+            onInput={(e) => setFields('password', e.target.value)}
+          />
+          <input
+            class="input"
+            type="reapeatPassword"
+            placeholder="Repeat Password"
+            onInput={(e) => setFields('repeatPassword', e.target.value)}
           />
           <button class="btn-primary" type="submit">
             Submit
