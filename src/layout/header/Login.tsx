@@ -1,6 +1,7 @@
 import { createSignal, type Component, Show } from 'solid-js'
 import { SimpleCard } from '../../components/cards/simpleCard/SimpleCard'
 import { A } from '@solidjs/router'
+import { LoginForm } from '../../components/loginForm/LoginForm'
 
 const Login: Component = () => {
   const [presentCard, setPresentCard] = createSignal(false)
@@ -18,7 +19,9 @@ const Login: Component = () => {
       </button>
       <Show when={presentCard()}>
         <div class="absolute">
-          <SimpleCard />
+          <SimpleCard>
+            <LoginForm />
+          </SimpleCard>
         </div>
       </Show>
     </div>
