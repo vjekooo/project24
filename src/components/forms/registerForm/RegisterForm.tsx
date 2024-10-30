@@ -1,8 +1,8 @@
 import { createResource, createSignal } from 'solid-js'
-import { $fetch } from '../../utils/fetch'
+import { $fetch } from '../../../utils/fetch'
 import { createStore } from 'solid-js/store'
 
-const url = 'http://0.0.0.0:8080/api/auth/register'
+const url = 'auth/register'
 
 const registerUser = async (formData) => {
   return $fetch(url).post(formData)

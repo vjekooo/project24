@@ -6,9 +6,16 @@ import Header from './layout/header/Header'
 import { Register } from './pages/Register'
 import { Home } from './pages/Home'
 import { createContext } from 'solid-js'
+import { User } from './pages/User'
+import { Store } from './pages/Store'
+import Login from './layout/header/Login'
+
+export interface User {
+  token: string
+}
 
 interface ContextState {
-  state: { user: { token?: string } }
+  state: { user: User }
   setState: (state) => void
 }
 
@@ -36,6 +43,9 @@ render(
     <Router root={App}>
       <Route path="/" component={Home} />
       <Route path="/register" component={Register} />
+      <Route path="/login" component={Login} />
+      <Route path="/user" component={User} />
+      <Route path="/store" component={Store} />
     </Router>
   ),
   document.getElementById('root')

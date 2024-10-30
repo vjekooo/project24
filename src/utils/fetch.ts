@@ -9,17 +9,19 @@ const config = (method = 'GET') => ({
 })
 
 interface Fetch {
-  get: () => Promise<Response>
-  post: (body: any) => Promise<Response>
+  get: <TResponse>() => Promise<TResponse>
+  post: <TResponse>(body: any) => Promise<TResponse>
 }
 
-export const $fetch = (url: string): Fetch => {
+export const $fetch = <TResponse>(url: string) => {
+  const apiDomain = import.meta.env.API_DOMAIN
+  const completeUrl = 'http://0.0.0.0:8080' + url
   return {
-    get: () => fetch(url),
-    post: (body: any) =>
+    get: () => fetch(url) as Promise<TResponse>,
+    post: <TBody extends BodyInit>(body: TBody) =>
       fetch(url, {
         ...config('POST'),
         body: JSON.stringify(body),
-      }),
+      }) as Promise<TResponse>,
   }
 }

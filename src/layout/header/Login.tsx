@@ -1,7 +1,7 @@
 import { createSignal, type Component, Show } from 'solid-js'
 import { SimpleCard } from '../../components/cards/simpleCard/SimpleCard'
 import { A } from '@solidjs/router'
-import { LoginForm } from '../../components/loginForm/LoginForm'
+import { LoginForm } from '../../components/forms/loginForm/LoginForm'
 
 const Login: Component = () => {
   const [presentCard, setPresentCard] = createSignal(false)

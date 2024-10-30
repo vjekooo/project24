@@ -1,10 +1,10 @@
 import { useContext } from 'solid-js'
-import { useForm } from '../../utils/validation'
+import { useForm } from '../../../utils/validation'
 import { createStore } from 'solid-js/store'
-import { AppContext } from '../../index'
-import { $fetch } from '../../utils/fetch'
+import { AppContext, User } from '../../../index'
+import { $fetch } from '../../../utils/fetch'
 
-const url = 'http://0.0.0.0:8080/api/auth/login'
+const url = 'auth/login'
 
 const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 
@@ -19,8 +19,7 @@ export const LoginForm = () => {
   })
 
   const fn = async (form) => {
-    // form.submit()
-    const data = await $fetch(url).post(form)
+    const data = await $fetch<User>(url).post(form)
     const token = data?.token
     if (token) {
       localStorage.setItem('token', token)
