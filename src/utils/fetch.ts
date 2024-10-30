@@ -15,9 +15,9 @@ interface Fetch {
 
 export const $fetch = <TResponse>(url: string) => {
   const apiDomain = import.meta.env.API_DOMAIN
-  const completeUrl = 'http://0.0.0.0:8080' + url
+  const completeUrl = apiDomain + url
   return {
-    get: () => fetch(url) as Promise<TResponse>,
+    get: () => fetch(completeUrl) as Promise<TResponse>,
     post: <TBody extends BodyInit>(body: TBody) =>
       fetch(url, {
         ...config('POST'),
