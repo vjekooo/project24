@@ -1,34 +1,43 @@
 import { useContext } from 'solid-js'
-import { useForm } from '../../../utils/validation'
-import { createStore } from 'solid-js/store'
-import { AppContext, User } from '../../../index'
-import { $fetch } from '../../../utils/fetch'
 
-const url = 'auth/login'
+import { AppContext, LoginResponse } from '../../../index'
+import { $fetch } from '../../../utils/fetch'
+import { useForm } from '../../../lib/form/useForm'
+import { useNavigate } from '@solidjs/router'
+
+interface LoginForm {
+  email: string
+  password: string
+}
+
+const loginUrl = 'auth/login'
 
 const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 
 export const LoginForm = () => {
-  const { state, setState } = useContext(AppContext)
-  const { validate, formSubmit, errors } = useForm({
+  const navigate = useNavigate()
+  const { setState } = useContext(AppContext)
+  const { validate, formSubmit, errors, updateFormField, form } = useForm({
     errorClass: 'error-input',
   })
-  const [fields, setFields] = createStore({
-    email: '',
-    password: '',
-  })
 
-  const fn = async (form) => {
-    const data = await $fetch<User>(url).post(form)
-    const token = data?.token
-    if (token) {
-      localStorage.setItem('token', token)
-      setState({ user: { token: token } })
+  const handleSubmit = async (event: Event) => {
+    event.preventDefault()
+    const formData = {
+      email: form.email,
+      password: form.password,
     }
+    await $fetch<LoginForm, LoginResponse>(loginUrl)
+      .post(formData)
+      .then((data) => {
+        localStorage.setItem('token', data.accessToken)
+        setState({ token: data.accessToken })
+        navigate('/')
+      })
   }
 
   return (
-    <form use:formSubmit={fn}>
+    <form onSubmit={handleSubmit}>
       <div class="flex flex-col gap-4">
         <div class="field-block">
           <input
@@ -37,8 +46,7 @@ export const LoginForm = () => {
             type="email"
             placeholder="Email"
             required
-            onInput={(e) => setFields('email', e.target.value)}
-            use:validate
+            onChange={updateFormField('email')}
           />
           {errors.email && <ErrorMessage error={errors.email} />}
         </div>
@@ -49,8 +57,7 @@ export const LoginForm = () => {
             name="password"
             placeholder="Password"
             required
-            onInput={(e) => setFields('password', e.target.value)}
-            use:validate
+            onChange={updateFormField('password')}
           />
           {errors.password && <ErrorMessage error={errors.password} />}
         </div>

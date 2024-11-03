@@ -1,6 +1,6 @@
 import { AddressForm } from '../components/forms/addressForm/AddressForm'
 
-export const User = () => {
+export const Account = () => {
   return (
     <div>
       <AddressForm />

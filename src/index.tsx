@@ -6,16 +6,23 @@ import Header from './layout/header/Header'
 import { Register } from './pages/Register'
 import { Home } from './pages/Home'
 import { createContext } from 'solid-js'
-import { User } from './pages/User'
+import { Account } from './pages/Account'
 import { Store } from './pages/Store'
 import Login from './layout/header/Login'
 
 export interface User {
-  token: string
+  firstName: string
+  lastName: string
+  email: string
+}
+
+export interface LoginResponse {
+  accessToken: string
+  refreshToken: string
 }
 
 interface ContextState {
-  state: { user: User }
+  state: { user: Account; token: string }
   setState: (state) => void
 }
 
@@ -24,8 +31,11 @@ export const AppContext = createContext<ContextState>()
 const App = (props) => {
   const [state, setState] = createStore({
     user: {
-      token: localStorage.getItem('token'),
+      firstName: '',
+      lastName: '',
+      email: '',
     },
+    token: localStorage.getItem('token'),
   })
 
   return (
@@ -44,7 +54,7 @@ render(
       <Route path="/" component={Home} />
       <Route path="/register" component={Register} />
       <Route path="/login" component={Login} />
-      <Route path="/user" component={User} />
+      <Route path="/user" component={Account} />
       <Route path="/store" component={Store} />
     </Router>
   ),

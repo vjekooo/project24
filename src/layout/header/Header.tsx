@@ -1,12 +1,30 @@
-import { useContext, type Component, createSignal, Show } from 'solid-js'
+import {
+  type Component,
+  createResource,
+  createSignal,
+  Show,
+  useContext,
+} from 'solid-js'
 import Login from './Login'
 import { A } from '@solidjs/router'
-import { AppContext } from '../../index'
+import { AppContext, User } from '../../index'
 import { UserMenu } from '../../components/cards/userMenu/UserMenu'
 import { SimpleCard } from '../../components/cards/simpleCard/SimpleCard'
+import { $fetch } from '../../utils/fetch'
+import { Register } from '../../pages/Register'
+
+const userUrl = 'user'
+
+async function fetchData(source, { value, refetching }): Promise<User> {
+  const token = localStorage.getItem('token')
+  if (!token) return
+  return await $fetch<any, User>(userUrl).get()
+}
 
 const Header: Component = () => {
-  const { state } = useContext(AppContext)
+  const { state, setState } = useContext(AppContext)
+
+  const [data, { mutate, refetch }] = createResource(fetchData)
 
   const [presentUserInfo, setPresentUserInfo] = createSignal(false)
 
@@ -16,8 +34,12 @@ const Header: Component = () => {
         <div>Logo goes here</div>
       </A>
       <p class="text-4xl text-green-700 text-center py-20">This is a header</p>
-      {!state.user.token ? (
-        <Login />
+      {data() && <div>{data().email}</div>}
+      {!state.token ? (
+        <>
+          <Register />
+          <Login />
+        </>
       ) : (
         <div class="relative">
           <div onClick={() => setPresentUserInfo(!presentUserInfo())}>User</div>

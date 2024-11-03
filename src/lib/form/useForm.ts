@@ -22,16 +22,26 @@ function checkValid({ element, validators = [] }, setErrors, errorClass) {
   }
 }
 
-interface FormValidation {
+interface Form {
   validate: any
   formSubmit: any
   errors: {
     email: string
     password: string
   }
+  updateFormField: (fieldName: string) => (event: Event) => void
+  form: {
+    email: string
+    password: string
+  }
 }
 
-export function useForm({ errorClass }): FormValidation {
+export function useForm({ errorClass }): Form {
+  const [form, setForm] = createStore({
+    email: '',
+    password: '',
+  })
+
   const [errors, setErrors] = createStore({
       email: '',
       password: '',
@@ -69,5 +79,18 @@ export function useForm({ errorClass }): FormValidation {
     }
   }
 
-  return { validate, formSubmit, errors }
+  const updateFormField = (fieldName: string) => (event: Event) => {
+    const inputElement = event.currentTarget as HTMLInputElement
+    if (inputElement.type === 'checkbox') {
+      setForm({
+        [fieldName]: !!inputElement.checked,
+      })
+    } else {
+      setForm({
+        [fieldName]: inputElement.value,
+      })
+    }
+  }
+
+  return { validate, formSubmit, errors, updateFormField, form }
 }
