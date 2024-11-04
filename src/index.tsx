@@ -1,28 +1,19 @@
-import './index.css'
 import { render } from 'solid-js/web'
 import { Router, Route } from '@solidjs/router'
 import { createStore } from 'solid-js/store'
+import { createContext } from 'solid-js'
+
+import './index.css'
 import Header from './layout/header/Header'
 import { Register } from './pages/Register'
 import { Home } from './pages/Home'
-import { createContext } from 'solid-js'
 import { Account } from './pages/Account'
 import { Store } from './pages/Store'
 import Login from './layout/header/Login'
-
-export interface User {
-  firstName: string
-  lastName: string
-  email: string
-}
-
-export interface LoginResponse {
-  accessToken: string
-  refreshToken: string
-}
+import { User } from './types'
 
 interface ContextState {
-  state: { user: Account; token: string }
+  state: { user: User; token: string }
   setState: (state) => void
 }
 
@@ -54,7 +45,7 @@ render(
       <Route path="/" component={Home} />
       <Route path="/register" component={Register} />
       <Route path="/login" component={Login} />
-      <Route path="/user" component={Account} />
+      <Route path="/account" component={Account} />
       <Route path="/store" component={Store} />
     </Router>
   ),

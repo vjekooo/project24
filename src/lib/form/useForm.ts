@@ -22,29 +22,29 @@ function checkValid({ element, validators = [] }, setErrors, errorClass) {
   }
 }
 
-interface Form {
+interface Form<T> {
   validate: any
   formSubmit: any
-  errors: {
-    email: string
-    password: string
-  }
+  errors: T
   updateFormField: (fieldName: string) => (event: Event) => void
-  form: {
-    email: string
-    password: string
-  }
+  form: T
 }
 
-export function useForm({ errorClass }): Form {
+export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
+  const errorClass = 'error-input'
+
+  // @ts-ignore
+  const state = config.reduce((acc, { name }) => {
+    acc[name] = ''
+    return acc
+  }, {})
+
   const [form, setForm] = createStore({
-    email: '',
-    password: '',
+    ...state,
   })
 
   const [errors, setErrors] = createStore({
-      email: '',
-      password: '',
+      ...state,
     }),
     fields = {}
 
@@ -92,5 +92,6 @@ export function useForm({ errorClass }): Form {
     }
   }
 
+  // @ts-ignore
   return { validate, formSubmit, errors, updateFormField, form }
 }

@@ -1,10 +1,15 @@
 import { A } from '@solidjs/router'
+import { User } from '../../../types'
 
-export const UserMenu = (props: any) => {
+interface Props {
+  user: User
+}
+
+export const UserMenu = ({ user }: Props) => {
   return (
     <div class="flex flex-col gap-2">
       <A href="/account">Account</A>
-      <A href="/store">Store</A>
+      {user.store && <A href="/store">Store</A>}
     </div>
   )
 }

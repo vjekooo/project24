@@ -1,33 +1,29 @@
 import { $fetch } from '../../../utils/fetch'
+import { StoreConfig, storeConfig } from './config'
 import { useForm } from '../../../lib/form/useForm'
-import { loginConfig, LoginConfig } from '../loginForm/config'
-import { Address, LoginResponse } from '../../../types'
-import { AddressConfig } from './config'
+import { Store } from '../../../types'
 
-const url = 'address'
+const url = '/store'
 
-export const AddressForm = () => {
+export const StoreForm = () => {
   const { validate, formSubmit, errors, updateFormField, form } = useForm<
-    AddressConfig,
-    Address
-  >({
-    config: loginConfig,
-  })
+    StoreConfig,
+    Store
+  >({ config: storeConfig })
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    await $fetch<Address, LoginResponse>(url)
+    console.log(errors)
+    await $fetch<Store, {}>(url)
       .post(form)
-      .then((data) => {
-        localStorage.setItem('token', data.accessToken)
-      })
+      .then((data) => {})
   }
 
   return (
     <div class="flex justify-center">
-      <form onSubmit={handleSubmit}>
-        <div class="flex flex-col gap-2">
-          {loginConfig.map((field) => {
+      <div class="flex flex-col gap-2">
+        <form onSubmit={handleSubmit}>
+          {storeConfig.map((field) => {
             return (
               <input
                 class="input"
@@ -40,8 +36,8 @@ export const AddressForm = () => {
           <button class="btn-primary" type="submit">
             Submit
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   )
 }
