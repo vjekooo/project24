@@ -6,13 +6,23 @@ export interface AddressConfig {
 
 export const addressConfig: AddressConfig[] = [
   {
-    label: 'Name',
-    name: 'name',
+    label: 'Street',
+    name: 'street',
     type: 'text',
   },
   {
-    label: 'Description',
-    name: 'description',
+    label: 'House Number',
+    name: 'houseNumber',
+    type: 'text',
+  },
+  {
+    label: 'City',
+    name: 'city',
+    type: 'text',
+  },
+  {
+    label: 'Postal Code',
+    name: 'postalCode',
     type: 'text',
   },
 ]

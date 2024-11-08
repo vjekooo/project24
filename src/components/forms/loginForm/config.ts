@@ -6,13 +6,13 @@ export interface LoginConfig {
 
 export const loginConfig: LoginConfig[] = [
   {
-    label: 'Name',
-    name: 'name',
+    label: 'Email',
+    name: 'email',
     type: 'text',
   },
   {
-    label: 'Description',
-    name: 'description',
-    type: 'text',
+    label: 'Password',
+    name: 'password',
+    type: 'password',
   },
 ]

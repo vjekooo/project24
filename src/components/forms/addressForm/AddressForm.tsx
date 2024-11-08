@@ -1,8 +1,7 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { loginConfig, LoginConfig } from '../loginForm/config'
 import { Address, LoginResponse } from '../../../types'
-import { AddressConfig } from './config'
+import { addressConfig, AddressConfig } from './config'
 
 const url = 'address'
 
@@ -11,7 +10,7 @@ export const AddressForm = () => {
     AddressConfig,
     Address
   >({
-    config: loginConfig,
+    config: addressConfig,
   })
 
   const handleSubmit = async (event: Event) => {
@@ -27,12 +26,12 @@ export const AddressForm = () => {
     <div class="flex justify-center">
       <form onSubmit={handleSubmit}>
         <div class="flex flex-col gap-2">
-          {loginConfig.map((field) => {
+          {addressConfig.map((field) => {
             return (
               <input
                 class="input"
                 type={field.type}
-                placeholder={field.name}
+                placeholder={field.label}
                 onChange={updateFormField(field.name)}
               />
             )

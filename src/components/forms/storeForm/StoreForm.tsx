@@ -28,7 +28,7 @@ export const StoreForm = () => {
               <input
                 class="input"
                 type={field.type}
-                placeholder={field.name}
+                placeholder={field.label}
                 onChange={updateFormField(field.name)}
               />
             )
