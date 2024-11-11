@@ -4,13 +4,14 @@ import { createStore } from 'solid-js/store'
 import { createContext } from 'solid-js'
 
 import './index.css'
-import Header from './layout/header/Header'
-import { Register } from './pages/Register'
 import { Home } from './pages/Home'
 import { Account } from './pages/Account'
 import { Store } from './pages/Store'
-import Login from './layout/header/Login'
 import { User } from './types'
+import { ConfirmRegistration } from './pages/ConfirmRegistration'
+import { Navbar } from './layout/Navbar'
+import { Footer } from './layout/Footer'
+import { Hero } from './layout/Hero'
 
 interface ContextState {
   state: { user: User; token: string }
@@ -32,8 +33,10 @@ const App = (props) => {
   return (
     <AppContext.Provider value={{ state, setState }}>
       <div class="laptop:container laptop:m-auto">
-        <Header />
+        <Navbar />
+        <Hero />
         {props.children}
+        <Footer />
       </div>
     </AppContext.Provider>
   )
@@ -43,10 +46,9 @@ render(
   () => (
     <Router root={App}>
       <Route path="/" component={Home} />
-      <Route path="/register" component={Register} />
-      <Route path="/login" component={Login} />
       <Route path="/account" component={Account} />
       <Route path="/store" component={Store} />
+      <Route path="/confirm-registration" component={ConfirmRegistration} />
     </Router>
   ),
   document.getElementById('root')

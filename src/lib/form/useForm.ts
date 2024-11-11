@@ -28,6 +28,7 @@ interface Form<T> {
   errors: T
   updateFormField: (fieldName: string) => (event: Event) => void
   form: T
+  isFormValid: boolean
 }
 
 export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
@@ -48,15 +49,14 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
     }),
     fields = {}
 
-  const validate = (ref) => {
-    const validators = []
-    let config
-    fields[ref.name] = config = { element: ref, validators }
-    ref.onblur = checkValid(config, setErrors, errorClass)
-    ref.oninput = () => {
-      if (!errors[ref.name]) return
-      setErrors({ [ref.name]: undefined })
-      errorClass && ref.classList.toggle(errorClass, false)
+  const validate = (ref: any) => {
+    const name = ref.name
+    const value = form[name]
+    if (!ref.validation) {
+      return
+    }
+    if (ref.validation(value)) {
+      setErrors({ [name]: ref.validation(value) })
     }
   }
 
@@ -92,6 +92,24 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
     }
   }
 
-  // @ts-ignore
-  return { validate, formSubmit, errors, updateFormField, form }
+  const isFormValid = () => {
+    for (const k in errors) {
+      const field = errors[k]
+      if (field.length > 0) {
+        return false
+      }
+    }
+    return true
+  }
+
+  return {
+    validate,
+    formSubmit,
+    // @ts-ignore
+    errors,
+    updateFormField,
+    // @ts-ignore
+    form,
+    isFormValid: isFormValid(),
+  }
 }

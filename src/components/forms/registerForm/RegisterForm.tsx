@@ -1,52 +1,70 @@
-import { createResource, createSignal } from 'solid-js'
 import { $fetch } from '../../../utils/fetch'
-import { createStore } from 'solid-js/store'
+import { useForm } from '../../../lib/form/useForm'
+import { registerConfig, RegisterConfig } from './config'
+
+interface Props {
+  formSwitcher: (value: string) => void
+}
+
+interface RegisterForm {
+  email: string
+  password: string
+}
 
 const url = 'auth/register'
 
-const registerUser = async (formData) => {
-  return $fetch(url).post(formData)
-}
+const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 
-export const RegisterForm = () => {
-  const [fields, setFields] = createStore({
-    email: '',
-    password: '',
-    repeatPassword: '',
+export const RegisterForm = ({ formSwitcher }: Props) => {
+  const { form, errors, validate, updateFormField, isFormValid } = useForm<
+    RegisterConfig,
+    RegisterForm
+  >({
+    config: registerConfig,
   })
-  const [validatedFields, setValidatedFields] = createSignal(false)
 
-  createResource(validatedFields, registerUser)
+  const handleSubmit = async (event: Event) => {
+    event.preventDefault()
+    await $fetch<RegisterForm, null>(url)
+      .post(form)
+      .then((data) => {
+        // do nothing
+      })
+  }
 
   return (
     <div class="flex justify-center">
       <div class="flex flex-col gap-2">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-          }}
-        >
-          <input
-            class="input"
-            type="email"
-            placeholder="Email"
-            onInput={(e) => setFields('email', e.target.value)}
-          />
-          <input
-            class="input"
-            type="password"
-            placeholder="Password"
-            onInput={(e) => setFields('password', e.target.value)}
-          />
-          <input
-            class="input"
-            type="reapeatPassword"
-            placeholder="Repeat Password"
-            onInput={(e) => setFields('repeatPassword', e.target.value)}
-          />
-          <button class="btn-primary" type="submit">
-            Submit
-          </button>
+        <form onSubmit={handleSubmit}>
+          <div class="flex flex-col gap-6">
+            {registerConfig.map((field) => {
+              return (
+                <div class="field-block ">
+                  <input
+                    {...validate(field)}
+                    class="input"
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    onChange={updateFormField(field.name)}
+                  />
+                  {errors[field.name] && (
+                    <ErrorMessage error={errors[field.name]} />
+                  )}
+                </div>
+              )
+            })}
+            <button class="btn-primary" type="submit" disabled={!isFormValid}>
+              Submit
+            </button>
+            <div class="flex justify-center">or</div>
+            <button
+              class="btn-primary-inverse"
+              type="submit"
+              onClick={() => formSwitcher('login')}
+            >
+              Sign In
+            </button>
+          </div>
         </form>
       </div>
     </div>

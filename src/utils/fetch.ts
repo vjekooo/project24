@@ -35,16 +35,24 @@ export const $fetch: Fetch = (url: string) => {
       fetch(completeUrl, {
         method: 'GET',
         ...headers(),
-      }).then((res) => {
-        return res.json()
-      }),
+      })
+        .then((res) => {
+          return res.json()
+        })
+        .catch((err) => {
+          console.log(err)
+        }),
     post: (body) =>
       fetch(completeUrl, {
         method: 'POST',
         ...headers(),
         body: JSON.stringify(body),
-      }).then((res) => {
-        return res.json()
-      }),
+      })
+        .then((res) => {
+          return res.json()
+        })
+        .catch((err) => {
+          console.log(err)
+        }),
   }
 }

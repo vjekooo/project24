@@ -7,6 +7,10 @@ import { useForm } from '../../../lib/form/useForm'
 import { LoginResponse } from '../../../types'
 import { LoginConfig, loginConfig } from './config'
 
+interface Props {
+  formSwitcher: (value: string) => void
+}
+
 interface LoginForm {
   email: string
   password: string
@@ -16,7 +20,7 @@ const loginUrl = 'auth/login'
 
 const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 
-export const LoginForm = () => {
+export const LoginForm = ({ formSwitcher }: Props) => {
   const navigate = useNavigate()
   const { setState } = useContext(AppContext)
   const { validate, formSubmit, errors, updateFormField, form } = useForm<
@@ -39,7 +43,7 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-6 mt-5">
         {loginConfig.map((field) => {
           return (
             <div class="field-block">
@@ -56,7 +60,15 @@ export const LoginForm = () => {
           )
         })}
         <button class="btn-primary" type="submit">
-          Submit
+          Sign In
+        </button>
+        <div class="flex justify-center">or</div>
+        <button
+          class="btn-primary-inverse"
+          type="submit"
+          onClick={() => formSwitcher('register')}
+        >
+          Create Account
         </button>
       </div>
     </form>
