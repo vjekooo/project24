@@ -32,27 +32,16 @@ export const $fetch: Fetch = (url: string) => {
   const completeUrl = apiDomain + url
   return {
     get: () =>
-      fetch(completeUrl, {
-        method: 'GET',
-        ...headers(),
-      })
-        .then((res) => {
-          return res.json()
-        })
-        .catch((err) => {
-          console.log(err)
-        }),
+      fetch(completeUrl, headers())
+        .then((res) => res.json())
+        .catch((err) => console.error('GET error:', err)),
     post: (body) =>
       fetch(completeUrl, {
         method: 'POST',
         ...headers(),
         body: JSON.stringify(body),
       })
-        .then((res) => {
-          return res.json()
-        })
-        .catch((err) => {
-          console.log(err)
-        }),
+        .then((res) => res.json())
+        .catch((err) => console.error('POST error:', err)),
   }
 }

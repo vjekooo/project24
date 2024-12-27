@@ -12,22 +12,24 @@ export const Navbar = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
 
-  const { state, setState } = useContext(AppContext)
+  const { state } = useContext(AppContext)
 
-  async function fetchData(source, { value, refetching }): Promise<User> {
-    const token = localStorage.getItem('token')
-    if (!token) return
-    return await $fetch<any, User>(userUrl).get()
-  }
-
-  const [data, { mutate, refetch }] = createResource(fetchData)
+  // async function fetchData(source, { value, refetching }): Promise<User> {
+  //   const token = localStorage.getItem('token')
+  //   if (!token) return
+  //   return await $fetch<any, User>(userUrl).get()
+  // }
+  //
+  // const [data, { mutate, refetch }] = createResource(fetchData)
 
   return (
     <div class="w-full">
       <Modal isOpen={presentSignIn()} onClose={() => setPresentSignIn(false)}>
-        <h2>Sign in</h2>
         {formType() === 'login' ? (
-          <LoginForm formSwitcher={setFormType} />
+          <LoginForm
+            formSwitcher={setFormType}
+            onComplete={() => setPresentSignIn(false)}
+          />
         ) : (
           <RegisterForm formSwitcher={setFormType} />
         )}
