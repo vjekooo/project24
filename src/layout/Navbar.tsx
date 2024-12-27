@@ -1,4 +1,9 @@
-import { createResource, createSignal, useContext } from 'solid-js'
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  useContext,
+} from 'solid-js'
 import { User } from '../types'
 import { $fetch } from '../utils/fetch'
 import { Modal } from '../components/modal/Modal'
@@ -12,15 +17,19 @@ export const Navbar = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
 
-  const { state } = useContext(AppContext)
+  const { state, setState } = useContext(AppContext)
 
-  // async function fetchData(source, { value, refetching }): Promise<User> {
-  //   const token = localStorage.getItem('token')
-  //   if (!token) return
-  //   return await $fetch<any, User>(userUrl).get()
-  // }
-  //
-  // const [data, { mutate, refetch }] = createResource(fetchData)
+  async function fetchData(): Promise<User> {
+    const token = localStorage.getItem('token')
+    if (!token) return
+    return await $fetch<any, User>(userUrl).get()
+  }
+
+  const [data] = createResource(fetchData)
+
+  createEffect(() => {
+    setState(data())
+  })
 
   return (
     <div class="w-full">
@@ -107,7 +116,10 @@ export const Navbar = () => {
             id="nav-content"
           >
             {state.token ? (
-              <a class="inline-block no-underline hover:text-black" href="#">
+              <a
+                class="inline-block no-underline hover:text-black"
+                href="/account"
+              >
                 <svg
                   class="fill-current hover:text-black"
                   xmlns="http://www.w3.org/2000/svg"
