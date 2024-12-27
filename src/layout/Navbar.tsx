@@ -13,23 +13,33 @@ import { AppContext } from '../index'
 
 const userUrl = 'user'
 
+async function fetchData(): Promise<User> {
+  const token = localStorage.getItem('token')
+  if (!token) return
+  return await $fetch<any, User>(userUrl).get()
+}
+
 export const Navbar = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
 
   const { state, setState } = useContext(AppContext)
 
-  async function fetchData(): Promise<User> {
-    const token = localStorage.getItem('token')
-    if (!token) return
-    return await $fetch<any, User>(userUrl).get()
-  }
-
   const [data] = createResource(fetchData)
 
   createEffect(() => {
-    setState(data())
-  })
+    const userData = data()
+    if (userData) {
+      setState({
+        ...state,
+        user: {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+        },
+      })
+    }
+  }, [data])
 
   return (
     <div class="w-full">
@@ -45,6 +55,7 @@ export const Navbar = () => {
       </Modal>
       <nav id="header" class="w-full z-30 top-0 py-1">
         <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
+          {/*@ts-ignore*/}
           <label htmlFor="menu-toggle" class="cursor-pointer md:hidden block">
             <svg
               class="fill-current text-gray-900"

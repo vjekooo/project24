@@ -13,9 +13,14 @@ import { Navbar } from './layout/Navbar'
 import { Footer } from './layout/Footer'
 import { Hero } from './layout/Hero'
 
+interface State {
+  user: User
+  token: string
+}
+
 interface ContextState {
   state: { user: User; token: string }
-  setState: (state) => void
+  setState: (state: State) => void
 }
 
 export const AppContext = createContext<ContextState>()
@@ -34,7 +39,6 @@ const App = (props) => {
     <AppContext.Provider value={{ state, setState }}>
       <div class="laptop:container laptop:m-auto">
         <Navbar />
-        <Hero />
         {props.children}
         <Footer />
       </div>

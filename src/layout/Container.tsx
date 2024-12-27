@@ -1,5 +1,9 @@
-export const Container = (props) => {
-  return (
-    <div class="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">{props.children}</div>
-  )
+import { JSX } from 'solid-js'
+
+interface Props {
+  children: JSX.Element
+}
+
+export const Container = ({ children }: Props) => {
+  return <div class="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">{children}</div>
 }
