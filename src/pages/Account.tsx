@@ -43,7 +43,7 @@ export const Account = () => {
             <AddressForm />
           </div>
         )}
-        {!user()?.store && (
+        {!user()?.store?.length && (
           <div class="flex flex-row gap-3">
             <p>You have no store on file</p>
             <StoreForm />

@@ -2,8 +2,8 @@ export interface User {
   firstName: string
   lastName: string
   email: string
-  address?: Address
-  store?: Store
+  address?: Address[]
+  store?: Store[]
 }
 
 export interface Address {
@@ -18,7 +18,12 @@ export interface Store {
   description: string
   address?: Address
 }
+
 export interface LoginResponse {
   accessToken: string
   refreshToken: string
+}
+
+export interface MessageResponse {
+  message: string
 }

@@ -36,6 +36,8 @@ export const Navbar = () => {
           firstName: userData.firstName,
           lastName: userData.lastName,
           email: userData.email,
+          address: userData.address,
+          store: userData.store,
         },
       })
     }
@@ -107,7 +109,7 @@ export const Navbar = () => {
           <div class="order-1 md:order-2">
             <a
               class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
-              href="#"
+              href="/"
             >
               <svg
                 class="fill-current text-gray-800 mr-2"

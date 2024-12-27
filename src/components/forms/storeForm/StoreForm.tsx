@@ -1,9 +1,9 @@
 import { $fetch } from '../../../utils/fetch'
 import { StoreConfig, storeConfig } from './config'
 import { useForm } from '../../../lib/form/useForm'
-import { Store } from '../../../types'
+import { MessageResponse, Store } from '../../../types'
 
-const url = '/store'
+const url = 'store'
 
 export const StoreForm = () => {
   const { validate, formSubmit, errors, updateFormField, form } = useForm<
@@ -14,9 +14,11 @@ export const StoreForm = () => {
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
     console.log(errors)
-    await $fetch<Store, {}>(url)
+    await $fetch<Store, MessageResponse>(url)
       .post(form)
-      .then((data) => {})
+      .then((data) => {
+        console.log(data.message)
+      })
   }
 
   return (
