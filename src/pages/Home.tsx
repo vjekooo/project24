@@ -1,10 +1,22 @@
 import { Container } from '../layout/Container'
 import { Hero } from '../layout/Hero'
 
+const HeroAction = () => (
+  <a
+    class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black"
+    href="#"
+  >
+    go to store
+  </a>
+)
+
 export const Home = () => {
   return (
     <div>
-      <Hero name="Stripy Zig Zag Jigsaw Pillow and Duvet Set" />
+      <Hero
+        name="Stripy Zig Zag Jigsaw Pillow and Duvet Set"
+        action={<HeroAction />}
+      />
       <Container>
         <section class="bg-white py-8">
           <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">

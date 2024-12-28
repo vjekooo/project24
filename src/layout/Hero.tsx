@@ -1,8 +1,11 @@
+import { JSX } from 'solid-js'
+
 interface Props {
   name: string
+  action?: JSX.Element
 }
 
-export const Hero = ({ name }: Props) => {
+export const Hero = ({ name, action }: Props) => {
   console.log(name)
   return (
     <section
@@ -12,12 +15,7 @@ export const Hero = ({ name }: Props) => {
       <div class="container mx-auto">
         <div class="flex flex-col w-full lg:w-1/2 justify-center items-start  px-6 tracking-wide">
           <h1 class="text-black text-2xl my-4">{name}</h1>
-          <a
-            class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black"
-            href="#"
-          >
-            products
-          </a>
+          {action && action}
         </div>
       </div>
     </section>
