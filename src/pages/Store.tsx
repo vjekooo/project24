@@ -1,4 +1,4 @@
-import { createResource } from 'solid-js'
+import { createEffect, createResource, createSignal } from 'solid-js'
 import { $fetch, FetchData } from '../utils/fetch'
 import { Hero } from '../layout/Hero'
 import { Container } from '../layout/Container'
@@ -17,22 +17,26 @@ const fetchData = async () => {
 }
 
 export const Store = () => {
+  const [store, setStore] = createSignal<StoreType | null>(null)
   const [data] = createResource<FetchData<StoreType>>(fetchData)
+
+  createEffect(() => {
+    if (data()) {
+      setStore(data().data)
+    }
+  })
 
   return (
     <div>
-      <Hero />
+      {store()?.name && <Hero name={store()?.name} />}
       <Container>
         <section class="bg-white py-8">
           <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
             <nav id="store" class="w-full z-30 top-0 px-6 py-1">
               <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
-                <a
-                  class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
-                  href="#"
-                >
-                  Store
-                </a>
+                <span class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl ">
+                  Latest Products
+                </span>
 
                 <div class="flex items-center" id="store-nav-content">
                   <a
@@ -161,22 +165,7 @@ export const Store = () => {
 
               <p class="mt-8 mb-8"></p>
 
-              <p class="mb-8">
-                Lorem ipsum dolor sit amet, consectetur{' '}
-                <a href="#">random link</a> adipiscing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Vel risus
-                commodo viverra maecenas accumsan lacus vel facilisis volutpat.
-                Vitae aliquet nec ullamcorper sit. Nullam eget felis eget nunc
-                lobortis mattis aliquam. In est ante in nibh mauris. Egestas
-                congue quisque egestas diam in. Facilisi nullam vehicula ipsum a
-                arcu. Nec nam aliquam sem et tortor consequat. Eget mi proin sed
-                libero enim sed faucibus turpis in. Hac habitasse platea
-                dictumst quisque. In aliquam sem fringilla ut. Gravida rutrum
-                quisque non tellus orci ac auctor augue mauris. Accumsan lacus
-                vel facilisis volutpat est velit egestas dui id. At tempor
-                commodo ullamcorper a. Volutpat commodo sed egestas egestas
-                fringilla. Vitae congue eu consequat ac.
-              </p>
+              <p class="mb-8">{store()?.description}</p>
             </div>
           </section>
         </section>

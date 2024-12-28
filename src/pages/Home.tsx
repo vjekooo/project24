@@ -4,7 +4,7 @@ import { Hero } from '../layout/Hero'
 export const Home = () => {
   return (
     <div>
-      <Hero />
+      <Hero name="Stripy Zig Zag Jigsaw Pillow and Duvet Set" />
       <Container>
         <section class="bg-white py-8">
           <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
