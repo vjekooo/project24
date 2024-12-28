@@ -50,6 +50,7 @@ export const Navbar = () => {
         {formType() === 'login' ? (
           <LoginForm
             formSwitcher={setFormType}
+            // @ts-ignore
             onComplete={() => setPresentSignIn(false)}
           />
         ) : (

@@ -36,6 +36,7 @@ const getCookie = (name: string): string | null => {
   return null
 }
 
+// @ts-ignore
 export const $fetch: Fetch = (url: string) => {
   const apiDomain = import.meta.env.VITE_API_DOMAIN
   const completeUrl = apiDomain + url

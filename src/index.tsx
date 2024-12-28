@@ -11,7 +11,6 @@ import { User } from './types'
 import { ConfirmRegistration } from './pages/ConfirmRegistration'
 import { Navbar } from './layout/Navbar'
 import { Footer } from './layout/Footer'
-import { Hero } from './layout/Hero'
 
 interface State {
   user: User
