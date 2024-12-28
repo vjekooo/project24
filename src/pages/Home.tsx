@@ -4,7 +4,7 @@ import { Hero } from '../layout/Hero'
 const HeroAction = () => (
   <a
     class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black"
-    href="#"
+    href="/store/1"
   >
     go to store
   </a>
