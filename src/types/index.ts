@@ -15,15 +15,20 @@ export interface Address {
 }
 
 export interface Store {
+  id: string
   name: string
   description: string
+  userId: string
+  media?: string[]
+  product?: Product[]
   address?: Address
 }
 
 export interface Product {
   name: string
   description: string
-  image: string
+  image: string[]
+  storeId?: string
 }
 
 export interface LoginResponse {

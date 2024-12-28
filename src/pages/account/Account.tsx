@@ -1,11 +1,11 @@
 import { createEffect, createResource, createSignal } from 'solid-js'
-import { AddressForm } from '../components/forms/addressForm/AddressForm'
-import { User } from '../types'
-import { $fetch, FetchData } from '../utils/fetch'
-import { StoreForm } from '../components/forms/storeForm/StoreForm'
-import { Content } from '../layout/Content'
-import { Stack } from '../ui/Stack'
-import { Modal } from '../components/modal/Modal'
+import { AddressForm } from '../../components/forms/addressForm/AddressForm'
+import { User } from '../../types'
+import { $fetch, FetchData } from '../../utils/fetch'
+import { StoreForm } from '../../components/forms/storeForm/StoreForm'
+import { Content } from '../../layout/Content'
+import { Stack } from '../../ui/Stack'
+import { Modal } from '../../components/modal/Modal'
 
 const userUrl = 'user'
 
@@ -92,6 +92,7 @@ export const Account = () => {
             <h2>Your store is:</h2>
             <span>{user().store[0]?.name}</span>
             <span>{user().store[0]?.description}</span>
+            <a href={`/account/store/${user()?.store[0].id}`}>go to store</a>
           </Stack>
         )}
       </div>

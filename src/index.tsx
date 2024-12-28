@@ -5,12 +5,13 @@ import { createContext } from 'solid-js'
 
 import './index.css'
 import { Home } from './pages/Home'
-import { Account } from './pages/Account'
+import { Account } from './pages/account/Account'
 import { Store } from './pages/Store'
 import { User } from './types'
 import { ConfirmRegistration } from './pages/ConfirmRegistration'
 import { Navbar } from './layout/Navbar'
 import { Footer } from './layout/Footer'
+import { UserStore } from './pages/account/UserStore'
 
 interface State {
   user: User
@@ -50,6 +51,7 @@ render(
     <Router root={App}>
       <Route path="/" component={Home} />
       <Route path="/account" component={Account} />
+      <Route path="/account/store/:id" component={UserStore} />
       <Route path="/store/:id" component={Store} />
       <Route path="/confirm-registration" component={ConfirmRegistration} />
     </Router>

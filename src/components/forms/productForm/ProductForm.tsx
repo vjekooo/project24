@@ -1,11 +1,17 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { MessageResponse, Product } from '../../../types'
+import { MessageResponse, Product, Store } from '../../../types'
 import { productConfig, Config } from './config'
+import { Stack } from '../../../ui/Stack'
 
-const url = 'store'
+const url = 'product'
 
-export const ProductForm = () => {
+interface Props {
+  store: Store
+  onClose: () => void
+}
+
+export const ProductForm = ({ store, onClose }: Props) => {
   const { validate, formSubmit, errors, updateFormField, form } = useForm<
     Config,
     Product
@@ -13,16 +19,24 @@ export const ProductForm = () => {
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
+    const newProduct = {
+      ...form,
+      image: [form.image],
+      storeId: store.id,
+    }
     const { data, error } = await $fetch<Product, MessageResponse>(url).post(
-      form
+      // @ts-ignore
+      newProduct
     )
-    console.log({ data, error })
+    if (data) {
+      onClose()
+    }
   }
 
   return (
-    <div class="flex justify-center">
-      <div class="flex flex-col gap-2">
-        <form onSubmit={handleSubmit}>
+    <div class="flex flex-col gap-2">
+      <form onSubmit={handleSubmit}>
+        <Stack gap={6}>
           {productConfig.map((field) => {
             return (
               <input
@@ -36,8 +50,8 @@ export const ProductForm = () => {
           <button class="btn-primary" type="submit">
             Submit
           </button>
-        </form>
-      </div>
+        </Stack>
+      </form>
     </div>
   )
 }
