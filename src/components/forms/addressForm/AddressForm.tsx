@@ -15,11 +15,10 @@ export const AddressForm = () => {
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    await $fetch<Address, MessageResponse>(url)
-      .post(form)
-      .then((data) => {
-        console.log(data.message)
-      })
+    const { data, error } = await $fetch<Address, MessageResponse>(url).post(
+      form
+    )
+    console.log({ data, error: error.message })
   }
 
   return (

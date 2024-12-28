@@ -22,7 +22,7 @@ const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 
 export const LoginForm = ({ formSwitcher }: Props) => {
   const navigate = useNavigate()
-  const { setState } = useContext(AppContext)
+  const { state, setState } = useContext(AppContext)
   const { validate, formSubmit, errors, updateFormField, form } = useForm<
     LoginConfig,
     LoginForm
@@ -32,13 +32,13 @@ export const LoginForm = ({ formSwitcher }: Props) => {
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    await $fetch<LoginForm, LoginResponse>(loginUrl)
-      .post(form)
-      .then((data) => {
-        localStorage.setItem('token', data.accessToken)
-        setState({ token: data.accessToken })
-        navigate('/')
-      })
+    const { data } = await $fetch<LoginForm, LoginResponse>(loginUrl).post(form)
+
+    if (data?.accessToken) {
+      localStorage.setItem('token', data?.accessToken)
+      setState({ ...state, token: data?.accessToken })
+      navigate('/')
+    }
   }
 
   return (

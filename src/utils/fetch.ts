@@ -13,13 +13,13 @@ const headers = () => {
 
 type Fetch = <TBody, TResponse>(url: string) => FetchMethods<TBody, TResponse>
 
-interface FetchData<R> {
+export interface FetchData<R> {
   data: R
   error?: Error
 }
 
 interface Error {
-  error: string
+  message: string
 }
 
 interface FetchMethods<T, R> {

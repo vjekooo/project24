@@ -1,48 +1,14 @@
-import {
-  createEffect,
-  createResource,
-  createSignal,
-  useContext,
-} from 'solid-js'
-import { User } from '../types'
-import { $fetch } from '../utils/fetch'
+import { createSignal, useContext } from 'solid-js'
 import { Modal } from '../components/modal/Modal'
 import { LoginForm } from '../components/forms/loginForm/LoginForm'
 import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
 import { AppContext } from '../index'
 
-const userUrl = 'user'
-
-async function fetchData(): Promise<User> {
-  const token = localStorage.getItem('token')
-  if (!token) return
-  const { data } = await $fetch<{}, User>(userUrl).get()
-  return data
-}
-
 export const Navbar = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
 
-  const { state, setState } = useContext(AppContext)
-
-  const [data] = createResource(fetchData)
-
-  createEffect(() => {
-    const userData = data()
-    if (userData) {
-      setState({
-        ...state,
-        user: {
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          email: userData.email,
-          address: userData.address,
-          store: userData.store,
-        },
-      })
-    }
-  }, [data])
+  const { state } = useContext(AppContext)
 
   return (
     <div class="w-full">
