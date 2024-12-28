@@ -100,7 +100,7 @@ export const Account = () => {
   return (
     <Content>
       <Stack gap={6}>
-        <h1>Account</h1>
+        <h1 class="h1">Account</h1>
         {data()?.error ? error : content()}
       </Stack>
     </Content>
