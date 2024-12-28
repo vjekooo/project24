@@ -1,16 +1,23 @@
 import { createResource } from 'solid-js'
-import { $fetch } from '../utils/fetch'
+import { $fetch, FetchData } from '../utils/fetch'
 import { Hero } from '../layout/Hero'
 import { Container } from '../layout/Container'
+import { Store as StoreType } from '../types'
+import { useParams, useSearchParams } from '@solidjs/router'
 
-const url = 'http://0.0.0.0:8080/api/store'
+const url = 'store'
 
-const getStore = async () => {
-  return $fetch(url).get()
+const fetchData = async () => {
+  const params = useParams()
+  if (!params.id) {
+    throw new Error('No id provided')
+  }
+  const fullUrl = `${url}/${params.id}`
+  return await $fetch<{}, StoreType>(fullUrl).get()
 }
 
 export const Store = () => {
-  const [data] = createResource(url, getStore)
+  const [data] = createResource<FetchData<StoreType>>(fetchData)
 
   return (
     <div>

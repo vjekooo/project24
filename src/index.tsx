@@ -50,7 +50,7 @@ render(
     <Router root={App}>
       <Route path="/" component={Home} />
       <Route path="/account" component={Account} />
-      <Route path="/store" component={Store} />
+      <Route path="/store/:id" component={Store} />
       <Route path="/confirm-registration" component={ConfirmRegistration} />
     </Router>
   ),
