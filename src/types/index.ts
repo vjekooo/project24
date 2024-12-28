@@ -20,6 +20,12 @@ export interface Store {
   address?: Address
 }
 
+export interface Product {
+  name: string
+  description: string
+  image: string
+}
+
 export interface LoginResponse {
   accessToken: string
   refreshToken: string
