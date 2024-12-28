@@ -92,17 +92,6 @@ export const UserStore = () => {
                 </div>
               </div>
             </nav>
-
-            <section class="bg-white py-8">
-              <div class="container py-8 px-6 mx-auto">
-                <button
-                  class="btn-primary"
-                  onClick={() => setPresentProductForm(true)}
-                >
-                  Add a product
-                </button>
-              </div>
-            </section>
           </div>
         </section>
 
@@ -115,7 +104,7 @@ export const UserStore = () => {
 
         <section>
           <section class="bg-white py-8">
-            <div class="container py-8 px-6 mx-auto">
+            <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
               {products() &&
                 products().data.length &&
                 products().data.map((product) => (
@@ -141,6 +130,16 @@ export const UserStore = () => {
                   </div>
                 ))}
             </div>
+            <section class="bg-white py-8">
+              <div class="container py-8 px-6 mx-auto">
+                <button
+                  class="btn-primary"
+                  onClick={() => setPresentProductForm(true)}
+                >
+                  Add a product
+                </button>
+              </div>
+            </section>
           </section>
         </section>
 
