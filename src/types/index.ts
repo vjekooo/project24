@@ -2,15 +2,16 @@ export interface User {
   firstName: string
   lastName: string
   email: string
-  address?: Address[]
+  address?: Address
   store?: Store[]
 }
 
 export interface Address {
   street: string
+  houseNumber: string
   city: string
   state: string
-  zip: string
+  postalCode: string
 }
 
 export interface Store {
