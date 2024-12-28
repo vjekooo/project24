@@ -1,6 +1,6 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { Address, LoginResponse } from '../../../types'
+import { Address, LoginResponse, MessageResponse } from '../../../types'
 import { addressConfig, AddressConfig } from './config'
 
 const url = 'address'
@@ -15,11 +15,10 @@ export const AddressForm = () => {
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    await $fetch<Address, LoginResponse>(url)
-      .post(form)
-      .then((data) => {
-        localStorage.setItem('token', data.accessToken)
-      })
+    const { data, error } = await $fetch<Address, MessageResponse>(url).post(
+      form
+    )
+    console.log({ data, error: error.message })
   }
 
   return (

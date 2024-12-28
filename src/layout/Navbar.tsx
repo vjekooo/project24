@@ -1,39 +1,31 @@
-import { createResource, createSignal, useContext } from 'solid-js'
-import { User } from '../types'
-import { $fetch } from '../utils/fetch'
+import { createSignal, useContext } from 'solid-js'
 import { Modal } from '../components/modal/Modal'
 import { LoginForm } from '../components/forms/loginForm/LoginForm'
 import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
 import { AppContext } from '../index'
 
-const userUrl = 'user'
-
 export const Navbar = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
 
-  const { state, setState } = useContext(AppContext)
-
-  async function fetchData(source, { value, refetching }): Promise<User> {
-    const token = localStorage.getItem('token')
-    if (!token) return
-    return await $fetch<any, User>(userUrl).get()
-  }
-
-  const [data, { mutate, refetch }] = createResource(fetchData)
+  const { state } = useContext(AppContext)
 
   return (
     <div class="w-full">
       <Modal isOpen={presentSignIn()} onClose={() => setPresentSignIn(false)}>
-        <h2>Sign in</h2>
         {formType() === 'login' ? (
-          <LoginForm formSwitcher={setFormType} />
+          <LoginForm
+            formSwitcher={setFormType}
+            // @ts-ignore
+            onComplete={() => setPresentSignIn(false)}
+          />
         ) : (
           <RegisterForm formSwitcher={setFormType} />
         )}
       </Modal>
       <nav id="header" class="w-full z-30 top-0 py-1">
         <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-6 py-3">
+          {/*@ts-ignore*/}
           <label htmlFor="menu-toggle" class="cursor-pointer md:hidden block">
             <svg
               class="fill-current text-gray-900"
@@ -85,7 +77,7 @@ export const Navbar = () => {
           <div class="order-1 md:order-2">
             <a
               class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
-              href="#"
+              href="/"
             >
               <svg
                 class="fill-current text-gray-800 mr-2"
@@ -105,7 +97,10 @@ export const Navbar = () => {
             id="nav-content"
           >
             {state.token ? (
-              <a class="inline-block no-underline hover:text-black" href="#">
+              <a
+                class="inline-block no-underline hover:text-black"
+                href="/account"
+              >
                 <svg
                   class="fill-current hover:text-black"
                   xmlns="http://www.w3.org/2000/svg"

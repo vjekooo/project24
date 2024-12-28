@@ -13,9 +13,18 @@ const headers = () => {
 
 type Fetch = <TBody, TResponse>(url: string) => FetchMethods<TBody, TResponse>
 
+export interface FetchData<R> {
+  data: R
+  error?: Error
+}
+
+interface Error {
+  message: string
+}
+
 interface FetchMethods<T, R> {
-  get: () => Promise<R>
-  post: (body: T) => Promise<R>
+  get: () => Promise<FetchData<R>>
+  post: (body: T) => Promise<FetchData<R>>
 }
 
 const getCookie = (name: string): string | null => {
@@ -27,32 +36,38 @@ const getCookie = (name: string): string | null => {
   return null
 }
 
+// @ts-ignore
 export const $fetch: Fetch = (url: string) => {
   const apiDomain = import.meta.env.VITE_API_DOMAIN
   const completeUrl = apiDomain + url
   return {
-    get: () =>
-      fetch(completeUrl, {
-        method: 'GET',
-        ...headers(),
-      })
-        .then((res) => {
-          return res.json()
+    get: async () => {
+      try {
+        const res = await fetch(completeUrl, headers())
+        if (!res.ok) {
+          const data = await res.json()
+          throw new Error(data.message)
+        }
+        return { data: await res.json() }
+      } catch (err) {
+        return { err: err }
+      }
+    },
+    post: async (body) => {
+      try {
+        const res = await fetch(completeUrl, {
+          method: 'POST',
+          ...headers(),
+          body: JSON.stringify(body),
         })
-        .catch((err) => {
-          console.log(err)
-        }),
-    post: (body) =>
-      fetch(completeUrl, {
-        method: 'POST',
-        ...headers(),
-        body: JSON.stringify(body),
-      })
-        .then((res) => {
-          return res.json()
-        })
-        .catch((err) => {
-          console.log(err)
-        }),
+        if (!res.ok) {
+          const data = await res.json()
+          throw new Error(data.message)
+        }
+        return { data: await res.json() }
+      } catch (err) {
+        return { error: err }
+      }
+    },
   }
 }

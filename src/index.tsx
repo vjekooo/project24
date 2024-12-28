@@ -11,11 +11,15 @@ import { User } from './types'
 import { ConfirmRegistration } from './pages/ConfirmRegistration'
 import { Navbar } from './layout/Navbar'
 import { Footer } from './layout/Footer'
-import { Hero } from './layout/Hero'
+
+interface State {
+  user: User
+  token: string
+}
 
 interface ContextState {
   state: { user: User; token: string }
-  setState: (state) => void
+  setState: (state: State) => void
 }
 
 export const AppContext = createContext<ContextState>()
@@ -34,7 +38,6 @@ const App = (props) => {
     <AppContext.Provider value={{ state, setState }}>
       <div class="laptop:container laptop:m-auto">
         <Navbar />
-        <Hero />
         {props.children}
         <Footer />
       </div>
@@ -47,7 +50,7 @@ render(
     <Router root={App}>
       <Route path="/" component={Home} />
       <Route path="/account" component={Account} />
-      <Route path="/store" component={Store} />
+      <Route path="/store/:id" component={Store} />
       <Route path="/confirm-registration" component={ConfirmRegistration} />
     </Router>
   ),

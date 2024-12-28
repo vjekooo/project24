@@ -1,5 +1,6 @@
 import { $fetch } from '../utils/fetch'
 import { useLocation, useNavigate } from '@solidjs/router'
+import { Content } from '../layout/Content'
 
 export const ConfirmRegistration = () => {
   const location = useLocation()
@@ -17,11 +18,11 @@ export const ConfirmRegistration = () => {
   }
 
   return (
-    <div>
+    <Content>
       <h1>Confirmation</h1>
       <button class="btn-primary" onClick={() => handleSubmit()}>
         Confirm
       </button>
-    </div>
+    </Content>
   )
 }
