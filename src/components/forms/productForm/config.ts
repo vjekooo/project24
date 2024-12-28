@@ -1,10 +1,10 @@
-export interface StoreConfig {
+export interface Config {
   label: string
   name: string
   type: string
 }
 
-export const storeConfig: StoreConfig[] = [
+export const productConfig: Config[] = [
   {
     label: 'Name',
     name: 'name',
@@ -13,6 +13,11 @@ export const storeConfig: StoreConfig[] = [
   {
     label: 'Description',
     name: 'description',
+    type: 'text',
+  },
+  {
+    label: 'Image',
+    name: 'image',
     type: 'text',
   },
 ]

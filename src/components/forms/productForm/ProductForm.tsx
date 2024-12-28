@@ -1,15 +1,15 @@
 import { $fetch } from '../../../utils/fetch'
-import { StoreConfig, storeConfig } from './config'
 import { useForm } from '../../../lib/form/useForm'
 import { MessageResponse, Product } from '../../../types'
+import { productConfig, Config } from './config'
 
 const url = 'store'
 
 export const ProductForm = () => {
   const { validate, formSubmit, errors, updateFormField, form } = useForm<
-    StoreConfig,
+    Config,
     Product
-  >({ config: storeConfig })
+  >({ config: productConfig })
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
@@ -23,7 +23,7 @@ export const ProductForm = () => {
     <div class="flex justify-center">
       <div class="flex flex-col gap-2">
         <form onSubmit={handleSubmit}>
-          {storeConfig.map((field) => {
+          {productConfig.map((field) => {
             return (
               <input
                 class="input"
