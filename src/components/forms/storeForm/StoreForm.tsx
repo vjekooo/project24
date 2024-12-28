@@ -13,12 +13,8 @@ export const StoreForm = () => {
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    console.log(errors)
-    await $fetch<Store, MessageResponse>(url)
-      .post(form)
-      .then((data) => {
-        console.log(data.message)
-      })
+    const { data, error } = await $fetch<Store, MessageResponse>(url).post(form)
+    console.log({ data, error })
   }
 
   return (

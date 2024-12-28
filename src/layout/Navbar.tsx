@@ -16,7 +16,8 @@ const userUrl = 'user'
 async function fetchData(): Promise<User> {
   const token = localStorage.getItem('token')
   if (!token) return
-  return await $fetch<any, User>(userUrl).get()
+  const { data } = await $fetch<{}, User>(userUrl).get()
+  return data
 }
 
 export const Navbar = () => {
