@@ -26,6 +26,7 @@ interface FetchMethods<T, R> {
   get: () => Promise<FetchData<R>>
   post: (body: T) => Promise<FetchData<R>>
   put: (body: T) => Promise<FetchData<R>>
+  patch: (body: T) => Promise<FetchData<R>>
   delete: () => Promise<FetchData<R>>
 }
 

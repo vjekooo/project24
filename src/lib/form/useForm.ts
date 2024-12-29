@@ -27,6 +27,7 @@ interface Form<T> {
   formSubmit: any
   errors: T
   updateFormField: (fieldName: string) => (event: Event) => void
+  setDefaultValue: (fieldName: string, value: string) => void
   form: T
   isFormValid: boolean
 }
@@ -79,6 +80,12 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
     }
   }
 
+  const setDefaultValue = (fieldName: string, value: string) => {
+    setForm({
+      [fieldName]: value,
+    })
+  }
+
   const updateFormField = (fieldName: string) => (event: Event) => {
     const inputElement = event.currentTarget as HTMLInputElement
     if (inputElement.type === 'checkbox') {
@@ -108,6 +115,7 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
     // @ts-ignore
     errors,
     updateFormField,
+    setDefaultValue,
     // @ts-ignore
     form,
     isFormValid: isFormValid(),

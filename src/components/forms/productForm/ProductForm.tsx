@@ -14,19 +14,19 @@ interface Props {
 }
 
 export const ProductForm = ({ store, product, onClose }: Props) => {
-  const { validate, formSubmit, errors, updateFormField, form } = useForm<
-    Config,
-    Product
-  >({ config: productConfig })
+  const { updateFormField, setDefaultValue, form } = useForm<Config, Product>({
+    config: productConfig,
+  })
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
-    const newProduct = {
-      ...form,
-      image: [form.image],
-      storeId: store.id,
-    }
+
     if (product()?.id) {
+      const newProduct = {
+        ...form,
+        image: form.image ? form.image : [form.image],
+        storeId: store.id,
+      }
       const { data } = await $fetch<Product, MessageResponse>(url).put(
         // @ts-ignore
         {
@@ -38,6 +38,11 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
         onClose()
       }
     } else {
+      const newProduct = {
+        ...form,
+        image: [form.image],
+        storeId: store.id,
+      }
       const { data } = await $fetch<Product, MessageResponse>(url).post(
         // @ts-ignore
         newProduct
@@ -53,13 +58,16 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
       <form onSubmit={handleSubmit}>
         <Stack gap={6}>
           {productConfig.map((field) => {
+            if (product()) {
+              setDefaultValue(field.name, product()?.[field.name])
+            }
             return (
               <input
                 class="input"
                 type={field.type}
                 placeholder={field.label}
                 onChange={updateFormField(field.name)}
-                value={product()?.[field.name] || ''}
+                value={product()?.[field.name]}
               />
             )
           })}
