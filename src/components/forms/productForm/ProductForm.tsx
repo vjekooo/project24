@@ -1,7 +1,7 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
 import { MessageResponse, Product, Store } from '../../../types'
-import { productConfig, Config } from './config'
+import { productConfig as config, Config } from './config'
 import { Stack } from '../../../ui/Stack'
 import { Accessor } from 'solid-js'
 
@@ -15,36 +15,27 @@ interface Props {
 
 export const ProductForm = ({ store, product, onClose }: Props) => {
   const { updateFormField, setDefaultValue, form } = useForm<Config, Product>({
-    config: productConfig,
+    config,
   })
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()
 
+    const newProduct = {
+      ...form,
+      storeId: store.id,
+    }
+
     if (product()?.id) {
-      const newProduct = {
-        ...form,
-        image: form.image ? form.image : [form.image],
-        storeId: store.id,
-      }
-      const { data } = await $fetch<Product, MessageResponse>(url).put(
-        // @ts-ignore
-        {
-          ...newProduct,
-          id: product()?.id,
-        }
-      )
+      const { data } = await $fetch<Product, MessageResponse>(url).put({
+        ...newProduct,
+        id: product()?.id,
+      })
       if (data) {
         onClose()
       }
     } else {
-      const newProduct = {
-        ...form,
-        image: [form.image],
-        storeId: store.id,
-      }
       const { data } = await $fetch<Product, MessageResponse>(url).post(
-        // @ts-ignore
         newProduct
       )
       if (data) {
@@ -57,7 +48,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
     <div class="flex flex-col gap-2">
       <form onSubmit={handleSubmit}>
         <Stack gap={6}>
-          {productConfig.map((field) => {
+          {config.map((field) => {
             if (product()) {
               setDefaultValue(field.name, product()?.[field.name])
             }
@@ -66,8 +57,8 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
                 class="input"
                 type={field.type}
                 placeholder={field.label}
-                onChange={updateFormField(field.name)}
-                value={product()?.[field.name]}
+                onChange={updateFormField(field.name, field.multiple)}
+                value={product()?.[field.name] || ''}
               />
             )
           })}

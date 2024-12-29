@@ -26,7 +26,10 @@ interface Form<T> {
   validate: any
   formSubmit: any
   errors: T
-  updateFormField: (fieldName: string) => (event: Event) => void
+  updateFormField: (
+    fieldName: string,
+    multiple?: boolean
+  ) => (event: Event) => void
   setDefaultValue: (fieldName: string, value: string) => void
   form: T
   isFormValid: boolean
@@ -86,18 +89,25 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
     })
   }
 
-  const updateFormField = (fieldName: string) => (event: Event) => {
-    const inputElement = event.currentTarget as HTMLInputElement
-    if (inputElement.type === 'checkbox') {
-      setForm({
-        [fieldName]: !!inputElement.checked,
-      })
-    } else {
-      setForm({
-        [fieldName]: inputElement.value,
-      })
+  const updateFormField =
+    (fieldName: string, multiple?: boolean) => (event: Event) => {
+      const inputElement = event.currentTarget as HTMLInputElement
+      if (inputElement.type === 'checkbox') {
+        setForm({
+          [fieldName]: !!inputElement.checked,
+        })
+      } else {
+        if (multiple) {
+          setForm({
+            [fieldName]: [...state[fieldName], inputElement.value],
+          })
+        } else {
+          setForm({
+            [fieldName]: inputElement.value,
+          })
+        }
+      }
     }
-  }
 
   const isFormValid = () => {
     for (const k in errors) {

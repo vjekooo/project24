@@ -2,6 +2,7 @@ export interface Config {
   label: string
   name: string
   type: string
+  multiple?: boolean
 }
 
 export const productConfig: Config[] = [
@@ -19,5 +20,6 @@ export const productConfig: Config[] = [
     label: 'Image',
     name: 'image',
     type: 'text',
+    multiple: true,
   },
 ]
