@@ -24,7 +24,7 @@ export interface Store {
   description: string
   userId: string
   media?: Media[]
-  product?: Product[]
+  products?: Product[]
   address?: Address
 }
 
