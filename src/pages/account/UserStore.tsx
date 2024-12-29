@@ -31,14 +31,14 @@ export const UserStore = () => {
   const [store, setStore] = createSignal<Store | null>(null)
   const [data] = createResource<FetchData<Store>>(fetchData)
 
-  const [products, { refetch: refetchProducts }] =
+  const [products, { refetch }] =
     createResource<FetchData<Product[]>>(fetchProducts)
 
   const [presentProductForm, setPresentProductForm] = createSignal(false)
 
   const onModalClose = () => {
+    refetch()
     setPresentProductForm(false)
-    refetchProducts()
   }
 
   createEffect(() => {
