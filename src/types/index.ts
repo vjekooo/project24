@@ -14,12 +14,16 @@ export interface Address {
   postalCode: string
 }
 
+interface Media {
+  url: string
+}
+
 export interface Store {
   id: string
   name: string
   description: string
   userId: string
-  media?: string[]
+  media?: Media[]
   product?: Product[]
   address?: Address
 }
