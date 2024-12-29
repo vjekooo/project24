@@ -25,6 +25,8 @@ interface Error {
 interface FetchMethods<T, R> {
   get: () => Promise<FetchData<R>>
   post: (body: T) => Promise<FetchData<R>>
+  put: (body: T) => Promise<FetchData<R>>
+  delete: () => Promise<FetchData<R>>
 }
 
 const getCookie = (name: string): string | null => {
@@ -67,6 +69,37 @@ export const $fetch: Fetch = (url: string) => {
         return { data: await res.json() }
       } catch (err) {
         return { error: err }
+      }
+    },
+    put: async (body) => {
+      try {
+        const res = await fetch(completeUrl, {
+          method: 'PUT',
+          ...headers(),
+          body: JSON.stringify(body),
+        })
+        if (!res.ok) {
+          const data = await res.json()
+          throw new Error(data.message)
+        }
+        return { data: await res.json() }
+      } catch (err) {
+        return { error: err }
+      }
+    },
+    delete: async () => {
+      try {
+        const res = await fetch(completeUrl, {
+          method: 'DELETE',
+          ...headers(),
+        })
+        if (!res.ok) {
+          const data = await res.json()
+          throw new Error(data.message)
+        }
+        return { data: await res.json() }
+      } catch (err) {
+        return { err: err }
       }
     },
   }

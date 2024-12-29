@@ -3,15 +3,17 @@ import { useForm } from '../../../lib/form/useForm'
 import { MessageResponse, Product, Store } from '../../../types'
 import { productConfig, Config } from './config'
 import { Stack } from '../../../ui/Stack'
+import { Accessor } from 'solid-js'
 
 const url = 'product'
 
 interface Props {
   store: Store
+  product?: Accessor<Product>
   onClose: () => void
 }
 
-export const ProductForm = ({ store, onClose }: Props) => {
+export const ProductForm = ({ store, product, onClose }: Props) => {
   const { validate, formSubmit, errors, updateFormField, form } = useForm<
     Config,
     Product
@@ -24,12 +26,25 @@ export const ProductForm = ({ store, onClose }: Props) => {
       image: [form.image],
       storeId: store.id,
     }
-    const { data, error } = await $fetch<Product, MessageResponse>(url).post(
-      // @ts-ignore
-      newProduct
-    )
-    if (data) {
-      onClose()
+    if (product()?.id) {
+      const { data } = await $fetch<Product, MessageResponse>(url).put(
+        // @ts-ignore
+        {
+          ...newProduct,
+          id: product()?.id,
+        }
+      )
+      if (data) {
+        onClose()
+      }
+    } else {
+      const { data } = await $fetch<Product, MessageResponse>(url).post(
+        // @ts-ignore
+        newProduct
+      )
+      if (data) {
+        onClose()
+      }
     }
   }
 
@@ -44,6 +59,7 @@ export const ProductForm = ({ store, onClose }: Props) => {
                 type={field.type}
                 placeholder={field.label}
                 onChange={updateFormField(field.name)}
+                value={product()?.[field.name] || ''}
               />
             )
           })}
