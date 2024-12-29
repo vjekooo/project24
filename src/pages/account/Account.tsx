@@ -69,7 +69,7 @@ export const Account = () => {
             <span>{user().address.city}</span>
           </Stack>
         )}
-        {!user()?.store?.length ? (
+        {!user()?.stores?.length ? (
           <div class="flex flex-row gap-3">
             <p>You have no store on file</p>
             <div>
@@ -90,9 +90,9 @@ export const Account = () => {
         ) : (
           <Stack gap={3}>
             <h3 class="h3">Store</h3>
-            <span>{user().store[0]?.name}</span>
+            <span>{user().stores[0]?.name}</span>
             <Stack gap={3} horizontal>
-              <a href={`/account/store/${user()?.store[0].id}`}>
+              <a href={`/account/store/${user()?.stores[0].id}`}>
                 edit your store
               </a>
               <svg

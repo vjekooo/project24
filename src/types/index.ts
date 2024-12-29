@@ -3,7 +3,8 @@ export interface User {
   lastName: string
   email: string
   address?: Address
-  store?: Store[]
+  stores?: Store[]
+  favorites?: FavoriteProduct[]
 }
 
 export interface Address {
