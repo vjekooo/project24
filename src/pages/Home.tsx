@@ -1,8 +1,14 @@
 import { createResource } from 'solid-js'
 import { Container } from '../layout/Container'
 import { Hero } from '../layout/Hero'
-import { $fetch } from '../utils/fetch'
-import { Store } from '../types'
+import { $fetch, FetchData } from '../utils/fetch'
+import {
+  FavoriteProduct,
+  FavoriteStore,
+  MessageResponse,
+  Store,
+} from '../types'
+import { HeartIcon } from '../icons/HeartIcon'
 
 interface HeroActionProps {
   storeId: string
@@ -23,8 +29,30 @@ const fetchData = async () => {
   return await $fetch<any, Store[]>(url).get()
 }
 
+const setStoreFavorite = async (id: string) => {
+  const fullUrl = 'store/toggle-favorite'
+  const { data, error } = await $fetch<{}, MessageResponse>(fullUrl).post({
+    storeId: id,
+  })
+  console.log({ data, error })
+}
+
+const fetchFavorites = async () => {
+  const fullUrl = 'store/favorites'
+  return await $fetch<{}, FavoriteStore[]>(fullUrl).get()
+}
+
 export const Home = () => {
   const [stores] = createResource(fetchData)
+
+  const [favorites, { refetch }] =
+    createResource<FetchData<FavoriteStore[]>>(fetchFavorites)
+
+  const onFavClick = (id: string) => {
+    setStoreFavorite(id).then(() => {
+      refetch()
+    })
+  }
 
   return (
     <div>
@@ -90,10 +118,22 @@ export const Home = () => {
                         class="hover:grow hover:shadow-lg"
                         src={store.media[0].url}
                       />
-                      <div class="pt-3 flex items-center justify-between">
-                        <p class="">{store.name}</p>
-                      </div>
                     </a>
+                    <div class="pt-3 flex items-center justify-between">
+                      <p class="">{store.name}</p>
+                      <div
+                        class="cursor-pointer"
+                        onClick={() => onFavClick(store.id)}
+                      >
+                        <HeartIcon
+                          isFilled={() =>
+                            favorites()?.data?.some(
+                              (favorite) => favorite.storeId === store.id
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

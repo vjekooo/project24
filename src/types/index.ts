@@ -34,6 +34,11 @@ export interface FavoriteProduct {
   productId: string
 }
 
+export interface FavoriteStore {
+  id: string
+  storeId: string
+}
+
 export interface Product {
   id: string
   name: string
