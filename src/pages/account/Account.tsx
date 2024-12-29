@@ -9,7 +9,7 @@ import { Modal } from '../../components/modal/Modal'
 
 const userUrl = 'user'
 
-async function fetchData(source, { value, refetching }) {
+async function fetchData() {
   return await $fetch<any, User>(userUrl).get()
 }
 
@@ -19,7 +19,7 @@ export const Account = () => {
   const [presentAddressForm, setPresentAddressForm] = createSignal(false)
   const [presentStoreForm, setPresentStoreForm] = createSignal(false)
 
-  const [data, { mutate, refetch }] = createResource<FetchData<User>>(fetchData)
+  const [data] = createResource<FetchData<User>>(fetchData)
 
   createEffect(() => {
     if (data()) {
