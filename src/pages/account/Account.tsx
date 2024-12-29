@@ -60,7 +60,7 @@ export const Account = () => {
           </div>
         ) : (
           <Stack gap={3}>
-            <h2>Your address is:</h2>
+            <h3 class="h3">Address</h3>
             <Stack gap={3} horizontal>
               <span>{user()?.address.street}</span>
               <span>{user().address.houseNumber}</span>
@@ -89,10 +89,28 @@ export const Account = () => {
           </div>
         ) : (
           <Stack gap={3}>
-            <h2>Your store is:</h2>
+            <h3 class="h3">Store</h3>
             <span>{user().store[0]?.name}</span>
-            <span>{user().store[0]?.description}</span>
-            <a href={`/account/store/${user()?.store[0].id}`}>go to store</a>
+            <Stack gap={3} horizontal>
+              <a href={`/account/store/${user()?.store[0].id}`}>
+                edit your store
+              </a>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1"
+                width="24"
+                height="24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4 12h16m-6-6l6 6-6 6"
+                />
+              </svg>
+            </Stack>
           </Stack>
         )}
       </div>
