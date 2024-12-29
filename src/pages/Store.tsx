@@ -5,14 +5,14 @@ import { Container } from '../layout/Container'
 import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
 import { useParams } from '@solidjs/router'
 
-const HeartIcon = ({ isFilled }: { isFilled: boolean }) => {
+const HeartIcon = ({ isFilled }: { isFilled: () => boolean }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       class="h-5 w-5 transition-all duration-200 ease-in-out cursor-pointer transform hover:scale-110" // Add hover scale effect
-      fill={isFilled ? 'red' : 'white'}
-      stroke={isFilled ? 'red' : 'black'}
+      fill={isFilled() ? 'red' : 'white'}
+      stroke={isFilled() ? 'red' : 'black'}
       stroke-width="1.5"
       classList={{
         'hover:stroke-black': true,
@@ -35,7 +35,7 @@ const fetchData = async () => {
 }
 
 const setProductFavorite = async (id: string) => {
-  const fullUrl = 'product/favorite'
+  const fullUrl = 'product/toggle-favorite'
   const { data, error } = await $fetch<{}, MessageResponse>(fullUrl).post({
     productId: id,
   })
@@ -48,26 +48,21 @@ const fetchFavorites = async () => {
 }
 
 export const Store = () => {
-  const [store, setStore] = createSignal<StoreType | null>(null)
-  const [data] = createResource<FetchData<StoreType>>(fetchData)
+  const [store] = createResource<FetchData<StoreType>>(fetchData)
 
-  const [favorites] =
+  const [favorites, { refetch }] =
     createResource<FetchData<FavoriteProduct[]>>(fetchFavorites)
 
   const onFavClick = (id: string) => {
-    setProductFavorite(id)
+    setProductFavorite(id).then(() => {
+      refetch()
+    })
   }
-
-  createEffect(() => {
-    if (data()) {
-      setStore(data().data)
-    }
-  })
 
   return (
     <div>
-      {store()?.name && (
-        <Hero name={store()?.name} image={store()?.media[0].url} />
+      {store()?.data && (
+        <Hero name={store().data.name} image={store().data.media[0].url} />
       )}
       <Container>
         <section class="bg-white py-8">
@@ -112,14 +107,14 @@ export const Store = () => {
               </div>
             </nav>
 
-            {!store()?.products.length && (
+            {!store()?.data.products.length && (
               <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                 This store has no products
               </div>
             )}
 
             <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-              {store()?.products.map((product) => (
+              {store()?.data.products.map((product) => (
                 <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <a href="#">
                     <img
@@ -135,9 +130,11 @@ export const Store = () => {
                       onClick={() => onFavClick(product.id)}
                     >
                       <HeartIcon
-                        isFilled={favorites()?.data.some(
-                          (favorite) => favorite.productId === product.id
-                        )}
+                        isFilled={() =>
+                          favorites()?.data?.some(
+                            (favorite) => favorite.productId === product.id
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -159,7 +156,7 @@ export const Store = () => {
 
               <p class="mt-8 mb-8"></p>
 
-              <p class="mb-8">{store()?.description}</p>
+              <p class="mb-8">{store()?.data.description}</p>
             </div>
           </section>
         </section>
