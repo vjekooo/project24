@@ -1,4 +1,5 @@
 import { JSX } from 'solid-js'
+import { Stack } from '../ui/Stack'
 
 interface Props {
   name: string
@@ -9,14 +10,14 @@ interface Props {
 export const Hero = ({ name, image, action }: Props) => {
   return (
     <section
-      class="w-full mx-auto bg-nordic-gray-light flex pt-12 md:pt-0 md:items-center bg-cover bg-right"
+      class="w-full mx-auto bg-nordic-gray-light flex p-12 md:pt-0 items-end bg-cover bg-right"
       style={`max-width:1600px; height: 32rem; background-image: url('${image}');`}
     >
-      <div class="container mx-auto">
-        <div class="flex flex-col w-full lg:w-1/2 justify-center items-start  px-6 tracking-wide">
-          <h1 class="text-black text-2xl my-4">{name}</h1>
-          {action && action}
-        </div>
+      <div class="flex flex-col justify-center items-start p-6 tracking-wide bg-white opacity-50">
+        <Stack gap={3}>
+          <h1 class="text-black h1">{name}</h1>
+          {action && <div>{action}</div>}
+        </Stack>
       </div>
     </section>
   )
