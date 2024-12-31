@@ -3,7 +3,8 @@ import { useForm } from '../../../lib/form/useForm'
 import { MessageResponse, Product, Store } from '../../../types'
 import { productConfig as config, Config } from './config'
 import { Stack } from '../../../ui/Stack'
-import { Accessor } from 'solid-js'
+import { Accessor, For } from 'solid-js'
+import { ErrorMessage } from '../../../ui/ErrorMessage'
 
 const url = 'product'
 
@@ -14,15 +15,23 @@ interface Props {
 }
 
 export const ProductForm = ({ store, product, onClose }: Props) => {
-  const { updateFormField, setDefaultValue, form } = useForm<Config, Product>({
+  const {
+    updateFormField,
+    errors,
+    formSubmit,
+    validate,
+    cleanFormData,
+    isFormValid,
+  } = useForm<Config, Product>({
     config,
+    defaultState: product(),
   })
 
-  const handleSubmit = async (event: Event) => {
-    event.preventDefault()
+  const handleSubmit = async (form: HTMLFormElement, data: Product) => {
+    const cleanData = cleanFormData(data)
 
     const newProduct = {
-      ...form,
+      ...cleanData,
       storeId: store.id,
     }
 
@@ -46,23 +55,30 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
 
   return (
     <div class="flex flex-col gap-2">
-      <form onSubmit={handleSubmit}>
+      <form use:formSubmit={handleSubmit}>
         <Stack gap={6}>
-          {config.map((field) => {
-            if (product()) {
-              setDefaultValue(field.name, product()?.[field.name])
-            }
-            return (
-              <input
-                class="input"
-                type={field.type}
-                placeholder={field.label}
-                onChange={updateFormField(field.name, field.multiple)}
-                value={product()?.[field.name] || ''}
-              />
-            )
-          })}
-          <button class="btn-primary" type="submit">
+          <For each={config}>
+            {(item, index) => {
+              return (
+                <Stack gap={2}>
+                  <input
+                    use:validate={[item.validation]}
+                    class="input"
+                    name={item.name}
+                    type={item.type}
+                    placeholder={item.label}
+                    onChange={updateFormField(item.name, item.multiple)}
+                    value={product()?.[item.name] || ''}
+                  />
+                  {errors[item.name] && (
+                    <ErrorMessage error={errors[item.name]} />
+                  )}
+                </Stack>
+              )
+            }}
+          </For>
+
+          <button class="btn-primary" type="submit" disabled={!isFormValid()}>
             Submit
           </button>
         </Stack>

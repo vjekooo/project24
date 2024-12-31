@@ -1,12 +1,27 @@
+import { createSignal } from 'solid-js'
 import { createStore } from 'solid-js/store'
 
-function checkValid({ element, validators = [] }, setErrors, errorClass) {
+const cleanFormData = (data: any) => {
+  return Object.keys(data).reduce((acc, key) => {
+    if (data[key] !== '') {
+      acc[key] = data[key]
+    }
+    return acc
+  }, {})
+}
+
+function checkValid(
+  { element, validators },
+  setErrors: (field: any) => void,
+  setValid: (valid: boolean) => void,
+  errorClass: string
+) {
   return async () => {
     element.setCustomValidity('')
     element.checkValidity()
     let message = element.validationMessage
     if (!message) {
-      for (const validator of validators) {
+      for (const validator of validators.filter(Boolean)) {
         const text = await validator(element)
         if (text) {
           element.setCustomValidity(text)
@@ -18,11 +33,14 @@ function checkValid({ element, validators = [] }, setErrors, errorClass) {
     if (message) {
       errorClass && element.classList.toggle(errorClass, true)
       setErrors({ [element.name]: message })
+      setValid(false)
+    } else {
+      setValid(true)
     }
   }
 }
 
-interface Form<T> {
+interface Form<T, R> {
   validate: any
   formSubmit: any
   errors: T
@@ -30,17 +48,22 @@ interface Form<T> {
     fieldName: string,
     multiple?: boolean
   ) => (event: Event) => void
-  setDefaultValue: (fieldName: string, value: string) => void
   form: T
-  isFormValid: boolean
+  cleanFormData: (data: R) => R
+  isFormValid: () => boolean
 }
 
-export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
+export function useForm<T, R>({
+  config,
+  defaultState,
+}: {
+  config: T[]
+  defaultState?: R
+}): Form<R> {
   const errorClass = 'error-input'
 
-  // @ts-ignore
-  const state = config.reduce((acc, { name }) => {
-    acc[name] = ''
+  const state = config.reduce((acc, { name }: any) => {
+    acc[name] = defaultState?.[name] || ''
     return acc
   }, {})
 
@@ -51,20 +74,27 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
   const [errors, setErrors] = createStore({
       ...state,
     }),
-    fields = {}
+    fields = []
 
-  const validate = (ref: any) => {
-    const name = ref.name
-    const value = form[name]
-    if (!ref.validation) {
-      return
-    }
-    if (ref.validation(value)) {
-      setErrors({ [name]: ref.validation(value) })
+  const [isValid, setIsValid] = createSignal(true)
+
+  const validate = (ref: HTMLInputElement, accessor: () => boolean) => {
+    const accessorValue = accessor()
+    const validators = Array.isArray(accessorValue) ? accessorValue : []
+    let config = { element: ref, validators }
+    fields.push(config)
+    ref.onblur = checkValid(config, setErrors, setIsValid, errorClass)
+    ref.oninput = () => {
+      if (!errors[ref.name]) return
+      setErrors({ [ref.name]: undefined })
+      errorClass && ref.classList.toggle(errorClass, false)
     }
   }
 
-  const formSubmit = (ref, accessor) => {
+  const formSubmit = (
+    ref: HTMLFormElement,
+    accessor: () => (ref: HTMLFormElement, state: R) => void
+  ) => {
     const callback = accessor() || (() => {})
     ref.setAttribute('novalidate', '')
     ref.onsubmit = async (e) => {
@@ -73,20 +103,14 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
 
       for (const k in fields) {
         const field = fields[k]
-        await checkValid(field, setErrors, errorClass)()
+        await checkValid(field, setErrors, setIsValid, errorClass)()
         if (!errored && field.element.validationMessage) {
           field.element.focus()
           errored = true
         }
       }
-      !errored && callback(ref)
+      !errored && callback(ref, form as R)
     }
-  }
-
-  const setDefaultValue = (fieldName: string, value: string) => {
-    setForm({
-      [fieldName]: value,
-    })
   }
 
   const updateFormField =
@@ -109,25 +133,15 @@ export function useForm<T, R>({ config }: { config: T[] }): Form<R> {
       }
     }
 
-  const isFormValid = () => {
-    for (const k in errors) {
-      const field = errors[k]
-      if (field.length > 0) {
-        return false
-      }
-    }
-    return true
-  }
-
   return {
     validate,
     formSubmit,
     // @ts-ignore
     errors,
     updateFormField,
-    setDefaultValue,
     // @ts-ignore
     form,
-    isFormValid: isFormValid(),
+    cleanFormData,
+    isFormValid: () => isValid(),
   }
 }

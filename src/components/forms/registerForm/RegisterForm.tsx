@@ -1,6 +1,7 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
 import { registerConfig, RegisterConfig } from './config'
+import { ErrorMessage } from '../../../ui/ErrorMessage'
 
 interface Props {
   formSwitcher: (value: string) => void
@@ -12,8 +13,6 @@ interface RegisterForm {
 }
 
 const url = 'auth/register'
-
-const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 
 export const RegisterForm = ({ formSwitcher }: Props) => {
   const { form, errors, validate, updateFormField, isFormValid } = useForm<
