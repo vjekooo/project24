@@ -6,6 +6,7 @@ import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
 import { LoginResponse } from '../../../types'
 import { LoginConfig, loginConfig } from './config'
+import { ErrorMessage } from '../../../ui/ErrorMessage'
 
 interface Props {
   formSwitcher: (value: string) => void
@@ -17,8 +18,6 @@ interface LoginForm {
 }
 
 const loginUrl = 'auth/login'
-
-const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 
 export const LoginForm = ({ formSwitcher }: Props) => {
   const navigate = useNavigate()
@@ -41,6 +40,7 @@ export const LoginForm = ({ formSwitcher }: Props) => {
   }
 
   return (
+    // @ts-ignore
     <form use:formSubmit={handleSubmit}>
       <div class="flex flex-col gap-6 mt-5">
         {loginConfig.map((field) => {

@@ -55,6 +55,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
 
   return (
     <div class="flex flex-col gap-2">
+      {/*@ts-ignore*/}
       <form use:formSubmit={handleSubmit}>
         <Stack gap={6}>
           <For each={config}>
@@ -62,6 +63,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
               return (
                 <Stack gap={2}>
                   <input
+                    // @ts-ignore
                     use:validate={[item.validation]}
                     class="input"
                     name={item.name}
