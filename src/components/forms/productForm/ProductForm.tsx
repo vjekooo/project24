@@ -64,7 +64,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
                 <Stack gap={2}>
                   <input
                     // @ts-ignore
-                    use:validate={[item.validation]}
+                    use:validate={item.validation}
                     class="input"
                     name={item.name}
                     type={item.type}

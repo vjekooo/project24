@@ -40,7 +40,7 @@ export const RegisterForm = ({ formSwitcher }: Props) => {
                 <Stack gap={2}>
                   <input
                     // @ts-ignore
-                    use:validate={[field.validation]}
+                    use:validate={field.validation}
                     class="input"
                     type={field.type}
                     placeholder={field.placeholder}
