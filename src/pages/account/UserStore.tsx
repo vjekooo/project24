@@ -4,11 +4,11 @@ import { $fetch, FetchData } from '../../utils/fetch'
 import { Hero } from '../../layout/Hero'
 import { MessageResponse, Product, Store } from '../../types'
 import { Container } from '../../layout/Container'
-import { Modal } from '../../components/modal/Modal'
 import { ProductForm } from '../../components/forms/productForm/ProductForm'
 import { EditIcon } from '../../icons/EditIcon'
 import { DeleteIcon } from '../../icons/DeleteIcon'
 import { Stack } from '../../ui/Stack'
+import { Modal } from '../../components/modal/Modal'
 
 const storeUrl = 'store'
 const productUrl = 'product'
@@ -110,7 +110,7 @@ export const UserStore = () => {
         >
           {store() && (
             <ProductForm
-              store={store().data}
+              store={store()?.data}
               product={productToEdit}
               onClose={onModalClose}
             />

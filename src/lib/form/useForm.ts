@@ -1,13 +1,13 @@
 import { createSignal } from 'solid-js'
 import { createStore } from 'solid-js/store'
 
-const cleanFormData = (data: any) => {
+const cleanFormData = <T>(data: T): T => {
   return Object.keys(data).reduce((acc, key) => {
     if (data[key] !== '') {
       acc[key] = data[key]
     }
     return acc
-  }, {})
+  }, {}) as T
 }
 
 function checkValid(
@@ -40,7 +40,7 @@ function checkValid(
   }
 }
 
-interface Form<T, R> {
+interface Form<T> {
   validate: any
   formSubmit: any
   errors: T
@@ -49,7 +49,7 @@ interface Form<T, R> {
     multiple?: boolean
   ) => (event: Event) => void
   form: T
-  cleanFormData: (data: R) => R
+  cleanFormData: <T>(data: T) => T
   isFormValid: () => boolean
 }
 

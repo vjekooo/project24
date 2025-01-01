@@ -27,7 +27,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
     defaultState: product(),
   })
 
-  const handleSubmit = async (form: HTMLFormElement, data: Product) => {
+  const handleSubmit = async (_: HTMLFormElement, data: Product) => {
     const cleanData = cleanFormData(data)
 
     const newProduct = {
@@ -35,7 +35,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
       storeId: store.id,
     }
 
-    if (product()?.id) {
+    if (product && product()?.id) {
       const { data } = await $fetch<Product, MessageResponse>(url).put({
         ...newProduct,
         id: product()?.id,
@@ -58,7 +58,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
       <form use:formSubmit={handleSubmit}>
         <Stack gap={6}>
           <For each={config}>
-            {(item, index) => {
+            {(item) => {
               return (
                 <Stack gap={2}>
                   <input

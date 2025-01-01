@@ -23,15 +23,14 @@ const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
 export const LoginForm = ({ formSwitcher }: Props) => {
   const navigate = useNavigate()
   const { state, setState } = useContext(AppContext)
-  const { validate, formSubmit, errors, updateFormField, form } = useForm<
+  const { formSubmit, errors, updateFormField } = useForm<
     LoginConfig,
     LoginForm
   >({
     config: loginConfig,
   })
 
-  const handleSubmit = async (event: Event) => {
-    event.preventDefault()
+  const handleSubmit = async (_: Event, form: LoginForm) => {
     const { data } = await $fetch<LoginForm, LoginResponse>(loginUrl).post(form)
 
     if (data?.accessToken) {
@@ -42,7 +41,7 @@ export const LoginForm = ({ formSwitcher }: Props) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form use:formSubmit={handleSubmit}>
       <div class="flex flex-col gap-6 mt-5">
         {loginConfig.map((field) => {
           return (

@@ -1,4 +1,4 @@
-import { createSignal, JSX } from 'solid-js'
+import { JSX } from 'solid-js'
 
 interface ModalProps {
   isOpen: boolean
@@ -19,7 +19,7 @@ export const Modal = (props: ModalProps) => {
       ></div>
 
       <div class="bg-white p-6 rounded shadow-lg z-10 flex flex-col">
-        <div class="cursor-pointer self-end" onClick={props.onClose}>
+        <div class="cursor-pointer self-end mb-8" onClick={props.onClose}>
           X
         </div>
         <div>{props.children}</div>

@@ -3,6 +3,8 @@ import { Modal } from '../components/modal/Modal'
 import { LoginForm } from '../components/forms/loginForm/LoginForm'
 import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
 import { AppContext } from '../index'
+import { ProductForm } from '../components/forms/productForm/ProductForm'
+import { createModal } from '../hooks/createModal'
 
 export const Navbar = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
@@ -10,9 +12,15 @@ export const Navbar = () => {
 
   const { state } = useContext(AppContext)
 
+  const { Modal, openModal } = createModal()
+
+  const onModalClose = () => {
+    //
+  }
+
   return (
     <div class="w-full">
-      <Modal isOpen={presentSignIn()} onClose={() => setPresentSignIn(false)}>
+      <Modal onClose={onModalClose}>
         {formType() === 'login' ? (
           <LoginForm
             formSwitcher={setFormType}
@@ -116,7 +124,7 @@ export const Navbar = () => {
               <div
                 class="inline-block no-underline cursor-pointer hover:text-black"
                 onClick={() => {
-                  setPresentSignIn(!presentSignIn())
+                  openModal()
                 }}
               >
                 Sign in
