@@ -107,6 +107,7 @@ export const UserStore = () => {
         <Modal
           isOpen={presentProductForm()}
           onClose={() => setPresentProductForm(false)}
+          title="Add a product"
         >
           {store() && (
             <ProductForm
