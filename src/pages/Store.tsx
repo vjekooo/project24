@@ -5,6 +5,7 @@ import { Container } from '../layout/Container'
 import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
 import { useParams } from '@solidjs/router'
 import { HeartIcon } from '../icons/HeartIcon'
+import { ProductCard } from '../components/cards/productCard/ProductCard'
 
 const url = 'store'
 
@@ -98,16 +99,9 @@ export const Store = () => {
 
             <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
               {store()?.data.products.map((product) => (
-                <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <a href="#">
-                    <img
-                      class="hover:grow hover:shadow-lg"
-                      src={product.image[0]}
-                      alt="store image"
-                    />
-                  </a>
-                  <div class="pt-3 flex items-center justify-between">
-                    <p class="">{product.name}</p>
+                <ProductCard
+                  product={product}
+                  action={
                     <div
                       class="cursor-pointer"
                       onClick={() => onFavClick(product.id)}
@@ -120,9 +114,8 @@ export const Store = () => {
                         }
                       />
                     </div>
-                  </div>
-                  <p class="pt-1 text-gray-900">£9.99</p>
-                </div>
+                  }
+                />
               ))}
             </div>
           </div>

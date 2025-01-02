@@ -5,10 +5,11 @@ import { Hero } from '../../layout/Hero'
 import { MessageResponse, Product, Store } from '../../types'
 import { Container } from '../../layout/Container'
 import { ProductForm } from '../../components/forms/productForm/ProductForm'
+import { Modal } from '../../components/modal/Modal'
+import { ProductCard } from '../../components/cards/productCard/ProductCard'
+import { Stack } from '../../ui/Stack'
 import { EditIcon } from '../../icons/EditIcon'
 import { DeleteIcon } from '../../icons/DeleteIcon'
-import { Stack } from '../../ui/Stack'
-import { Modal } from '../../components/modal/Modal'
 
 const storeUrl = 'store'
 const productUrl = 'product'
@@ -121,16 +122,9 @@ export const UserStore = () => {
         <section class="bg-white py-8">
           <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
             {products()?.data?.map((product) => (
-              <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                <a href="#">
-                  <img
-                    class="hover:grow hover:shadow-lg"
-                    src={product.image[0]}
-                    alt="product image"
-                  />
-                </a>
-                <div class="pt-3 flex items-center justify-between">
-                  <p class="">{product.name}</p>
+              <ProductCard
+                product={product}
+                action={
                   <Stack gap={3} horizontal>
                     <div
                       onClick={() => onEdit(product.id)}
@@ -145,9 +139,8 @@ export const UserStore = () => {
                       <DeleteIcon />
                     </div>
                   </Stack>
-                </div>
-                <p class="pt-1 text-gray-900">£9.99</p>
-              </div>
+                }
+              />
             ))}
           </div>
           <section class="bg-white py-8">

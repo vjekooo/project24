@@ -45,6 +45,8 @@ export interface Product {
   description: string
   image: string[]
   storeId?: string
+  price: number
+  discount: number
 }
 
 export interface LoginResponse {
