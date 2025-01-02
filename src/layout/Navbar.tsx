@@ -12,7 +12,11 @@ export const Navbar = () => {
 
   return (
     <div class="w-full">
-      <Modal isOpen={presentSignIn()} onClose={() => setPresentSignIn(false)}>
+      <Modal
+        isOpen={presentSignIn()}
+        onClose={() => setPresentSignIn(false)}
+        title={formType() === 'login' ? 'Sign in' : 'Register'}
+      >
         {formType() === 'login' ? (
           <LoginForm
             formSwitcher={setFormType}

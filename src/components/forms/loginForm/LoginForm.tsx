@@ -10,6 +10,7 @@ import { ErrorMessage } from '../../../ui/ErrorMessage'
 
 interface Props {
   formSwitcher: (value: string) => void
+  onComplete: () => void
 }
 
 interface LoginForm {
@@ -19,7 +20,7 @@ interface LoginForm {
 
 const loginUrl = 'auth/login'
 
-export const LoginForm = ({ formSwitcher }: Props) => {
+export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
   const navigate = useNavigate()
   const { state, setState } = useContext(AppContext)
   const { formSubmit, errors, updateFormField } = useForm<
@@ -36,6 +37,7 @@ export const LoginForm = ({ formSwitcher }: Props) => {
       localStorage.setItem('token', data?.accessToken)
       setState({ ...state, token: data?.accessToken })
       navigate('/')
+      onComplete()
     }
   }
 

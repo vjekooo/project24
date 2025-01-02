@@ -21,7 +21,7 @@ export const Modal = (props: ModalProps) => {
 
       <div class="bg-white p-6 rounded shadow-lg z-10 flex flex-col">
         <div class="flex items-center justify-between mb-8">
-          {props.title && <h1 class="text-2xl">{props.title}</h1>}
+          <div>{props.title && <h1 class="h3">{props.title}</h1>}</div>
           <div class="cursor-pointer self-end" onClick={props.onClose}>
             X
           </div>
