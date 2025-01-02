@@ -2,12 +2,7 @@ import { createResource } from 'solid-js'
 import { Container } from '../layout/Container'
 import { Hero } from '../layout/Hero'
 import { $fetch, FetchData } from '../utils/fetch'
-import {
-  FavoriteProduct,
-  FavoriteStore,
-  MessageResponse,
-  Store,
-} from '../types'
+import { FavoriteStore, MessageResponse, Store } from '../types'
 import { HeartIcon } from '../icons/HeartIcon'
 
 interface HeroActionProps {
@@ -59,7 +54,7 @@ export const Home = () => {
       {stores()?.data.length && (
         <Hero
           name={stores().data[0].name}
-          image={stores().data[0].media[0].url}
+          image={stores().data[0].media[0]?.imageUrl}
           action={<HeroAction storeId={stores().data[0].id} />}
         />
       )}
@@ -116,7 +111,7 @@ export const Home = () => {
                     <a href={`/store/${store.id}`}>
                       <img
                         class="hover:grow hover:shadow-lg"
-                        src={store.media[0].url}
+                        src={store.media[0]?.imageUrl}
                       />
                     </a>
                     <div class="pt-3 flex items-center justify-between">

@@ -12,7 +12,7 @@ export const ProductCard = ({ product, action }: Props) => {
       <a href="#">
         <img
           class="hover:grow hover:shadow-lg"
-          src={product.image[0]}
+          src={product.media[0].imageUrl}
           alt="product image"
         />
       </a>

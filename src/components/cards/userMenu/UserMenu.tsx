@@ -9,7 +9,7 @@ export const UserMenu = ({ user }: Props) => {
   return (
     <div class="flex flex-col gap-2">
       <A href="/account">Account</A>
-      {user.store && <A href="/store">Store</A>}
+      {user.stores && <A href="/store">Store</A>}
     </div>
   )
 }

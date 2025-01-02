@@ -16,7 +16,8 @@ export interface Address {
 }
 
 interface Media {
-  url: string
+  id: string
+  imageUrl: string
 }
 
 export interface Store {
@@ -43,7 +44,7 @@ export interface Product {
   id: string
   name: string
   description: string
-  image: string[]
+  media?: Media[]
   storeId?: string
   price: number
   discount: number

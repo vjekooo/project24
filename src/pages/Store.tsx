@@ -46,7 +46,10 @@ export const Store = () => {
   return (
     <div>
       {store()?.data && (
-        <Hero name={store().data.name} image={store().data.media[0].url} />
+        <Hero
+          name={store().data.name}
+          image={store().data.media[0]?.imageUrl}
+        />
       )}
       <Container>
         <section class="bg-white py-8">
