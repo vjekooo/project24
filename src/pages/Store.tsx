@@ -6,6 +6,8 @@ import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
 import { useParams } from '@solidjs/router'
 import { HeartIcon } from '../icons/HeartIcon'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
+import { Content } from '../layout/Content'
+import { Nav } from '../layout/Nav'
 
 const url = 'store'
 
@@ -51,76 +53,35 @@ export const Store = () => {
           image={store().data.media[0]?.imageUrl}
         />
       )}
-      <Container>
+      <Content>
         <section class="bg-white py-8">
-          <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-            <nav id="store" class="w-full z-30 top-0 px-6 py-1">
-              <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-3">
-                <span class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl ">
-                  Latest Products
-                </span>
-
-                <div class="flex items-center" id="store-nav-content">
-                  <a
-                    class="pl-3 inline-block no-underline hover:text-black"
-                    href="#"
-                  >
-                    <svg
-                      class="fill-current hover:text-black"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
-                    </svg>
-                  </a>
-
-                  <a
-                    class="pl-3 inline-block no-underline hover:text-black"
-                    href="#"
-                  >
-                    <svg
-                      class="fill-current hover:text-black"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </nav>
-
-            {!store()?.data.products.length && (
-              <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                This store has no products
-              </div>
-            )}
-
-            <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-              {store()?.data.products.map((product) => (
-                <ProductCard
-                  product={product}
-                  action={
-                    <div
-                      class="cursor-pointer"
-                      onClick={() => onFavClick(product.id)}
-                    >
-                      <HeartIcon
-                        isFilled={() =>
-                          favorites()?.data?.some(
-                            (favorite) => favorite.productId === product.id
-                          )
-                        }
-                      />
-                    </div>
-                  }
-                />
-              ))}
+          <Nav title="Latest Products" />
+          {!store()?.data.products.length && (
+            <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+              This store has no products
             </div>
+          )}
+
+          <div class="w-full grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+            {store()?.data.products.map((product) => (
+              <ProductCard
+                product={product}
+                action={
+                  <div
+                    class="cursor-pointer"
+                    onClick={() => onFavClick(product.id)}
+                  >
+                    <HeartIcon
+                      isFilled={() =>
+                        favorites()?.data?.some(
+                          (favorite) => favorite.productId === product.id
+                        )
+                      }
+                    />
+                  </div>
+                }
+              />
+            ))}
           </div>
         </section>
         <section>
@@ -139,7 +100,7 @@ export const Store = () => {
             </div>
           </section>
         </section>
-      </Container>
+      </Content>
     </div>
   )
 }

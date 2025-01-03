@@ -4,7 +4,7 @@ import { LoginForm } from '../components/forms/loginForm/LoginForm'
 import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
 import { AppContext } from '../index'
 
-export const Navbar = () => {
+export const Header = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
 

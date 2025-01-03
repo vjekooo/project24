@@ -8,13 +8,15 @@ interface Props {
 
 export const ProductCard = ({ product, action }: Props) => {
   return (
-    <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+    <div class="flex flex-col">
       <a href={`/product/${product.id}`}>
-        <img
-          class="hover:grow hover:shadow-lg"
-          src={product.media[0].imageUrl}
-          alt="product image"
-        />
+        <div class="relative w-full pt-[100%]">
+          <img
+            class="absolute top-0 left-0 w-full h-full object-cover hover:grow hover:shadow-lg"
+            src={product.media[0].imageUrl}
+            alt="product image"
+          />
+        </div>
       </a>
       <div class="pt-3 flex items-center justify-between">
         <p class="">{product.name}</p>

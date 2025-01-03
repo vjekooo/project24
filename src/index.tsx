@@ -9,7 +9,7 @@ import { Account } from './pages/account/Account'
 import { Store } from './pages/Store'
 import { User } from './types'
 import { ConfirmRegistration } from './pages/ConfirmRegistration'
-import { Navbar } from './layout/Navbar'
+import { Header } from './layout/Header'
 import { Footer } from './layout/Footer'
 import { UserStore } from './pages/account/UserStore'
 import { Product } from './pages/Product'
@@ -39,7 +39,7 @@ const App = (props) => {
   return (
     <AppContext.Provider value={{ state, setState }}>
       <div class="laptop:container laptop:m-auto">
-        <Navbar />
+        <Header />
         {props.children}
         <Footer />
       </div>
