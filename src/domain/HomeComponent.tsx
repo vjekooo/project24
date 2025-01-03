@@ -1,4 +1,4 @@
-import { createResource } from 'solid-js'
+import { Suspense, createResource } from 'solid-js'
 import { Hero } from '../layout/Hero'
 import { $fetch, FetchData } from '../utils/fetch'
 import { FavoriteStore, MessageResponse, Store } from '../types'
@@ -7,6 +7,7 @@ import { Nav } from '../layout/Nav'
 import { Content } from '../layout/Content'
 import { StoreCard } from '../components/cards/storeCard/StoreCard'
 import { Featured } from '../layout/Featured'
+import { Loading } from '../layout/Loading'
 
 interface HeroActionProps {
   storeId: string
@@ -40,7 +41,7 @@ const fetchFavorites = async () => {
   return await $fetch<{}, FavoriteStore[]>(fullUrl).get()
 }
 
-export const Home = () => {
+export const HomeComponent = () => {
   const [stores] = createResource(fetchData)
 
   const [favorites, { refetch }] =
@@ -53,7 +54,7 @@ export const Home = () => {
   }
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       {stores()?.data.length && (
         <Hero
           name={stores().data[0].name}
@@ -108,6 +109,6 @@ export const Home = () => {
           ))}
         </div>
       </Content>
-    </>
+    </Suspense>
   )
 }

@@ -1,10 +1,10 @@
 import { render } from 'solid-js/web'
 import { Router, Route } from '@solidjs/router'
 import { createStore } from 'solid-js/store'
-import { createContext } from 'solid-js'
+import { ErrorBoundary, JSX, createContext } from 'solid-js'
 
 import './index.css'
-import { Home } from './pages/Home'
+import { HomePage } from './pages/HomePage'
 import { Account } from './pages/account/Account'
 import { Store } from './pages/Store'
 import { User } from './types'
@@ -26,7 +26,11 @@ interface ContextState {
 
 export const AppContext = createContext<ContextState>()
 
-const App = (props) => {
+interface Props {
+  children?: JSX.Element
+}
+
+const App = (props: Props) => {
   const [state, setState] = createStore({
     user: {
       firstName: '',
@@ -50,7 +54,7 @@ const App = (props) => {
 render(
   () => (
     <Router root={App}>
-      <Route path="/" component={Home} />
+      <Route path="/" component={HomePage} />
       <Route path="/account" component={Account} />
       <Route path="/account/store/:id" component={UserStore} />
       <Route path="/store/:id" component={Store} />
