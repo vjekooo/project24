@@ -1,17 +1,15 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { Address, LoginResponse, MessageResponse } from '../../../types'
-import { addressConfig, AddressConfig } from './config'
+import { Address, MessageResponse } from '../../../types'
+import { addressConfig } from './config'
 
 const url = 'address'
 
 export const AddressForm = () => {
-  const { validate, formSubmit, errors, updateFormField, form } = useForm<
-    AddressConfig,
-    Address
-  >({
-    config: addressConfig,
-  })
+  const { validate, formSubmit, errors, updateFormField, form } =
+    useForm<Address>({
+      config: addressConfig,
+    })
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault()

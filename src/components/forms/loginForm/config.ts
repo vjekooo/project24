@@ -1,10 +1,6 @@
-export interface LoginConfig {
-  label: string
-  name: string
-  type: string
-}
+import { FormConfig } from '../../../lib/form/useForm'
 
-export const loginConfig: LoginConfig[] = [
+export const loginConfig: FormConfig[] = [
   {
     label: 'Email',
     name: 'email',

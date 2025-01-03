@@ -1,6 +1,6 @@
 import { createEffect, createResource, createSignal } from 'solid-js'
 import { AddressForm } from '../../components/forms/addressForm/AddressForm'
-import { User } from '../../types'
+import { Category, User } from '../../types'
 import { $fetch, FetchData } from '../../utils/fetch'
 import { StoreForm } from '../../components/forms/storeForm/StoreForm'
 import { Content } from '../../layout/Content'
@@ -10,9 +10,14 @@ import { StoreCard } from '../../components/cards/storeCard/StoreCard'
 import { EditIcon } from '../../icons/EditIcon'
 
 const userUrl = 'user'
+const categoryUrl = 'category'
 
 async function fetchData() {
   return await $fetch<any, User>(userUrl).get()
+}
+
+async function fetchCategories() {
+  return await $fetch<any, Category[]>(categoryUrl).get()
 }
 
 export const Account = () => {
@@ -22,6 +27,8 @@ export const Account = () => {
   const [presentStoreForm, setPresentStoreForm] = createSignal(false)
 
   const [data] = createResource<FetchData<User>>(fetchData)
+
+  const [category] = createResource<FetchData<Category[]>>(fetchCategories)
 
   createEffect(() => {
     if (data()) {
@@ -74,20 +81,6 @@ export const Account = () => {
         {!user()?.stores?.length ? (
           <div class="flex flex-row gap-3">
             <p>You have no store on file</p>
-            <div>
-              <button
-                class="btn-primary"
-                onClick={() => setPresentStoreForm(true)}
-              >
-                Add Store
-              </button>
-            </div>
-            <Modal
-              isOpen={presentStoreForm()}
-              onClose={() => setPresentStoreForm(false)}
-            >
-              <StoreForm />
-            </Modal>
           </div>
         ) : (
           <Stack gap={3}>
@@ -104,6 +97,18 @@ export const Account = () => {
             </div>
           </Stack>
         )}
+        <div class="mb-8 mt-16">
+          <button class="btn-primary" onClick={() => setPresentStoreForm(true)}>
+            Add Store
+          </button>
+        </div>
+        <Modal
+          isOpen={presentStoreForm()}
+          onClose={() => setPresentStoreForm(false)}
+          title="Add a store"
+        >
+          <StoreForm categories={category()?.data} />
+        </Modal>
       </div>
     )
 

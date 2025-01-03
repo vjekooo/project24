@@ -1,14 +1,7 @@
 import { exists } from '../registerForm/validators'
+import { FormConfig } from '../../../lib/form/useForm'
 
-export interface Config {
-  label: string
-  name: string
-  type: string
-  multiple?: boolean
-  validation?: Function[]
-}
-
-export const productConfig: Config[] = [
+export const productConfig: FormConfig[] = [
   {
     label: 'Name',
     name: 'name',
@@ -25,6 +18,6 @@ export const productConfig: Config[] = [
     label: 'Image',
     name: 'image',
     type: 'text',
-    multiple: true,
+    isArray: true,
   },
 ]

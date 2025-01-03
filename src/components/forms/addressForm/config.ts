@@ -1,10 +1,6 @@
-export interface AddressConfig {
-  label: string
-  name: string
-  type: string
-}
+import { FormConfig } from '../../../lib/form/useForm'
 
-export const addressConfig: AddressConfig[] = [
+export const addressConfig: FormConfig[] = [
   {
     label: 'Street',
     name: 'street',

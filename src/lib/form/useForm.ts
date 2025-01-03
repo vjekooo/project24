@@ -1,6 +1,15 @@
 import { createSignal } from 'solid-js'
 import { createStore } from 'solid-js/store'
 
+export interface FormConfig {
+  label: string
+  name: string
+  type: string
+  placeholder?: string
+  isArray?: boolean
+  validation?: Function[]
+}
+
 const cleanFormData = <T>(data: T): T => {
   return Object.keys(data).reduce((acc, key) => {
     if (data[key] !== '') {
@@ -53,11 +62,11 @@ interface Form<T> {
   isFormValid: () => boolean
 }
 
-export function useForm<T, R>({
+export function useForm<R>({
   config,
   defaultState,
 }: {
-  config: T[]
+  config: FormConfig[]
   defaultState?: R
 }): Form<R> {
   const errorClass = 'error-input'
@@ -114,14 +123,14 @@ export function useForm<T, R>({
   }
 
   const updateFormField =
-    (fieldName: string, multiple?: boolean) => (event: Event) => {
+    (fieldName: string, isArray?: boolean) => (event: Event) => {
       const inputElement = event.currentTarget as HTMLInputElement
       if (inputElement.type === 'checkbox') {
         setForm({
           [fieldName]: !!inputElement.checked,
         })
       } else {
-        if (multiple) {
+        if (isArray) {
           setForm({
             [fieldName]: [...state[fieldName], inputElement.value],
           })

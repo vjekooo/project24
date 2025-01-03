@@ -5,7 +5,7 @@ import { AppContext } from '../../../index'
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
 import { LoginResponse } from '../../../types'
-import { LoginConfig, loginConfig } from './config'
+import { loginConfig } from './config'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
 
 interface Props {
@@ -23,10 +23,7 @@ const loginUrl = 'auth/login'
 export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
   const navigate = useNavigate()
   const { state, setState } = useContext(AppContext)
-  const { formSubmit, errors, updateFormField } = useForm<
-    LoginConfig,
-    LoginForm
-  >({
+  const { formSubmit, errors, updateFormField } = useForm<LoginForm>({
     config: loginConfig,
   })
 

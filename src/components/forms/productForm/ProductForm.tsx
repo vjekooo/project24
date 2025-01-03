@@ -1,7 +1,7 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
 import { MessageResponse, Product, Store } from '../../../types'
-import { productConfig as config, Config } from './config'
+import { productConfig as config } from './config'
 import { Stack } from '../../../ui/Stack'
 import { Accessor, For } from 'solid-js'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
@@ -22,7 +22,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
     validate,
     cleanFormData,
     isFormValid,
-  } = useForm<Config, Product>({
+  } = useForm<Product>({
     config,
     defaultState: product(),
   })
@@ -69,7 +69,7 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
                     name={item.name}
                     type={item.type}
                     placeholder={item.label}
-                    onChange={updateFormField(item.name, item.multiple)}
+                    onChange={updateFormField(item.name, item.isArray)}
                     value={product()?.[item.name] || ''}
                   />
                   {errors[item.name] && (

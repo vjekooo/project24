@@ -1,6 +1,6 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { registerConfig, RegisterConfig } from './config'
+import { registerConfig } from './config'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
 import { Stack } from '../../../ui/Stack'
 
@@ -17,7 +17,7 @@ const url = 'auth/register'
 
 export const RegisterForm = ({ formSwitcher }: Props) => {
   const { errors, validate, formSubmit, updateFormField, isFormValid } =
-    useForm<RegisterConfig, RegisterForm>({
+    useForm<RegisterForm>({
       config: registerConfig,
     })
 

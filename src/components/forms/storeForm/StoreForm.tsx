@@ -1,18 +1,29 @@
 import { $fetch } from '../../../utils/fetch'
-import { StoreConfig, storeConfig } from './config'
+import { storeConfig } from './config'
 import { useForm } from '../../../lib/form/useForm'
-import { MessageResponse, Store } from '../../../types'
+import { Category, MessageResponse, Option, Store } from '../../../types'
+import { Stack } from '../../../ui/Stack'
 
 const url = 'store'
 
-export const StoreForm = () => {
-  const { validate, formSubmit, errors, updateFormField, form } = useForm<
-    StoreConfig,
-    Store
-  >({ config: storeConfig })
+interface Props {
+  categories: Category[]
+}
 
-  const handleSubmit = async (event: Event) => {
-    event.preventDefault()
+const createCategoryOptions = (categories: Category[]): Option[] => {
+  categories.unshift({ id: '0L', name: 'Select category', description: '' })
+  return categories.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }))
+}
+
+export const StoreForm = ({ categories }: Props) => {
+  const { validate, formSubmit, errors, updateFormField } = useForm<Store>({
+    config: storeConfig,
+  })
+
+  const handleSubmit = async (_: Event, form: Store) => {
     const { data, error } = await $fetch<Store, MessageResponse>(url).post(form)
     console.log({ data, error })
   }
@@ -20,20 +31,37 @@ export const StoreForm = () => {
   return (
     <div class="flex justify-center">
       <div class="flex flex-col gap-2">
-        <form onSubmit={handleSubmit}>
-          {storeConfig.map((field) => {
-            return (
-              <input
-                class="input"
-                type={field.type}
-                placeholder={field.label}
-                onChange={updateFormField(field.name)}
-              />
-            )
-          })}
-          <button class="btn-primary" type="submit">
-            Submit
-          </button>
+        {/*@ts-ignore*/}
+        <form use:formSubmit={handleSubmit}>
+          <Stack gap={6}>
+            {storeConfig.map((field) => {
+              return field.type === 'text' ? (
+                <input
+                  // @ts-ignore
+                  use:validate={field.validation}
+                  class="input"
+                  type={field.type}
+                  placeholder={field.label}
+                  onChange={updateFormField(field.name, field.isArray)}
+                />
+              ) : (
+                <select
+                  name={field.name}
+                  class="input"
+                  onChange={updateFormField(field.name)}
+                  // @ts-ignore
+                  use:validate={field.validation}
+                >
+                  {createCategoryOptions(categories).map((option) => (
+                    <option value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+              )
+            })}
+            <button class="btn-primary" type="submit">
+              Submit
+            </button>
+          </Stack>
         </form>
       </div>
     </div>

@@ -7,6 +7,12 @@ export interface User {
   favorites?: FavoriteProduct[]
 }
 
+export interface Category {
+  id: string
+  name: string
+  description: string
+}
+
 export interface Address {
   street: string
   houseNumber: string
@@ -57,4 +63,9 @@ export interface LoginResponse {
 
 export interface MessageResponse {
   message: string
+}
+
+export interface Option {
+  value: string
+  label: string
 }
