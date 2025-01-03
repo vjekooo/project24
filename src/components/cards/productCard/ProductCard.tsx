@@ -9,7 +9,7 @@ interface Props {
 export const ProductCard = ({ product, action }: Props) => {
   return (
     <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-      <a href="#">
+      <a href={`/product/${product.id}`}>
         <img
           class="hover:grow hover:shadow-lg"
           src={product.media[0].imageUrl}

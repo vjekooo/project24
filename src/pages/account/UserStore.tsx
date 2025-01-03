@@ -28,7 +28,7 @@ const fetchProducts = async () => {
   if (!params.id) {
     throw new Error('No id provided')
   }
-  return await $fetch<{}, Product[]>(`${productUrl}/${params.id}`).get()
+  return await $fetch<{}, Product[]>(`${productUrl}/store/${params.id}`).get()
 }
 
 export const UserStore = () => {
@@ -58,7 +58,7 @@ export const UserStore = () => {
   return (
     <div>
       {store()?.data.name && (
-        <Hero name={store().data.name} image={store().data.media[0].url} />
+        <Hero name={store().data.name} image={store().data.media[0].imageUrl} />
       )}
       <Container>
         <section class="bg-white py-8">

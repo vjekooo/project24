@@ -12,6 +12,7 @@ import { ConfirmRegistration } from './pages/ConfirmRegistration'
 import { Navbar } from './layout/Navbar'
 import { Footer } from './layout/Footer'
 import { UserStore } from './pages/account/UserStore'
+import { Product } from './pages/Product'
 
 interface State {
   user: User
@@ -53,6 +54,7 @@ render(
       <Route path="/account" component={Account} />
       <Route path="/account/store/:id" component={UserStore} />
       <Route path="/store/:id" component={Store} />
+      <Route path="/product/:id" component={Product} />
       <Route path="/confirm-registration" component={ConfirmRegistration} />
     </Router>
   ),
