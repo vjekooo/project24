@@ -15,6 +15,12 @@ export const productConfig: FormConfig[] = [
     validation: [exists],
   },
   {
+    label: 'Price',
+    name: 'price',
+    type: 'number',
+    validation: [exists],
+  },
+  {
     label: 'Image',
     name: 'image',
     type: 'text',

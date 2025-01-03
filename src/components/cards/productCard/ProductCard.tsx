@@ -13,7 +13,7 @@ export const ProductCard = ({ product, action }: Props) => {
         <div class="relative w-full pt-[100%]">
           <img
             class="absolute top-0 left-0 w-full h-full object-cover hover:grow hover:shadow-lg"
-            src={product.media[0].imageUrl}
+            src={product.media.length > 0 ? product.media[0].imageUrl : ''}
             alt="product image"
           />
         </div>

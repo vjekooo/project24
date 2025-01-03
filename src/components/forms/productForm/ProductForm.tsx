@@ -5,13 +5,14 @@ import { productConfig as config } from './config'
 import { Stack } from '../../../ui/Stack'
 import { Accessor, For } from 'solid-js'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
+import { Toast } from '../../../lib/Toast'
 
 const url = 'product'
 
 interface Props {
   store: Store
   product?: Accessor<Product>
-  onClose: () => void
+  onClose: (message: string) => void
 }
 
 export const ProductForm = ({ store, product, onClose }: Props) => {
@@ -27,6 +28,8 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
     defaultState: product(),
   })
 
+  const { ToastComponent, showToast } = Toast()
+
   const handleSubmit = async (_: HTMLFormElement, data: Product) => {
     const cleanData = cleanFormData(data)
 
@@ -36,25 +39,32 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
     }
 
     if (product && product()?.id) {
-      const { data } = await $fetch<Product, MessageResponse>(url).put({
+      const { data, error } = await $fetch<Product, MessageResponse>(url).put({
         ...newProduct,
         id: product()?.id,
       })
       if (data) {
-        onClose()
+        onClose(data.message)
+      }
+      if (error) {
+        showToast(error.message)
       }
     } else {
-      const { data } = await $fetch<Product, MessageResponse>(url).post(
+      const { data, error } = await $fetch<Product, MessageResponse>(url).post(
         newProduct
       )
       if (data) {
-        onClose()
+        onClose(data.message)
+      }
+      if (error) {
+        showToast(error.message)
       }
     }
   }
 
   return (
     <div class="flex flex-col gap-2">
+      <ToastComponent />
       {/*@ts-ignore*/}
       <form use:formSubmit={handleSubmit}>
         <Stack gap={6}>

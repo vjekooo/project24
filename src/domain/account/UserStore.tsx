@@ -13,38 +13,40 @@ import { Content } from '../../layout/Content'
 import { Nav } from '../../layout/Nav'
 import { About } from '../../layout/About'
 import { Loading } from '../../layout/Loading'
+import { Toast } from '../../lib/Toast'
 
 const storeUrl = 'store'
 const productUrl = 'product'
 
-const fetchData = async () => {
-  const params = useParams()
-  if (!params.id) {
-    throw new Error('No id provided')
-  }
-  const fullUrl = `${storeUrl}/${params.id}`
+const fetchData = async (id: string) => {
+  const fullUrl = `${storeUrl}/${id}`
   return await $fetch<{}, Store>(fullUrl).get()
 }
 
-const fetchProducts = async () => {
+const fetchProducts = async (id: string) => {
+  return await $fetch<{}, Product[]>(`${productUrl}/store/${id}`).get()
+}
+
+export const UserStore = () => {
   const params = useParams()
   if (!params.id) {
     throw new Error('No id provided')
   }
-  return await $fetch<{}, Product[]>(`${productUrl}/store/${params.id}`).get()
-}
 
-export const UserStore = () => {
   const [productToEdit, setProductToEdit] = createSignal<Product | null>(null)
 
-  const [store] = createResource<FetchData<Store>>(fetchData)
+  const { ToastComponent, showToast } = Toast()
 
-  const [products, { refetch }] =
-    createResource<FetchData<Product[]>>(fetchProducts)
+  const [store] = createResource<FetchData<Store>>(() => fetchData(params.id))
+
+  const [products, { refetch }] = createResource<FetchData<Product[]>>(() =>
+    fetchProducts(params.id)
+  )
 
   const [presentProductForm, setPresentProductForm] = createSignal(false)
 
-  const onModalClose = () => {
+  const onModalClose = (message: string) => {
+    showToast(message)
     refetch()
     setPresentProductForm(false)
   }
@@ -55,7 +57,16 @@ export const UserStore = () => {
   }
 
   const deleteProduct = async (id: string) => {
-    return await $fetch<{}, MessageResponse>(`product/${id}`).delete()
+    const { data, error } = await $fetch<{}, MessageResponse>(
+      `product/${id}`
+    ).delete()
+    if (data) {
+      showToast(data.message)
+      refetch()
+    }
+    if (error) {
+      showToast(error.message)
+    }
   }
 
   return (
@@ -64,6 +75,7 @@ export const UserStore = () => {
         <Hero name={store().data.name} image={store().data.media[0].imageUrl} />
       )}
       <Content>
+        <ToastComponent />
         <Nav title="Your products" />
         <Modal
           isOpen={presentProductForm()}
