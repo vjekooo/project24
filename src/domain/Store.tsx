@@ -1,4 +1,4 @@
-import { createResource } from 'solid-js'
+import { Suspense, createResource } from 'solid-js'
 import { $fetch, FetchData } from '../utils/fetch'
 import { Hero } from '../layout/Hero'
 import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
@@ -8,6 +8,7 @@ import { ProductCard } from '../components/cards/productCard/ProductCard'
 import { Content } from '../layout/Content'
 import { Nav } from '../layout/Nav'
 import { About } from '../layout/About'
+import { Loading } from '../layout/Loading'
 
 const url = 'store'
 
@@ -46,7 +47,7 @@ export const Store = () => {
   }
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       {store()?.data && (
         <Hero
           name={store().data.name}
@@ -88,6 +89,6 @@ export const Store = () => {
           )}
         </section>
       </Content>
-    </>
+    </Suspense>
   )
 }

@@ -6,13 +6,13 @@ import { ErrorBoundary, JSX, createContext } from 'solid-js'
 import './index.css'
 import { HomePage } from './pages/HomePage'
 import { Account } from './pages/account/Account'
-import { Store } from './pages/Store'
+import { StorePage } from './pages/StorePage'
 import { User } from './types'
 import { ConfirmRegistration } from './pages/ConfirmRegistration'
 import { Header } from './layout/Header'
 import { Footer } from './layout/Footer'
 import { UserStore } from './pages/account/UserStore'
-import { Product } from './pages/Product'
+import { ProductPage } from './pages/ProductPage'
 
 interface State {
   user: User
@@ -57,8 +57,8 @@ render(
       <Route path="/" component={HomePage} />
       <Route path="/account" component={Account} />
       <Route path="/account/store/:id" component={UserStore} />
-      <Route path="/store/:id" component={Store} />
-      <Route path="/product/:id" component={Product} />
+      <Route path="/store/:id" component={StorePage} />
+      <Route path="/product/:id" component={ProductPage} />
       <Route path="/confirm-registration" component={ConfirmRegistration} />
     </Router>
   ),
