@@ -58,7 +58,7 @@ export const UserStore = () => {
   }
 
   return (
-    <div>
+    <>
       {store()?.data.name && (
         <Hero name={store().data.name} image={store().data.media[0].imageUrl} />
       )}
@@ -78,7 +78,7 @@ export const UserStore = () => {
           )}
         </Modal>
 
-        <div class="grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+        <div class="default-grid">
           {products()?.data?.map((product) => (
             <ProductCard
               product={product}
@@ -115,6 +115,6 @@ export const UserStore = () => {
           <About description={store()?.data.description} />
         )}
       </Content>
-    </div>
+    </>
   )
 }

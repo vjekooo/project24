@@ -46,7 +46,7 @@ export const Store = () => {
   }
 
   return (
-    <div>
+    <>
       {store()?.data && (
         <Hero
           name={store().data.name}
@@ -61,7 +61,7 @@ export const Store = () => {
           </div>
         )}
 
-        <div class="w-full grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+        <div class="default-grid">
           {store()?.data.products.map((product) => (
             <ProductCard
               product={product}
@@ -88,6 +88,6 @@ export const Store = () => {
           )}
         </section>
       </Content>
-    </div>
+    </>
   )
 }

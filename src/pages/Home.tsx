@@ -1,5 +1,4 @@
 import { createResource } from 'solid-js'
-import { Container } from '../layout/Container'
 import { Hero } from '../layout/Hero'
 import { $fetch, FetchData } from '../utils/fetch'
 import { FavoriteStore, MessageResponse, Store } from '../types'
@@ -53,7 +52,7 @@ export const Home = () => {
   }
 
   return (
-    <div>
+    <>
       {stores()?.data.length && (
         <Hero
           name={stores().data[0].name}
@@ -65,7 +64,7 @@ export const Home = () => {
         <section class="bg-white py-8">
           <Nav title="Latest Stores" />
 
-          <div class="grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+          <div class="default-grid">
             {stores()?.data.map((store) => (
               <StoreCard
                 store={store}
@@ -88,6 +87,6 @@ export const Home = () => {
           </div>
         </section>
       </Content>
-    </div>
+    </>
   )
 }

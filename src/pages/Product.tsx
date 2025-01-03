@@ -2,7 +2,6 @@ import { useParams } from '@solidjs/router'
 import { $fetch, FetchData } from '../utils/fetch'
 import { createResource } from 'solid-js'
 import { Product as ProductType } from '../types'
-import { Container } from '../layout/Container'
 import { Stack } from '../ui/Stack'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
 import { Content } from '../layout/Content'
@@ -51,7 +50,7 @@ export const Product = () => {
 
       <section>
         <h3 class="h3 mb-8">Related products</h3>
-        <div class="grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+        <div class="default-grid">
           {relatedProducts()?.data.map((product) => (
             <ProductCard product={product} action={null} />
           ))}
