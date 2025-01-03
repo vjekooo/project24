@@ -6,6 +6,7 @@ import { FavoriteStore, MessageResponse, Store } from '../types'
 import { HeartIcon } from '../icons/HeartIcon'
 import { Nav } from '../layout/Nav'
 import { Content } from '../layout/Content'
+import { StoreCard } from '../components/cards/storeCard/StoreCard'
 
 interface HeroActionProps {
   storeId: string
@@ -66,15 +67,9 @@ export const Home = () => {
 
           <div class="grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
             {stores()?.data.map((store) => (
-              <div>
-                <a href={`/store/${store.id}`}>
-                  <img
-                    class="hover:grow hover:shadow-lg"
-                    src={store.media[0]?.imageUrl}
-                  />
-                </a>
-                <div class="pt-3 flex items-center justify-between">
-                  <p class="">{store.name}</p>
+              <StoreCard
+                store={store}
+                action={
                   <div
                     class="cursor-pointer"
                     onClick={() => onFavClick(store.id)}
@@ -87,8 +82,8 @@ export const Home = () => {
                       }
                     />
                   </div>
-                </div>
-              </div>
+                }
+              />
             ))}
           </div>
         </section>
