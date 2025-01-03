@@ -6,6 +6,8 @@ import { StoreForm } from '../../components/forms/storeForm/StoreForm'
 import { Content } from '../../layout/Content'
 import { Stack } from '../../ui/Stack'
 import { Modal } from '../../components/modal/Modal'
+import { StoreCard } from '../../components/cards/storeCard/StoreCard'
+import { EditIcon } from '../../icons/EditIcon'
 
 const userUrl = 'user'
 
@@ -89,28 +91,17 @@ export const Account = () => {
           </div>
         ) : (
           <Stack gap={3}>
-            <h3 class="h3">Store</h3>
-            <span>{user().stores[0]?.name}</span>
-            <Stack gap={3} horizontal>
-              <a href={`/account/store/${user()?.stores[0].id}`}>
-                edit your store
-              </a>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1"
-                width="24"
-                height="24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4 12h16m-6-6l6 6-6 6"
-                />
-              </svg>
-            </Stack>
+            <h3 class="h3">Your Store</h3>
+            <div class="w-56">
+              <StoreCard
+                store={user()?.stores[0]}
+                action={
+                  <a href={`/account/store/${user()?.stores[0].id}`}>
+                    <EditIcon />
+                  </a>
+                }
+              />
+            </div>
           </Stack>
         )}
       </div>
