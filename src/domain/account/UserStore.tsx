@@ -1,4 +1,4 @@
-import { createResource, createSignal } from 'solid-js'
+import { Suspense, createResource, createSignal } from 'solid-js'
 import { useParams } from '@solidjs/router'
 import { $fetch, FetchData } from '../../utils/fetch'
 import { Hero } from '../../layout/Hero'
@@ -12,6 +12,7 @@ import { DeleteIcon } from '../../icons/DeleteIcon'
 import { Content } from '../../layout/Content'
 import { Nav } from '../../layout/Nav'
 import { About } from '../../layout/About'
+import { Loading } from '../../layout/Loading'
 
 const storeUrl = 'store'
 const productUrl = 'product'
@@ -58,7 +59,7 @@ export const UserStore = () => {
   }
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       {store()?.data.name && (
         <Hero name={store().data.name} image={store().data.media[0].imageUrl} />
       )}
@@ -115,6 +116,6 @@ export const UserStore = () => {
           <About description={store()?.data.description} />
         )}
       </Content>
-    </>
+    </Suspense>
   )
 }

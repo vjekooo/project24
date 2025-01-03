@@ -1,4 +1,4 @@
-import { createEffect, createResource, createSignal } from 'solid-js'
+import { Suspense, createEffect, createResource, createSignal } from 'solid-js'
 import { AddressForm } from '../../components/forms/addressForm/AddressForm'
 import { Category, User } from '../../types'
 import { $fetch, FetchData } from '../../utils/fetch'
@@ -8,6 +8,7 @@ import { Stack } from '../../ui/Stack'
 import { Modal } from '../../components/modal/Modal'
 import { StoreCard } from '../../components/cards/storeCard/StoreCard'
 import { EditIcon } from '../../icons/EditIcon'
+import { Loading } from '../../layout/Loading'
 
 const userUrl = 'user'
 const categoryUrl = 'category'
@@ -116,11 +117,13 @@ export const Account = () => {
     )
 
   return (
-    <Content>
-      <Stack gap={6}>
-        <h1 class="h1">Account</h1>
-        {data()?.error ? error : content()}
-      </Stack>
-    </Content>
+    <Suspense fallback={<Loading />}>
+      <Content>
+        <Stack gap={6}>
+          <h1 class="h1">Account</h1>
+          {data()?.error ? error : content()}
+        </Stack>
+      </Content>
+    </Suspense>
   )
 }
