@@ -61,31 +61,29 @@ export const Home = () => {
         />
       )}
       <Content>
-        <section class="bg-white py-8">
-          <Nav title="Latest Stores" />
+        <Nav title="Latest Stores" />
 
-          <div class="default-grid">
-            {stores()?.data.map((store) => (
-              <StoreCard
-                store={store}
-                action={
-                  <div
-                    class="cursor-pointer"
-                    onClick={() => onFavClick(store.id)}
-                  >
-                    <HeartIcon
-                      isFilled={() =>
-                        favorites()?.data?.some(
-                          (favorite) => favorite.storeId === store.id
-                        )
-                      }
-                    />
-                  </div>
-                }
-              />
-            ))}
-          </div>
-        </section>
+        <div class="default-grid">
+          {stores()?.data.map((store) => (
+            <StoreCard
+              store={store}
+              action={
+                <div
+                  class="cursor-pointer"
+                  onClick={() => onFavClick(store.id)}
+                >
+                  <HeartIcon
+                    isFilled={() =>
+                      favorites()?.data?.some(
+                        (favorite) => favorite.storeId === store.id
+                      )
+                    }
+                  />
+                </div>
+              }
+            />
+          ))}
+        </div>
       </Content>
     </>
   )

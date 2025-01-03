@@ -28,9 +28,9 @@ export const Header = () => {
           <RegisterForm formSwitcher={setFormType} />
         )}
       </Modal>
-      <nav id="header" class="w-full z-30 top-0 py-1">
+      <nav id="header" class="w-full z-30 top-0 py-1 px-6 md:px-0">
         <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-3">
-          <div class="relative">
+          <div class="relative md:hidden block">
             <div
               class="cursor-pointer md:hidden block"
               onClick={() => setPresentMenu(!presentMenu())}
