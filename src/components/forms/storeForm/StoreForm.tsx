@@ -8,6 +8,7 @@ const url = 'store'
 
 interface Props {
   categories: Category[]
+  onComplete: () => void
 }
 
 const createCategoryOptions = (categories: Category[]): Option[] => {
@@ -18,14 +19,14 @@ const createCategoryOptions = (categories: Category[]): Option[] => {
   }))
 }
 
-export const StoreForm = ({ categories }: Props) => {
+export const StoreForm = ({ categories, onComplete }: Props) => {
   const { validate, formSubmit, errors, updateFormField } = useForm<Store>({
     config: storeConfig,
   })
 
   const handleSubmit = async (_: Event, form: Store) => {
     const { data, error } = await $fetch<Store, MessageResponse>(url).post(form)
-    console.log({ data, error })
+    if (data) onComplete()
   }
 
   return (

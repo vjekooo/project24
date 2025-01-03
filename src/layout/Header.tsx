@@ -20,7 +20,6 @@ export const Header = () => {
         {formType() === 'login' ? (
           <LoginForm
             formSwitcher={setFormType}
-            // @ts-ignore
             onComplete={() => setPresentSignIn(false)}
           />
         ) : (

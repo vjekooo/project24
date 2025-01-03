@@ -107,7 +107,10 @@ export const Account = () => {
           onClose={() => setPresentStoreForm(false)}
           title="Add a store"
         >
-          <StoreForm categories={category()?.data} />
+          <StoreForm
+            categories={category()?.data}
+            onComplete={() => setPresentStoreForm(false)}
+          />
         </Modal>
       </div>
     )
