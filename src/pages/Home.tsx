@@ -86,6 +86,27 @@ export const Home = () => {
           ))}
         </div>
         {stores()?.data.length > 1 && <Featured store={stores()?.data[1]} />}
+        <div class="default-grid pb-16">
+          {stores()?.data.map((store) => (
+            <StoreCard
+              store={store}
+              action={
+                <div
+                  class="cursor-pointer"
+                  onClick={() => onFavClick(store.id)}
+                >
+                  <HeartIcon
+                    isFilled={() =>
+                      favorites()?.data?.some(
+                        (favorite) => favorite.storeId === store.id
+                      )
+                    }
+                  />
+                </div>
+              }
+            />
+          ))}
+        </div>
       </Content>
     </>
   )

@@ -4,6 +4,7 @@ import { LoginForm } from '../components/forms/loginForm/LoginForm'
 import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
 import { AppContext } from '../index'
 import { Stack } from '../ui/Stack'
+import { Logo } from '../icons/Logo'
 
 export const Header = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
@@ -36,33 +37,58 @@ export const Header = () => {
         )}
       </Modal>
       <nav id="header" class="w-full z-30 top-0 py-1 px-6 md:px-0">
-        <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-3">
-          <div class="relative md:hidden block">
-            <div
-              class="cursor-pointer md:hidden block"
-              onClick={() => setPresentMenu(!presentMenu())}
-            >
-              <svg
-                class="fill-current text-gray-900"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
+        <div class="w-full container mx-auto flex flex-wrap items-center mt-0 py-3">
+          <div class="w-1/3 flex justify-start content-center">
+            <div class="relative md:hidden block">
+              <div
+                class="cursor-pointer md:hidden block"
+                onClick={() => setPresentMenu(!presentMenu())}
               >
-                <title>menu</title>
-                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-              </svg>
+                <svg
+                  class="fill-current text-gray-900"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                >
+                  <title>menu</title>
+                  <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                </svg>
+              </div>
+
+              {presentMenu() && (
+                <div class="absolute w-600 bg-white shadow-lg mt-1">
+                  <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+                    <li>
+                      <a
+                        class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                        href="#"
+                      >
+                        Shop
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                        href="#"
+                      >
+                        About
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
 
-            {presentMenu() && (
-              <div class="absolute w-600 bg-white shadow-lg mt-1">
+            <div class="hidden md:flex md:items-center md:w-auto w-full">
+              <nav>
                 <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
                   <li>
                     <a
                       class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
                       href="#"
                     >
-                      Shop
+                      Categories
                     </a>
                   </li>
                   <li>
@@ -70,70 +96,32 @@ export const Header = () => {
                       class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
                       href="#"
                     >
-                      About
+                      Stores
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                      href="#"
+                    >
+                      Services
                     </a>
                   </li>
                 </ul>
-              </div>
-            )}
+              </nav>
+            </div>
           </div>
 
-          <div
-            class="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1"
-            id="menu"
-          >
-            <nav>
-              <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
-                <li>
-                  <a
-                    class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
-                    href="#"
-                  >
-                    Categories
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
-                    href="#"
-                  >
-                    Stores
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
-                    href="#"
-                  >
-                    Services
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-
-          <div class="order-1 md:order-2">
+          <div class="w-1/3 flex justify-center">
             <a
               class="flex items-center tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
               href="/"
             >
-              <svg
-                class="fill-current text-gray-800 mr-2"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path d="M5,22h14c1.103,0,2-0.897,2-2V9c0-0.553-0.447-1-1-1h-3V7c0-2.757-2.243-5-5-5S7,4.243,7,7v1H4C3.447,8,3,8.447,3,9v11 C3,21.103,3.897,22,5,22z M9,7c0-1.654,1.346-3,3-3s3,1.346,3,3v1H9V7z M5,10h2v2h2v-2h6v2h2v-2h2l0.002,10H5V10z" />
-              </svg>
-              LocalLink
+              <Logo />
             </a>
           </div>
 
-          <div
-            class="order-2 md:order-3 flex gap-6 items-center"
-            id="nav-content"
-          >
+          <div class="w-1/3 flex justify-end content-center">
             {state.token ? (
               <div class="relative inline-block text-left">
                 <div
