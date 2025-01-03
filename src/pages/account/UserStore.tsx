@@ -3,7 +3,6 @@ import { useParams } from '@solidjs/router'
 import { $fetch, FetchData } from '../../utils/fetch'
 import { Hero } from '../../layout/Hero'
 import { MessageResponse, Product, Store } from '../../types'
-import { Container } from '../../layout/Container'
 import { ProductForm } from '../../components/forms/productForm/ProductForm'
 import { Modal } from '../../components/modal/Modal'
 import { ProductCard } from '../../components/cards/productCard/ProductCard'
@@ -12,6 +11,7 @@ import { EditIcon } from '../../icons/EditIcon'
 import { DeleteIcon } from '../../icons/DeleteIcon'
 import { Content } from '../../layout/Content'
 import { Nav } from '../../layout/Nav'
+import { About } from '../../layout/About'
 
 const storeUrl = 'store'
 const productUrl = 'product'
@@ -63,10 +63,7 @@ export const UserStore = () => {
         <Hero name={store().data.name} image={store().data.media[0].imageUrl} />
       )}
       <Content>
-        <section class="bg-white py-8">
-          <Nav title="Your products" />
-        </section>
-
+        <Nav title="Your products" />
         <Modal
           isOpen={presentProductForm()}
           onClose={() => setPresentProductForm(false)}
@@ -114,18 +111,9 @@ export const UserStore = () => {
           </button>
         </div>
 
-        <div>
-          <a
-            class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8"
-            href="#"
-          >
-            About
-          </a>
-
-          <p class="mt-8 mb-8"></p>
-
-          <p class="mb-8">{store()?.data.description}</p>
-        </div>
+        {store()?.data.description && (
+          <About description={store()?.data.description} />
+        )}
       </Content>
     </div>
   )

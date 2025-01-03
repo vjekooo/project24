@@ -1,13 +1,13 @@
 import { createResource } from 'solid-js'
 import { $fetch, FetchData } from '../utils/fetch'
 import { Hero } from '../layout/Hero'
-import { Container } from '../layout/Container'
 import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
 import { useParams } from '@solidjs/router'
 import { HeartIcon } from '../icons/HeartIcon'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
 import { Content } from '../layout/Content'
 import { Nav } from '../layout/Nav'
+import { About } from '../layout/About'
 
 const url = 'store'
 
@@ -54,51 +54,38 @@ export const Store = () => {
         />
       )}
       <Content>
-        <section class="bg-white py-8">
-          <Nav title="Latest Products" />
-          {!store()?.data.products.length && (
-            <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-              This store has no products
-            </div>
-          )}
-
-          <div class="w-full grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-            {store()?.data.products.map((product) => (
-              <ProductCard
-                product={product}
-                action={
-                  <div
-                    class="cursor-pointer"
-                    onClick={() => onFavClick(product.id)}
-                  >
-                    <HeartIcon
-                      isFilled={() =>
-                        favorites()?.data?.some(
-                          (favorite) => favorite.productId === product.id
-                        )
-                      }
-                    />
-                  </div>
-                }
-              />
-            ))}
+        <Nav title="Latest Products" />
+        {!store()?.data.products.length && (
+          <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+            This store has no products
           </div>
-        </section>
+        )}
+
+        <div class="w-full grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+          {store()?.data.products.map((product) => (
+            <ProductCard
+              product={product}
+              action={
+                <div
+                  class="cursor-pointer"
+                  onClick={() => onFavClick(product.id)}
+                >
+                  <HeartIcon
+                    isFilled={() =>
+                      favorites()?.data?.some(
+                        (favorite) => favorite.productId === product.id
+                      )
+                    }
+                  />
+                </div>
+              }
+            />
+          ))}
+        </div>
         <section>
-          <section class="bg-white py-8">
-            <div class="container py-8 px-6 mx-auto">
-              <a
-                class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8"
-                href="#"
-              >
-                About
-              </a>
-
-              <p class="mt-8 mb-8"></p>
-
-              <p class="mb-8">{store()?.data.description}</p>
-            </div>
-          </section>
+          {store()?.data.description && (
+            <About description={store()?.data.description} />
+          )}
         </section>
       </Content>
     </div>
