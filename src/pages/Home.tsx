@@ -6,6 +6,7 @@ import { HeartIcon } from '../icons/HeartIcon'
 import { Nav } from '../layout/Nav'
 import { Content } from '../layout/Content'
 import { StoreCard } from '../components/cards/storeCard/StoreCard'
+import { Featured } from '../layout/Featured'
 
 interface HeroActionProps {
   storeId: string
@@ -63,7 +64,7 @@ export const Home = () => {
       <Content>
         <Nav title="Latest Stores" />
 
-        <div class="default-grid">
+        <div class="default-grid pb-16">
           {stores()?.data.map((store) => (
             <StoreCard
               store={store}
@@ -84,6 +85,7 @@ export const Home = () => {
             />
           ))}
         </div>
+        {stores()?.data.length > 1 && <Featured store={stores()?.data[1]} />}
       </Content>
     </>
   )
