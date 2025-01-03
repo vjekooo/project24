@@ -3,14 +3,21 @@ import { Modal } from '../components/modal/Modal'
 import { LoginForm } from '../components/forms/loginForm/LoginForm'
 import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
 import { AppContext } from '../index'
+import { Stack } from '../ui/Stack'
 
 export const Header = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
 
   const [presentMenu, setPresentMenu] = createSignal(false)
+  const [presentUserMenu, setPresentUserMenu] = createSignal(false)
 
   const { state } = useContext(AppContext)
+
+  const logOut = () => {
+    localStorage.removeItem('token')
+    window.location.reload()
+  }
 
   return (
     <div class="w-full">
@@ -128,21 +135,41 @@ export const Header = () => {
             id="nav-content"
           >
             {state.token ? (
-              <a
-                class="inline-block no-underline hover:text-black"
-                href="/account"
-              >
-                <svg
-                  class="fill-current hover:text-black"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
+              <div class="relative inline-block text-left">
+                <div
+                  class="cursor-pointer"
+                  onClick={() => setPresentUserMenu(!presentUserMenu())}
                 >
-                  <circle fill="none" cx="12" cy="7" r="3" />
-                  <path d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5S14.757 2 12 2zM12 10c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3S13.654 10 12 10zM21 21v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h2v-1c0-2.757 2.243-5 5-5h4c2.757 0 5 2.243 5 5v1H21z" />
-                </svg>
-              </a>
+                  <svg
+                    class="fill-current hover:text-black"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle fill="none" cx="12" cy="7" r="3" />
+                    <path d="M12 2C9.243 2 7 4.243 7 7s2.243 5 5 5 5-2.243 5-5S14.757 2 12 2zM12 10c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3S13.654 10 12 10zM21 21v-1c0-3.859-3.141-7-7-7h-4c-3.86 0-7 3.141-7 7v1h2v-1c0-2.757 2.243-5 5-5h4c2.757 0 5 2.243 5 5v1H21z" />
+                  </svg>
+                </div>
+                {presentUserMenu() && (
+                  <div class="absolute w-600 bg-white shadow-lg mt-1 right-3 px-2 py-3">
+                    <Stack>
+                      <a
+                        class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                        href="/account"
+                      >
+                        Account
+                      </a>
+                      <span
+                        class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                        onClick={() => logOut()}
+                      >
+                        Log Out
+                      </span>
+                    </Stack>
+                  </div>
+                )}
+              </div>
             ) : (
               <div
                 class="inline-block no-underline cursor-pointer hover:text-black"
