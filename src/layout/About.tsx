@@ -4,7 +4,7 @@ interface Props {
 
 export const About = ({ description }: Props) => {
   return (
-    <div class="container px-3 py-8">
+    <div class="container bg-gray-50 px-3 py-8">
       <span class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8">
         About
       </span>

@@ -9,10 +9,12 @@ export const Map = ({ address }: Props) => {
   let geocoder: null
 
   onMount(async () => {
+    // @ts-ignore
     map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: -33.397, lng: 150.644 },
       zoom: 8,
     })
+    // @ts-ignore
     geocoder = new google.maps.Geocoder()
   })
 
@@ -22,11 +24,14 @@ export const Map = ({ address }: Props) => {
 
   const createMarkerFromAddress = (address: string) => {
     if (!geocoder) return
+    // @ts-ignore
     geocoder.geocode({ address }, (results, status) => {
       if (status === 'OK' && results && results[0]) {
         const location = results[0].geometry.location
+        // @ts-ignore
         map?.setCenter(location) // Center map on the found location
 
+        // @ts-ignore
         new google.maps.Marker({
           position: location,
           map: map,
