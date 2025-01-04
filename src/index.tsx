@@ -13,6 +13,7 @@ import { Header } from './layout/Header'
 import { Footer } from './layout/Footer'
 import { UserStorePage } from './pages/account/UserStorePage'
 import { ProductPage } from './pages/ProductPage'
+import { SearchPage } from './pages/SearchPage'
 
 interface State {
   user: User
@@ -67,6 +68,7 @@ render(
       <Route path="/store/:id" component={StorePage} />
       <Route path="/product/:id" component={ProductPage} />
       <Route path="/confirm-registration" component={ConfirmRegistration} />
+      <Route path="/search" component={SearchPage} />
     </Router>
   ),
   document.getElementById('root')

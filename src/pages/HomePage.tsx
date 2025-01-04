@@ -1,11 +1,11 @@
 import { ErrorBoundary } from 'solid-js'
-import { HomeComponent } from '../domain/HomeComponent'
+import { Home } from '../domain/Home'
 import { Error } from '../layout/Error'
 
 export const HomePage = () => {
   return (
     <ErrorBoundary fallback={<Error />}>
-      <HomeComponent />
+      <Home />
     </ErrorBoundary>
   )
 }

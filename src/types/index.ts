@@ -69,3 +69,8 @@ export interface Option {
   value: string
   label: string
 }
+
+export interface SearchResponse {
+  products: Product[]
+  stores: Store[]
+}

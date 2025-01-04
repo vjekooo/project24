@@ -10,6 +10,11 @@ export const Map = ({ address }: Props) => {
 
   onMount(async () => {
     // @ts-ignore
+    if (!window.google) {
+      console.error('Google Maps API not loaded')
+      return
+    }
+    // @ts-ignore
     map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: -33.397, lng: 150.644 },
       zoom: 8,

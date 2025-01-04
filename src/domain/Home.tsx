@@ -41,7 +41,7 @@ const fetchFavorites = async () => {
   return await $fetch<{}, FavoriteStore[]>(fullUrl).get()
 }
 
-export const HomeComponent = () => {
+export const Home = () => {
   const [stores] = createResource(fetchData)
 
   const [favorites, { refetch }] =
