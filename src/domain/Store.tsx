@@ -9,8 +9,27 @@ import { Content } from '../layout/Content'
 import { Nav } from '../layout/Nav'
 import { About } from '../layout/About'
 import { Loading } from '../layout/Loading'
+import { Map } from '../components/map/Map'
 
 const url = 'store'
+
+function addressToString(address: {
+  street?: string
+  city?: string
+  state?: string
+  postalCode?: string
+  country?: string
+}): string {
+  return [
+    address.street,
+    address.city,
+    address.state,
+    address.postalCode,
+    address.country,
+  ]
+    .filter(Boolean) // Filter out any undefined or empty parts
+    .join(', ') // Join the parts with a comma and space
+}
 
 const fetchData = async () => {
   const params = useParams()
@@ -55,6 +74,19 @@ export const Store = () => {
         />
       )}
       <Content>
+        <div class="w-full flex mb-6 flex-wrap sm:flex-nowrap gap-6">
+          <div class="w-1/2">
+            {store()?.data.address && (
+              <Map address={addressToString(store()?.data.address)} />
+            )}
+          </div>
+          <div class="w-1/2">
+            {store()?.data.description && (
+              <About description={store()?.data.description} />
+            )}
+          </div>
+        </div>
+
         <Nav title="Latest Products" />
         {!store()?.data.products.length && (
           <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
@@ -83,11 +115,6 @@ export const Store = () => {
             />
           ))}
         </div>
-        <section>
-          {store()?.data.description && (
-            <About description={store()?.data.description} />
-          )}
-        </section>
       </Content>
     </Suspense>
   )
