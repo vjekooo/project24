@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, onMount } from 'solid-js'
+import { createEffect, onCleanup, onMount } from 'solid-js'
 
 interface Props {
   address: string

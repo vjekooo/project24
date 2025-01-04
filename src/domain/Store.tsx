@@ -10,7 +10,6 @@ import { Nav } from '../layout/Nav'
 import { About } from '../layout/About'
 import { Loading } from '../layout/Loading'
 import { Map } from '../components/map/Map'
-import { Stack } from '../ui/Stack'
 import { Address } from '../layout/Address'
 
 const url = 'store'

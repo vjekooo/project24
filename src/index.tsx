@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web'
 import { Router, Route } from '@solidjs/router'
 import { createStore } from 'solid-js/store'
-import { ErrorBoundary, JSX, createContext } from 'solid-js'
+import { JSX, createContext } from 'solid-js'
 
 import './index.css'
 import { HomePage } from './pages/HomePage'
