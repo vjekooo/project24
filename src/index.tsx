@@ -40,6 +40,13 @@ const App = (props: Props) => {
     token: localStorage.getItem('token'),
   })
 
+  const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+
+  const script = document.createElement('script')
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}&v=weekly`
+  script.async = true
+  document.body.appendChild(script)
+
   return (
     <AppContext.Provider value={{ state, setState }}>
       <div class="laptop:container laptop:m-auto">
