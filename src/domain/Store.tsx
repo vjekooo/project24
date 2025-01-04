@@ -10,6 +10,8 @@ import { Nav } from '../layout/Nav'
 import { About } from '../layout/About'
 import { Loading } from '../layout/Loading'
 import { Map } from '../components/map/Map'
+import { Stack } from '../ui/Stack'
+import { Address } from '../layout/Address'
 
 const url = 'store'
 
@@ -80,9 +82,12 @@ export const Store = () => {
               <Map address={addressToString(store()?.data.address)} />
             )}
           </div>
-          <div class="w-1/2">
+          <div class="w-1/2 bg-gray-50">
             {store()?.data.description && (
-              <About description={store()?.data.description} />
+              <About
+                description={store()?.data.description}
+                address={<Address address={store()?.data.address} />}
+              />
             )}
           </div>
         </div>
