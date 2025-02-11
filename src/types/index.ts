@@ -1,3 +1,5 @@
+import { Toast } from '../lib/Toast'
+
 export interface User {
   firstName: string
   lastName: string
@@ -11,6 +13,7 @@ export interface Category {
   id: string
   name: string
   description: string
+  subCategories?: Category[]
 }
 
 export interface Address {

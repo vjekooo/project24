@@ -14,6 +14,7 @@ import { Footer } from './layout/Footer'
 import { UserStorePage } from './pages/account/UserStorePage'
 import { ProductPage } from './pages/ProductPage'
 import { SearchPage } from './pages/SearchPage'
+import { CategoryPage } from './pages/CategoryPage'
 
 interface State {
   user: User
@@ -69,6 +70,7 @@ render(
       <Route path="/product/:id" component={ProductPage} />
       <Route path="/confirm-registration" component={ConfirmRegistration} />
       <Route path="/search" component={SearchPage} />
+      <Route path="/category" component={CategoryPage} />
     </Router>
   ),
   document.getElementById('root')
