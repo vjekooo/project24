@@ -82,10 +82,10 @@ export const Header = () => {
 
             <div class="hidden md:flex md:items-center md:w-auto w-full">
               <nav>
-                <ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
+                <ul class="md:flex items-center justify-between gap-6 text-base text-gray-700 pt-4 md:pt-0">
                   <li>
                     <a
-                      class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                      class="inline-block no-underline hover:text-black hover:underline py-2"
                       href="/category"
                     >
                       Categories
@@ -93,7 +93,7 @@ export const Header = () => {
                   </li>
                   <li>
                     <a
-                      class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                      class="inline-block no-underline hover:text-black hover:underline py-2"
                       href="#"
                     >
                       Stores
@@ -101,7 +101,7 @@ export const Header = () => {
                   </li>
                   <li>
                     <a
-                      class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                      class="inline-block no-underline hover:text-black hover:underline py-2"
                       href="#"
                     >
                       Services

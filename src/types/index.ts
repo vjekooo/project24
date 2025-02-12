@@ -1,5 +1,3 @@
-import { Toast } from '../lib/Toast'
-
 export interface User {
   firstName: string
   lastName: string

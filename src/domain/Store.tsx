@@ -1,7 +1,12 @@
 import { Suspense, createResource } from 'solid-js'
 import { $fetch, FetchData } from '../utils/fetch'
 import { Hero } from '../layout/Hero'
-import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
+import {
+  FavoriteProduct,
+  MessageResponse,
+  Product as ProductType,
+  Store as StoreType,
+} from '../types'
 import { useParams } from '@solidjs/router'
 import { HeartIcon } from '../icons/HeartIcon'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
@@ -11,6 +16,7 @@ import { About } from '../layout/About'
 import { Loading } from '../layout/Loading'
 import { Map } from '../components/map/Map'
 import { Address } from '../layout/Address'
+import { StoreCard } from '../components/cards/storeCard/StoreCard'
 
 const url = 'store'
 
@@ -28,8 +34,8 @@ function addressToString(address: {
     address.postalCode,
     address.country,
   ]
-    .filter(Boolean) // Filter out any undefined or empty parts
-    .join(', ') // Join the parts with a comma and space
+    .filter(Boolean)
+    .join(', ')
 }
 
 const fetchData = async () => {
@@ -54,8 +60,18 @@ const fetchFavorites = async () => {
   return await $fetch<{}, FavoriteProduct[]>(fullUrl).get()
 }
 
+const fetchRelatedStores = async () => {
+  const params = useParams()
+  if (!params.id) throw new Error('Missing product id')
+  return await $fetch<{}, StoreType[]>(
+    `${url}/${params.id}/related-stores`
+  ).get()
+}
+
 export const Store = () => {
   const [store] = createResource<FetchData<StoreType>>(fetchData)
+  const [relatedStores] =
+    createResource<FetchData<StoreType[]>>(fetchRelatedStores)
 
   const [favorites, { refetch }] =
     createResource<FetchData<FavoriteProduct[]>>(fetchFavorites)
@@ -99,26 +115,33 @@ export const Store = () => {
         )}
 
         <div class="default-grid">
-          {store()?.data.products.map((product) => (
-            <ProductCard
-              product={product}
-              action={
-                <div
-                  class="cursor-pointer"
-                  onClick={() => onFavClick(product.id)}
-                >
+          {store()?.data.products.map((product) => {
+            const isFavorite = favorites()?.data?.some(
+              (favorite) => favorite.productId === product.id
+            )
+
+            return (
+              <ProductCard
+                product={product}
+                action={
                   <HeartIcon
-                    isFilled={() =>
-                      favorites()?.data?.some(
-                        (favorite) => favorite.productId === product.id
-                      )
-                    }
+                    isFilled={() => isFavorite}
+                    onClick={() => onFavClick(product.id)}
                   />
-                </div>
-              }
-            />
-          ))}
+                }
+              />
+            )
+          })}
         </div>
+
+        <section>
+          <h3 class="h3 mb-12">Related stores</h3>
+          <div class="default-grid">
+            {relatedStores()?.data.map((store) => (
+              <StoreCard store={store} action={null} />
+            ))}
+          </div>
+        </section>
       </Content>
     </Suspense>
   )

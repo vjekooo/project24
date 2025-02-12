@@ -86,7 +86,7 @@ export const Home = () => {
             />
           ))}
         </div>
-        {stores()?.data.length > 1 && <Featured store={stores()?.data[1]} />}
+        {stores()?.data?.length > 1 && <Featured store={stores()?.data[1]} />}
         <div class="default-grid pb-16">
           {stores()?.data.map((store) => (
             <StoreCard

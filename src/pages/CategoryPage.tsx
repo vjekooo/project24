@@ -1,6 +1,6 @@
 import { createResource } from 'solid-js'
 import { Content } from '../layout/Content'
-import { $fetch } from '../utils/fetch'
+import { $fetch, FetchData } from '../utils/fetch'
 import { Category } from '../types'
 import { Stack } from '../ui/Stack'
 
@@ -9,20 +9,22 @@ const fetchData = async () => {
 }
 
 export const CategoryPage = () => {
-  const [categories] = createResource(fetchData)
+  const [categories] = createResource<FetchData<Category[]>>(fetchData)
+
+  const data = (
+    <Stack gap={6}>
+      {categories()?.data.map((category) => (
+        <Stack>
+          <h3>{category.name}</h3>
+        </Stack>
+      ))}
+    </Stack>
+  )
 
   return (
     <Content>
-      <h1>Category</h1>
-      <Stack gap={6}>
-        {categories()?.data.map((category) => {
-          return (
-            <Stack>
-              <h3>{category.name}</h3>
-            </Stack>
-          )
-        })}
-      </Stack>
+      <h1>Categories</h1>
+      {categories()?.data && data}
     </Content>
   )
 }
