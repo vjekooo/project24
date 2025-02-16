@@ -1,6 +1,12 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { MessageResponse, Product, Store } from '../../../types'
+import {
+  Category,
+  MessageResponse,
+  Option,
+  Product,
+  Store,
+} from '../../../types'
 import { productConfig as config } from './config'
 import { Stack } from '../../../ui/Stack'
 import { Accessor, For } from 'solid-js'
@@ -12,10 +18,28 @@ const url = 'product'
 interface Props {
   store: Store
   product?: Accessor<Product>
+  categories: Category[]
   onClose: (message: string) => void
 }
 
-export const ProductForm = ({ store, product, onClose }: Props) => {
+const createSubCategories = (categories: Category[]): Option[] => {
+  if (!categories) return []
+  const subCategories: Category[] = []
+  categories.map((category) => {
+    subCategories.push(...category.subCategories)
+  })
+  subCategories.unshift({ id: '0L', name: 'Select category', description: '' })
+  return subCategories.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }))
+}
+
+export const ProductForm = (props: Props) => {
+  const store = props.store
+  const product = props.product
+  const onClose = props.onClose
+
   const {
     updateFormField,
     errors,
@@ -67,26 +91,42 @@ export const ProductForm = ({ store, product, onClose }: Props) => {
       <ToastComponent />
       {/*@ts-ignore*/}
       <form use:formSubmit={handleSubmit}>
-        <Stack gap={6}>
+        <Stack size="md">
           <For each={config}>
             {(item) => {
-              return (
-                <Stack gap={2}>
-                  <input
+              if (item.type === 'text') {
+                return (
+                  <Stack size="md">
+                    <input
+                      // @ts-ignore
+                      use:validate={item.validation}
+                      class="input"
+                      name={item.name}
+                      type={item.type}
+                      placeholder={item.label}
+                      onChange={updateFormField(item.name, item.isArray)}
+                      value={product()?.[item.name] || ''}
+                    />
+                    {errors[item.name] && (
+                      <ErrorMessage error={errors[item.name]} />
+                    )}
+                  </Stack>
+                )
+              } else {
+                return (
+                  <select
+                    name={item.name}
+                    class="input"
+                    onChange={updateFormField(item.name, item.isArray)}
                     // @ts-ignore
                     use:validate={item.validation}
-                    class="input"
-                    name={item.name}
-                    type={item.type}
-                    placeholder={item.label}
-                    onChange={updateFormField(item.name, item.isArray)}
-                    value={product()?.[item.name] || ''}
-                  />
-                  {errors[item.name] && (
-                    <ErrorMessage error={errors[item.name]} />
-                  )}
-                </Stack>
-              )
+                  >
+                    {createSubCategories(props.categories).map((option) => (
+                      <option value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                )
+              }
             }}
           </For>
 

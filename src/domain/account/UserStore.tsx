@@ -2,7 +2,7 @@ import { Suspense, createResource, createSignal } from 'solid-js'
 import { useParams } from '@solidjs/router'
 import { $fetch, FetchData } from '../../utils/fetch'
 import { Hero } from '../../layout/Hero'
-import { MessageResponse, Product, Store } from '../../types'
+import { Category, MessageResponse, Product, Store } from '../../types'
 import { ProductForm } from '../../components/forms/productForm/ProductForm'
 import { Modal } from '../../components/modal/Modal'
 import { ProductCard } from '../../components/cards/productCard/ProductCard'
@@ -17,6 +17,7 @@ import { Toast } from '../../lib/Toast'
 
 const storeUrl = 'store'
 const productUrl = 'product'
+const categoryUrl = 'category'
 
 const fetchData = async (id: string) => {
   const fullUrl = `${storeUrl}/${id}`
@@ -27,6 +28,10 @@ const fetchProducts = async (id: string) => {
   return await $fetch<{}, Product[]>(`${productUrl}/store/${id}`).get()
 }
 
+async function fetchCategories() {
+  return await $fetch<any, Category[]>(categoryUrl).get()
+}
+
 export const UserStore = () => {
   const params = useParams()
   if (!params.id) {
@@ -34,6 +39,8 @@ export const UserStore = () => {
   }
 
   const [productToEdit, setProductToEdit] = createSignal<Product | null>(null)
+
+  const [category] = createResource(fetchCategories)
 
   const { ToastComponent, showToast } = Toast()
 
@@ -86,6 +93,7 @@ export const UserStore = () => {
             <ProductForm
               store={store()?.data}
               product={productToEdit}
+              categories={category()?.data}
               onClose={onModalClose}
             />
           )}
@@ -96,7 +104,7 @@ export const UserStore = () => {
             <ProductCard
               product={product}
               action={
-                <Stack gap={3} horizontal>
+                <Stack size="md" horizontal>
                   <div
                     onClick={() => onEdit(product.id)}
                     class="cursor-pointer"

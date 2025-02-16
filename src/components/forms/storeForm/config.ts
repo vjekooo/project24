@@ -22,7 +22,7 @@ export const storeConfig: FormConfig[] = [
   },
   {
     label: 'Category',
-    name: 'categoryId',
+    name: 'category',
     type: 'select',
     validation: [exists],
   },

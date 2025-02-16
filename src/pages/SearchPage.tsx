@@ -7,8 +7,8 @@ import { SearchResponse } from '../types'
 import { StoreCard } from '../components/cards/storeCard/StoreCard'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
 
-const fetchData = async (query: string) => {
-  const queryString = new URLSearchParams({ searchTerm: query }).toString()
+const fetchData = async (query: Partial<URLSearchParams>) => {
+  const queryString = new URLSearchParams(query as URLSearchParams).toString()
   return await $fetch<{}, SearchResponse>(`search?${queryString}`).get()
 }
 
@@ -18,17 +18,15 @@ export const SearchPage = () => {
   const [results, setResults] = createSignal<SearchResponse>()
 
   createEffect(async () => {
-    if (searchParams.q) {
-      const data = await fetchData(searchParams.q)
-      setResults(data.data)
-    }
-  }, searchParams.q)
+    const data = await fetchData(searchParams)
+    setResults(data.data)
+  })
 
   return (
     <Content>
-      <Stack gap={6}>
+      <Stack size="md">
         <h1>Search Results</h1>
-        <Stack gap={6}>
+        <Stack size="md">
           <h3>Stores</h3>
           <div class="default-grid">
             {results()?.stores.map((store) => (
@@ -36,7 +34,7 @@ export const SearchPage = () => {
             ))}
           </div>
         </Stack>
-        <Stack gap={6}>
+        <Stack size="md">
           <h3>Products</h3>
           {results()?.products.map((product) => (
             <ProductCard product={product} action={null} />

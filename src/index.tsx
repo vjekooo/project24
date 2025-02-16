@@ -3,7 +3,6 @@ import { Router, Route } from '@solidjs/router'
 import { createStore } from 'solid-js/store'
 import { JSX, createContext } from 'solid-js'
 
-import './index.css'
 import { HomePage } from './pages/HomePage'
 import { AccountPage } from './pages/account/AccountPage'
 import { StorePage } from './pages/StorePage'
@@ -15,6 +14,8 @@ import { UserStorePage } from './pages/account/UserStorePage'
 import { ProductPage } from './pages/ProductPage'
 import { SearchPage } from './pages/SearchPage'
 import { CategoryPage } from './pages/CategoryPage'
+
+import './index.css'
 
 interface State {
   user: User

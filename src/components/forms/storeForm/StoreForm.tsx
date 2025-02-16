@@ -12,6 +12,7 @@ interface Props {
 }
 
 const createCategoryOptions = (categories: Category[]): Option[] => {
+  if (!categories) return []
   categories.unshift({ id: '0L', name: 'Select category', description: '' })
   return categories.map((category) => ({
     value: category.id,
@@ -34,7 +35,7 @@ export const StoreForm = ({ categories, onComplete }: Props) => {
       <div class="flex flex-col gap-2">
         {/*@ts-ignore*/}
         <form use:formSubmit={handleSubmit}>
-          <Stack gap={6}>
+          <Stack size="md">
             {storeConfig.map((field) => {
               return field.type === 'text' ? (
                 <input

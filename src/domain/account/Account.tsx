@@ -1,7 +1,7 @@
 import { Suspense, createEffect, createResource, createSignal } from 'solid-js'
 import { AddressForm } from '../../components/forms/addressForm/AddressForm'
 import { Category, User } from '../../types'
-import { $fetch, FetchData } from '../../utils/fetch'
+import { $fetch } from '../../utils/fetch'
 import { StoreForm } from '../../components/forms/storeForm/StoreForm'
 import { Content } from '../../layout/Content'
 import { Stack } from '../../ui/Stack'
@@ -27,9 +27,9 @@ export const Account = () => {
   const [presentAddressForm, setPresentAddressForm] = createSignal(false)
   const [presentStoreForm, setPresentStoreForm] = createSignal(false)
 
-  const [data] = createResource<FetchData<User>>(fetchData)
+  const [data] = createResource(fetchData)
 
-  const [category] = createResource<FetchData<Category[]>>(fetchCategories)
+  const [category] = createResource(fetchCategories)
 
   createEffect(() => {
     if (data()) {
@@ -69,9 +69,9 @@ export const Account = () => {
             </Modal>
           </div>
         ) : (
-          <Stack gap={3}>
+          <Stack>
             <h3 class="h3">Address</h3>
-            <Stack gap={3} horizontal>
+            <Stack horizontal>
               <span>{user()?.address.street}</span>
               <span>{user().address.houseNumber}</span>
             </Stack>
@@ -84,7 +84,7 @@ export const Account = () => {
             <p>You have no store on file</p>
           </div>
         ) : (
-          <Stack gap={3}>
+          <Stack>
             <h3 class="h3">Your Store</h3>
             <div class="w-56">
               <StoreCard
@@ -119,7 +119,7 @@ export const Account = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Content>
-        <Stack gap={6}>
+        <Stack size="md">
           <h1 class="h1">Account</h1>
           {data()?.error ? error : content()}
         </Stack>

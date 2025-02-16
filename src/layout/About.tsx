@@ -3,7 +3,7 @@ import { Stack } from '../ui/Stack'
 
 interface Props {
   description: string
-  address: JSX.Element
+  address?: JSX.Element
 }
 
 export const About = (props: Props) => {
@@ -14,7 +14,7 @@ export const About = (props: Props) => {
           About
         </span>
         <p>{props.description}</p>
-        <Show when={props.address} fallback={'No address'}>
+        <Show when={props.address} fallback={''}>
           {props.address}
         </Show>
       </Stack>
