@@ -5,21 +5,17 @@ interface Props {
   address: AddressType
 }
 
-export const Address = ({ address }: Props) => {
+export const Address = (props: Props) => {
   return (
-    <div>
-      {address && (
-        <Stack gap={2}>
-          <Stack gap={2} horizontal>
-            <span class="">{address.street}</span>
-            <span class="">{address.houseNumber}</span>
-          </Stack>
-          <Stack gap={2} horizontal>
-            <span class="">{address.postalCode},</span>
-            <span class="">{address.city}</span>
-          </Stack>
-        </Stack>
-      )}
-    </div>
+    <Stack gap={2}>
+      <Stack gap={2} horizontal>
+        <span class="">{props.address.street}</span>
+        <span class="">{props.address.houseNumber}</span>
+      </Stack>
+      <Stack gap={2} horizontal>
+        <span class="">{props.address.postalCode},</span>
+        <span class="">{props.address.city}</span>
+      </Stack>
+    </Stack>
   )
 }

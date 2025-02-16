@@ -94,7 +94,7 @@ export const Header = () => {
                   <li>
                     <a
                       class="inline-block no-underline hover:text-black hover:underline py-2"
-                      href="#"
+                      href="/stores"
                     >
                       Stores
                     </a>
@@ -102,7 +102,7 @@ export const Header = () => {
                   <li>
                     <a
                       class="inline-block no-underline hover:text-black hover:underline py-2"
-                      href="#"
+                      href="/services"
                     >
                       Services
                     </a>

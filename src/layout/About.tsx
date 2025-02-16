@@ -1,19 +1,23 @@
-import { JSX } from 'solid-js'
+import { JSX, Show } from 'solid-js'
+import { Stack } from '../ui/Stack'
 
 interface Props {
   description: string
   address: JSX.Element
 }
 
-export const About = ({ description, address }: Props) => {
+export const About = (props: Props) => {
   return (
     <div class="container px-3 py-8">
-      <span class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl mb-8">
-        About
-      </span>
-      <p class="mt-8 mb-8"></p>
-      <p class="mb-8">{description}</p>
-      {address && address}
+      <Stack size="lg">
+        <span class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl">
+          About
+        </span>
+        <p>{props.description}</p>
+        <Show when={props.address} fallback={'No address'}>
+          {props.address}
+        </Show>
+      </Stack>
     </div>
   )
 }

@@ -1,13 +1,27 @@
 import { JSX } from 'solid-js'
 
+type Size = 'sm' | 'base' | 'md' | 'lg' | 'xl'
+
 interface Props {
-  gap?: number
+  size?: Size
   horizontal?: boolean
   children: JSX.Element
 }
 
-export const Stack = ({ gap = 1, horizontal = false, children }: Props) => (
-  <div class={`flex ${horizontal ? 'flex-row' : 'flex-col'} gap-${gap}`}>
+const sizeMap: Record<Size, string> = {
+  sm: 'gap-2',
+  base: 'gap-4',
+  md: 'gap-6',
+  lg: 'gap-8',
+  xl: 'gap-12',
+}
+
+export const Stack = ({
+  size = 'base',
+  horizontal = false,
+  children,
+}: Props) => (
+  <div class={`flex ${horizontal ? 'flex-row' : 'flex-col'} ${sizeMap[size]}`}>
     {children}
   </div>
 )

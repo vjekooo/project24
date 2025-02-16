@@ -1,12 +1,7 @@
-import { Suspense, createResource } from 'solid-js'
+import { Suspense, createEffect, createResource } from 'solid-js'
 import { $fetch, FetchData } from '../utils/fetch'
 import { Hero } from '../layout/Hero'
-import {
-  FavoriteProduct,
-  MessageResponse,
-  Product as ProductType,
-  Store as StoreType,
-} from '../types'
+import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
 import { useParams } from '@solidjs/router'
 import { HeartIcon } from '../icons/HeartIcon'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
@@ -38,47 +33,43 @@ function addressToString(address: {
     .join(', ')
 }
 
-const fetchData = async () => {
-  const params = useParams()
-  if (!params.id) {
-    throw new Error('No id provided')
-  }
-  const fullUrl = `${url}/${params.id}`
+const fetchStore = async (id: string) => {
+  const fullUrl = `${url}/${id}`
   return await $fetch<{}, StoreType>(fullUrl).get()
 }
 
 const setProductFavorite = async (id: string) => {
   const fullUrl = 'product/toggle-favorite'
-  const { data, error } = await $fetch<{}, MessageResponse>(fullUrl).post({
+  await $fetch<{}, MessageResponse>(fullUrl).post({
     productId: id,
   })
-  console.log({ data, error })
 }
 
 const fetchFavorites = async () => {
-  const fullUrl = 'product/favorites'
+  const fullUrl = 'product/favorite'
   return await $fetch<{}, FavoriteProduct[]>(fullUrl).get()
 }
 
-const fetchRelatedStores = async () => {
-  const params = useParams()
-  if (!params.id) throw new Error('Missing product id')
-  return await $fetch<{}, StoreType[]>(
-    `${url}/${params.id}/related-stores`
-  ).get()
+const fetchRelatedStores = async (id: string) => {
+  return await $fetch<{}, StoreType[]>(`${url}/${id}/related`).get()
 }
 
 export const Store = () => {
-  const [store] = createResource<FetchData<StoreType>>(fetchData)
-  const [relatedStores] =
-    createResource<FetchData<StoreType[]>>(fetchRelatedStores)
+  const params = useParams()
+  if (!params.id) {
+    throw new Error('No store id provided')
+  }
 
-  const [favorites, { refetch }] =
+  const [store] = createResource(() => params.id, fetchStore)
+
+  const [relatedStores] = createResource(() => params.id, fetchRelatedStores)
+
+  const [favorites, { refetch: refetchFavorites }] =
     createResource<FetchData<FavoriteProduct[]>>(fetchFavorites)
 
   const onFavClick = (id: string) => {
     setProductFavorite(id).then(() => {
-      refetch()
+      refetchFavorites()
     })
   }
 

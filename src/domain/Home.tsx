@@ -37,7 +37,7 @@ const setStoreFavorite = async (id: string) => {
 }
 
 const fetchFavorites = async () => {
-  const fullUrl = 'store/favorites'
+  const fullUrl = 'store/favorite'
   return await $fetch<{}, FavoriteStore[]>(fullUrl).get()
 }
 
@@ -70,18 +70,14 @@ export const Home = () => {
             <StoreCard
               store={store}
               action={
-                <div
-                  class="cursor-pointer"
+                <HeartIcon
+                  isFilled={() =>
+                    favorites()?.data?.some(
+                      (favorite) => favorite.storeId === store.id
+                    )
+                  }
                   onClick={() => onFavClick(store.id)}
-                >
-                  <HeartIcon
-                    isFilled={() =>
-                      favorites()?.data?.some(
-                        (favorite) => favorite.storeId === store.id
-                      )
-                    }
-                  />
-                </div>
+                />
               }
             />
           ))}
@@ -92,18 +88,14 @@ export const Home = () => {
             <StoreCard
               store={store}
               action={
-                <div
-                  class="cursor-pointer"
+                <HeartIcon
+                  isFilled={() =>
+                    favorites()?.data?.some(
+                      (favorite) => favorite.storeId === store.id
+                    )
+                  }
                   onClick={() => onFavClick(store.id)}
-                >
-                  <HeartIcon
-                    isFilled={() =>
-                      favorites()?.data?.some(
-                        (favorite) => favorite.storeId === store.id
-                      )
-                    }
-                  />
-                </div>
+                />
               }
             />
           ))}

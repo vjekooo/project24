@@ -7,16 +7,16 @@ interface Props {
   action?: JSX.Element
 }
 
-export const Hero = ({ name, image, action }: Props) => {
+export const Hero = (props: Props) => {
   return (
     <section
       class="w-full mx-auto bg-nordic-gray-light flex p-12 md:pt-0 items-end bg-cover bg-right"
-      style={`max-width:1600px; height: 32rem; background-image: url('${image}');`}
+      style={`max-width:1600px; height: 32rem; background-image: url('${props.image}');`}
     >
       <div class="flex flex-col justify-center items-start p-6 tracking-wide bg-white opacity-50">
         <Stack gap={3}>
-          <h1 class="text-black h1">{name}</h1>
-          {action && <div>{action}</div>}
+          <h1 class="text-black h1">{props.name}</h1>
+          <div>{props.action || ''}</div>
         </Stack>
       </div>
     </section>
