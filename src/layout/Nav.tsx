@@ -11,7 +11,7 @@ export const Nav = ({ title }: Props) => {
   return (
     <nav id="store" class="w-full z-30 top-0 py-1 mb-8">
       <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-3">
-        <span class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl ">
+        <span class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 h3">
           {title}
         </span>
 

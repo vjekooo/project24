@@ -19,7 +19,7 @@ export const Modal = (props: ModalProps) => {
         onClick={props.onClose}
       ></div>
 
-      <div class="bg-white p-6 rounded shadow-lg z-50 flex flex-col">
+      <div class="bg-white p-6 rounded shadow-lg z-50 flex flex-col w-full max-w-md">
         <div class="flex items-center justify-between mb-8">
           <div>{props.title && <h1 class="h3">{props.title}</h1>}</div>
           <div class="cursor-pointer self-end" onClick={props.onClose}>

@@ -20,17 +20,4 @@ export const productConfig: FormConfig[] = [
     type: 'text',
     validation: [],
   },
-  {
-    label: 'Image',
-    name: 'image',
-    type: 'text',
-    isArray: true,
-  },
-  {
-    label: 'Category',
-    name: 'category',
-    type: 'select',
-    isArray: true,
-    validation: [exists],
-  },
 ]

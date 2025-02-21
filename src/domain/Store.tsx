@@ -1,4 +1,4 @@
-import { Suspense, createEffect, createResource } from 'solid-js'
+import { Suspense, createResource } from 'solid-js'
 import { $fetch, FetchData } from '../utils/fetch'
 import { Hero } from '../layout/Hero'
 import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
@@ -126,7 +126,7 @@ export const Store = () => {
         </div>
 
         <section>
-          <h3 class="h3 mb-12">Related stores</h3>
+          <h3 class="h3 mb-12 uppercase">Related stores</h3>
           <div class="default-grid">
             {relatedStores()?.data.map((store) => (
               <StoreCard store={store} action={null} />

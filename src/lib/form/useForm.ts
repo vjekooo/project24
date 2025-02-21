@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js'
+import { createEffect, createSignal } from 'solid-js'
 import { createStore } from 'solid-js/store'
 
 export interface FormConfig {
@@ -72,12 +72,16 @@ export function useForm<R>({
   const errorClass = 'error-input'
 
   const state = config.reduce((acc, { name }: any) => {
-    acc[name] = defaultState?.[name] || ''
+    acc[name] = defaultState?.[name] || undefined
     return acc
   }, {})
 
   const [form, setForm] = createStore({
     ...state,
+  })
+
+  createEffect(() => {
+    setForm(state)
   })
 
   const [errors, setErrors] = createStore({
@@ -131,8 +135,9 @@ export function useForm<R>({
         })
       } else {
         if (isArray) {
+          const copy = state[fieldName] ? [...state[fieldName]] : []
           setForm({
-            [fieldName]: [...state[fieldName], inputElement.value],
+            [fieldName]: [...copy, inputElement.value],
           })
         } else {
           setForm({

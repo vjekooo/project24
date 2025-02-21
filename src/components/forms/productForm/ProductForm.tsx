@@ -1,17 +1,16 @@
-import { $fetch } from '../../../utils/fetch'
-import { useForm } from '../../../lib/form/useForm'
 import {
   Category,
-  MessageResponse,
   Option,
   Product,
+  ProductRequest,
   Store,
 } from '../../../types'
 import { productConfig as config } from './config'
 import { Stack } from '../../../ui/Stack'
-import { Accessor, For } from 'solid-js'
+import { Accessor, For, createEffect, createSignal } from 'solid-js'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
 import { Toast } from '../../../lib/Toast'
+import { RequestMethod, useMultipart } from '../../../hooks/useMultipart'
 
 const url = 'product'
 
@@ -40,33 +39,80 @@ export const ProductForm = (props: Props) => {
   const product = props.product
   const onClose = props.onClose
 
-  const {
-    updateFormField,
-    errors,
-    formSubmit,
-    validate,
-    cleanFormData,
-    isFormValid,
-  } = useForm<Product>({
-    config,
-    defaultState: product(),
+  const category = props.categories?.map((category) => category.id)
+
+  const [formState, setFormState] = createSignal<ProductRequest>({
+    name: '',
+    description: '',
+    price: 0,
+    existingImages: [],
+    category: [],
   })
+
+  createEffect(() => {
+    if (product) {
+      setFormState({
+        name: product()?.name || '',
+        description: product()?.description || '',
+        price: product()?.price || 0,
+        existingImages: product()?.media.map((media) => media.imageUrl) || [],
+        category: category ? [...category] : [],
+      })
+    }
+  })
+
+  const [newImages, setNewImages] = createSignal<File[]>([])
+
+  const [previewUrl, setPreviewUrl] = createSignal<string | null>(null)
+
+  const handleFileChange = (event: Event) => {
+    const target = event.currentTarget as HTMLInputElement
+    const file = target.files?.[0]
+    if (file) {
+      setNewImages([...newImages(), file])
+      setPreviewUrl(URL.createObjectURL(file))
+    }
+  }
+
+  const removeExistingImage = (image: string) => {
+    setFormState({
+      ...formState(),
+      existingImages: formState().existingImages.filter((existingImage) => {
+        return existingImage !== image
+      }),
+    })
+  }
 
   const { ToastComponent, showToast } = Toast()
 
-  const handleSubmit = async (_: HTMLFormElement, data: Product) => {
-    const cleanData = cleanFormData(data)
-
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     const newProduct = {
-      ...cleanData,
+      ...formState(),
       storeId: store.id,
     }
 
+    const formData = new FormData()
+
+    for (const key in newImages()) {
+      if (newImages()[key]) {
+        formData.append('newImages', newImages()[key])
+      }
+    }
+
+    for (const key in newProduct) {
+      formData.append(key, newProduct[key])
+    }
+
     if (product && product()?.id) {
-      const { data, error } = await $fetch<Product, MessageResponse>(url).put({
-        ...newProduct,
-        id: product()?.id,
-      })
+      formData.append('id', product()?.id)
+
+      const { data, error } = await useMultipart(
+        url,
+        formData,
+        RequestMethod.PUT
+      )
+
       if (data) {
         onClose(data.message)
       }
@@ -74,9 +120,7 @@ export const ProductForm = (props: Props) => {
         showToast(error.message)
       }
     } else {
-      const { data, error } = await $fetch<Product, MessageResponse>(url).post(
-        newProduct
-      )
+      const { data, error } = await useMultipart(url, formData)
       if (data) {
         onClose(data.message)
       }
@@ -89,48 +133,80 @@ export const ProductForm = (props: Props) => {
   return (
     <div class="flex flex-col gap-2">
       <ToastComponent />
-      {/*@ts-ignore*/}
-      <form use:formSubmit={handleSubmit}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <Stack size="md">
           <For each={config}>
             {(item) => {
-              if (item.type === 'text') {
-                return (
-                  <Stack size="md">
-                    <input
-                      // @ts-ignore
-                      use:validate={item.validation}
-                      class="input"
-                      name={item.name}
-                      type={item.type}
-                      placeholder={item.label}
-                      onChange={updateFormField(item.name, item.isArray)}
-                      value={product()?.[item.name] || ''}
-                    />
-                    {errors[item.name] && (
-                      <ErrorMessage error={errors[item.name]} />
-                    )}
-                  </Stack>
-                )
-              } else {
-                return (
-                  <select
-                    name={item.name}
+              return (
+                <Stack size="md">
+                  <input
                     class="input"
-                    onChange={updateFormField(item.name, item.isArray)}
-                    // @ts-ignore
-                    use:validate={item.validation}
-                  >
-                    {createSubCategories(props.categories).map((option) => (
-                      <option value={option.value}>{option.label}</option>
-                    ))}
-                  </select>
-                )
-              }
+                    name={item.name}
+                    type={item.type}
+                    placeholder={item.label}
+                    onChange={(event) =>
+                      setFormState({
+                        ...formState(),
+                        [item.name]: event.target.value,
+                      })
+                    }
+                    value={product()?.[item.name] || ''}
+                  />
+                  {/*{errors[item.name] && (*/}
+                  {/*  <ErrorMessage error={errors[item.name]} />*/}
+                  {/*)}*/}
+                </Stack>
+              )
             }}
           </For>
-
-          <button class="btn-primary" type="submit" disabled={!isFormValid()}>
+          <select
+            name="category"
+            class="input"
+            onChange={(event) => {
+              setFormState({
+                ...formState(),
+                category: [event.target.value],
+              })
+            }}
+            value={formState().category[0] || ''}
+          >
+            {createSubCategories(props.categories).map((option) => (
+              <option value={option.value}>{option.label}</option>
+            ))}
+          </select>
+          {formState()?.existingImages?.map((image) => (
+            <div class="w-[120px] relative">
+              <div
+                class="absolute top-[-5px] right-[-5px] bg-gray-50 rounded-full w-[25px] h-[25px] flex justify-center items-center cursor-pointer"
+                onClick={() => removeExistingImage(image)}
+              >
+                X
+              </div>
+              <img
+                class="w-full aspect-square object-cover hover:grow hover:shadow-lg"
+                src={image}
+                alt="product image"
+              />
+            </div>
+          ))}
+          {previewUrl() && (
+            <div class="mt-4">
+              <p>Preview:</p>
+              <img
+                src={previewUrl()}
+                alt="Uploaded Preview"
+                class="w-[100px]"
+              />
+            </div>
+          )}
+          <input
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFileChange}
+          />
+          <button class="btn-primary" type="submit">
             Submit
           </button>
         </Stack>

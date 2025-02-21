@@ -10,9 +10,9 @@ export const ProductCard = (props: Props) => {
   return (
     <div class="flex flex-col">
       <a href={`/product/${props.product.id}`}>
-        <div class="relative w-full pt-[100%]">
+        <div class="w-full">
           <img
-            class="absolute top-0 left-0 w-full h-full object-cover hover:grow hover:shadow-lg"
+            class="w-full aspect-square object-cover hover:grow hover:shadow-lg"
             src={
               props.product.media.length > 0
                 ? props.product.media[0].imageUrl

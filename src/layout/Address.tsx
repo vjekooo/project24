@@ -7,12 +7,12 @@ interface Props {
 
 export const Address = (props: Props) => {
   return (
-    <Stack gap={2}>
-      <Stack gap={2} horizontal>
+    <Stack size="sm">
+      <Stack size="sm" horizontal>
         <span class="">{props.address.street}</span>
         <span class="">{props.address.houseNumber}</span>
       </Stack>
-      <Stack gap={2} horizontal>
+      <Stack size="sm" horizontal>
         <span class="">{props.address.postalCode},</span>
         <span class="">{props.address.city}</span>
       </Stack>

@@ -47,14 +47,31 @@ export interface FavoriteStore {
   storeId: string
 }
 
+export interface Category {
+  id: string
+  name: string
+}
+
 export interface Product {
   id: string
   name: string
   description: string
   media?: Media[]
+  category: Category[]
   storeId?: string
   price: number
   discount: number
+}
+
+export interface ProductRequest {
+  name: string
+  description: string
+  existingImages: string[]
+  newImages?: File[]
+  price: number
+  storeId?: string
+  productId?: string
+  category: string[]
 }
 
 export interface LoginResponse {

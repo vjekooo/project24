@@ -37,7 +37,7 @@ export const RegisterForm = ({ formSwitcher }: Props) => {
           <div class="flex flex-col gap-6">
             {registerConfig.map((field) => {
               return (
-                <Stack gap={2}>
+                <Stack size="sm">
                   <input
                     // @ts-ignore
                     use:validate={field.validation}
