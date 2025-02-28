@@ -14,12 +14,14 @@ import { Nav } from '../../layout/Nav'
 import { About } from '../../layout/About'
 import { Loading } from '../../layout/Loading'
 import { Toast } from '../../lib/Toast'
+import { StoreCard } from '../../components/cards/storeCard/StoreCard'
+import { StoreForm } from '../../components/forms/storeForm/StoreForm'
 
 const storeUrl = 'store'
 const productUrl = 'product'
 const categoryUrl = 'category'
 
-const fetchData = async (id: string) => {
+const fetchStore = async (id: string) => {
   const fullUrl = `${storeUrl}/${id}`
   return await $fetch<{}, Store>(fullUrl).get()
 }
@@ -44,13 +46,14 @@ export const UserStore = () => {
 
   const { ToastComponent, showToast } = Toast()
 
-  const [store] = createResource<FetchData<Store>>(() => fetchData(params.id))
+  const [store] = createResource(() => fetchStore(params.id))
 
   const [products, { refetch }] = createResource<FetchData<Product[]>>(() =>
     fetchProducts(params.id)
   )
 
   const [presentProductForm, setPresentProductForm] = createSignal(false)
+  const [presentStoreForm, setPresentStoreForm] = createSignal(false)
 
   const onModalClose = (message: string) => {
     showToast(message)
@@ -79,11 +82,35 @@ export const UserStore = () => {
   return (
     <Suspense fallback={<Loading />}>
       {store()?.data.name && (
-        <Hero name={store().data.name} image={store().data.media[0].imageUrl} />
+        <div class="relative">
+          <Hero
+            name={store().data.name}
+            image={store().data.media[0]?.imageUrl}
+          />
+          <div
+            class="absolute bottom-5 right-10 cursor-pointer"
+            onClick={() => setPresentStoreForm(true)}
+          >
+            <EditIcon />
+          </div>
+        </div>
       )}
       <Content>
         <ToastComponent />
         <Nav title="Your products" />
+
+        <Modal
+          isOpen={presentStoreForm()}
+          onClose={() => setPresentStoreForm(false)}
+          title={store()?.data.id ? 'Edit store' : 'Create store'}
+        >
+          <StoreForm
+            store={store()?.data}
+            categories={category()?.data}
+            onComplete={onModalClose}
+          />
+        </Modal>
+
         <Modal
           isOpen={presentProductForm()}
           onClose={() => setPresentProductForm(false)}

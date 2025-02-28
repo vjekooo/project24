@@ -14,16 +14,4 @@ export const storeConfig: FormConfig[] = [
     type: 'text',
     validation: [exists],
   },
-  {
-    label: 'Image',
-    name: 'image',
-    type: 'text',
-    isArray: true,
-  },
-  {
-    label: 'Category',
-    name: 'category',
-    type: 'select',
-    validation: [exists],
-  },
 ]

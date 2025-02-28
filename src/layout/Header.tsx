@@ -1,14 +1,36 @@
-import { createSignal, useContext } from 'solid-js'
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  useContext,
+} from 'solid-js'
 import { Modal } from '../components/modal/Modal'
 import { LoginForm } from '../components/forms/loginForm/LoginForm'
 import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
 import { AppContext } from '../index'
 import { Stack } from '../ui/Stack'
 import { Logo } from '../icons/Logo'
+import { $fetch } from '../utils/fetch'
+import { User } from '../types'
+
+const url = 'user'
+
+const fetchUserInfo = async () => {
+  try {
+    return await $fetch<{}, User>(url).get()
+  } catch (e) {
+    if (e.status === 401) {
+      localStorage.removeItem('token')
+      window.location.reload()
+    }
+  }
+}
 
 export const Header = () => {
   const [presentSignIn, setPresentSignIn] = createSignal(false)
   const [formType, setFormType] = createSignal('login')
+
+  const [user] = createResource(fetchUserInfo)
 
   const [presentMenu, setPresentMenu] = createSignal(false)
   const [presentUserMenu, setPresentUserMenu] = createSignal(false)

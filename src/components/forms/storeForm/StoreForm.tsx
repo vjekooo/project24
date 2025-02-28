@@ -1,14 +1,22 @@
-import { $fetch } from '../../../utils/fetch'
 import { storeConfig } from './config'
-import { useForm } from '../../../lib/form/useForm'
-import { Category, MessageResponse, Option, Store } from '../../../types'
+import {
+  Category,
+  MessageResponse,
+  Option,
+  Store,
+  StoreRequest,
+} from '../../../types'
 import { Stack } from '../../../ui/Stack'
+import { Accessor, createEffect, createSignal, For } from 'solid-js'
+import { RequestMethod, useMultipart } from '../../../hooks/useMultipart'
+import { Toast } from '../../../lib/Toast'
 
 const url = 'store'
 
 interface Props {
+  store: Store
   categories: Category[]
-  onComplete: () => void
+  onComplete: (message: string) => void
 }
 
 const createCategoryOptions = (categories: Category[]): Option[] => {
@@ -20,46 +28,176 @@ const createCategoryOptions = (categories: Category[]): Option[] => {
   }))
 }
 
-export const StoreForm = ({ categories, onComplete }: Props) => {
-  const { validate, formSubmit, errors, updateFormField } = useForm<Store>({
-    config: storeConfig,
+export const StoreForm = (props: Props) => {
+  const store = props.store
+  const categories = props.categories
+  const onComplete = props.onComplete
+
+  const category = categories?.map((category) => category.id)
+
+  const [formState, setFormState] = createSignal<StoreRequest>({
+    name: '',
+    description: '',
+    existingImages: [],
+    category: [],
   })
 
-  const handleSubmit = async (_: Event, form: Store) => {
-    const { data, error } = await $fetch<Store, MessageResponse>(url).post(form)
-    if (data) onComplete()
+  const [newImages, setNewImages] = createSignal<File[]>([])
+
+  const [previewUrl, setPreviewUrl] = createSignal<string | null>(null)
+
+  createEffect(() => {
+    if (store) {
+      setFormState({
+        name: store?.name || '',
+        description: store?.description || '',
+        existingImages: store?.media?.map((media) => media.imageUrl) || [],
+        category: category ? [...category] : [],
+      })
+    }
+  })
+
+  const handleFileChange = (event: Event) => {
+    const target = event.currentTarget as HTMLInputElement
+    const file = target.files?.[0]
+    if (file) {
+      setNewImages([...newImages(), file])
+      setPreviewUrl(URL.createObjectURL(file))
+    }
   }
+
+  const removeExistingImage = (image: string) => {
+    setFormState({
+      ...formState(),
+      existingImages: formState().existingImages.filter((existingImage) => {
+        return existingImage !== image
+      }),
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const newProduct = {
+      ...formState(),
+    }
+
+    const formData = new FormData()
+
+    for (const key in newImages()) {
+      if (newImages()[key]) {
+        formData.append('newImages', newImages()[key])
+      }
+    }
+
+    for (const key in newProduct) {
+      formData.append(key, newProduct[key])
+    }
+
+    if (store && store?.id) {
+      formData.append('id', store?.id)
+
+      const { data, error } = await useMultipart(
+        url,
+        formData,
+        RequestMethod.PUT
+      )
+
+      if (data) {
+        onComplete(data.message)
+      }
+      if (error) {
+        showToast(error.message)
+      }
+    } else {
+      const { data, error } = await useMultipart(url, formData)
+      if (data) {
+        onComplete(data.message)
+      }
+      if (error) {
+        showToast(error.message)
+      }
+    }
+  }
+
+  const { ToastComponent, showToast } = Toast()
 
   return (
     <div class="flex justify-center">
+      <ToastComponent />
       <div class="flex flex-col gap-2">
-        {/*@ts-ignore*/}
-        <form use:formSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <Stack size="md">
-            {storeConfig.map((field) => {
-              return field.type === 'text' ? (
-                <input
-                  // @ts-ignore
-                  use:validate={field.validation}
-                  class="input"
-                  type={field.type}
-                  placeholder={field.label}
-                  onChange={updateFormField(field.name, field.isArray)}
-                />
-              ) : (
-                <select
-                  name={field.name}
-                  class="input"
-                  onChange={updateFormField(field.name)}
-                  // @ts-ignore
-                  use:validate={field.validation}
+            <For each={storeConfig}>
+              {(item) => {
+                return (
+                  <Stack size="md">
+                    <input
+                      class="input"
+                      name={item.name}
+                      type={item.type}
+                      placeholder={item.label}
+                      onChange={(event) =>
+                        setFormState({
+                          ...formState(),
+                          [item.name]: event.target.value,
+                        })
+                      }
+                      value={formState()?.[item.name] || ''}
+                    />
+                    {/*{errors[item.name] && (*/}
+                    {/*  <ErrorMessage error={errors[item.name]} />*/}
+                    {/*)}*/}
+                  </Stack>
+                )
+              }}
+            </For>
+            <select
+              name="category"
+              class="input"
+              onChange={(event) => {
+                setFormState({
+                  ...formState(),
+                  category: [event.target.value],
+                })
+              }}
+              value={formState().category[0] || ''}
+            >
+              {createCategoryOptions(props.categories).map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </select>
+            {formState()?.existingImages?.map((image) => (
+              <div class="w-[120px] relative">
+                <div
+                  class="absolute top-[-5px] right-[-5px] bg-gray-50 rounded-full w-[25px] h-[25px] flex justify-center items-center cursor-pointer"
+                  onClick={() => removeExistingImage(image)}
                 >
-                  {createCategoryOptions(categories).map((option) => (
-                    <option value={option.value}>{option.label}</option>
-                  ))}
-                </select>
-              )
-            })}
+                  X
+                </div>
+                <img
+                  class="w-full aspect-square object-cover hover:grow hover:shadow-lg"
+                  src={image}
+                  alt="product image"
+                />
+              </div>
+            ))}
+            {previewUrl() && (
+              <div class="mt-4">
+                <p>Preview:</p>
+                <img
+                  src={previewUrl()}
+                  alt="Uploaded Preview"
+                  class="w-[100px]"
+                />
+              </div>
+            )}
+            <input
+              id="image-upload"
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+            />
             <button class="btn-primary" type="submit">
               Submit
             </button>

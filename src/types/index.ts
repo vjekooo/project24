@@ -37,6 +37,14 @@ export interface Store {
   address?: Address
 }
 
+export interface StoreRequest {
+  name: string
+  description: string
+  existingImages?: string[]
+  newImages?: File[]
+  category: string[]
+}
+
 export interface FavoriteProduct {
   id: string
   productId: string

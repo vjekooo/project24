@@ -109,6 +109,7 @@ export const Account = () => {
           title="Add a store"
         >
           <StoreForm
+            store={null}
             categories={category()?.data}
             onComplete={() => setPresentStoreForm(false)}
           />

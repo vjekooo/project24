@@ -13,8 +13,8 @@ export const StoreCard = (props: Props) => {
         <div class="relative w-full pt-[100%]">
           <img
             class="absolute top-0 left-0 w-full h-full object-cover hover:grow hover:shadow-lg"
-            src={props.store.media[0].imageUrl}
-            alt="product image"
+            src={props.store.media[0]?.imageUrl}
+            alt="Store image"
           />
         </div>
       </a>

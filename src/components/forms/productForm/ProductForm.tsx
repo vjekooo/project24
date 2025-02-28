@@ -25,7 +25,9 @@ const createSubCategories = (categories: Category[]): Option[] => {
   if (!categories) return []
   const subCategories: Category[] = []
   categories.map((category) => {
-    subCategories.push(...category.subCategories)
+    if (category?.subCategories) {
+      subCategories.push(...category.subCategories)
+    }
   })
   subCategories.unshift({ id: '0L', name: 'Select category', description: '' })
   return subCategories.map((category) => ({
