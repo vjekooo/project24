@@ -36,9 +36,12 @@ export const SearchPage = () => {
         </Stack>
         <Stack size="md">
           <h3>Products</h3>
-          {results()?.products.map((product) => (
-            <ProductCard product={product} action={null} />
-          ))}
+          <div class="default-grid">
+            {results()?.products &&
+              results()?.products.map((product) => (
+                <ProductCard product={product} action={null} />
+              ))}
+          </div>
         </Stack>
       </Stack>
     </Content>

@@ -10,6 +10,7 @@ import { Stack } from '../../../ui/Stack'
 import { Accessor, createEffect, createSignal, For } from 'solid-js'
 import { RequestMethod, useMultipart } from '../../../hooks/useMultipart'
 import { Toast } from '../../../lib/Toast'
+import MultiSelect from './MultiSelect'
 
 const url = 'store'
 
@@ -21,7 +22,6 @@ interface Props {
 
 const createCategoryOptions = (categories: Category[]): Option[] => {
   if (!categories) return []
-  categories.unshift({ id: '0L', name: 'Select category', description: '' })
   return categories.map((category) => ({
     value: category.id,
     label: category.name,
@@ -47,14 +47,14 @@ export const StoreForm = (props: Props) => {
   const [previewUrl, setPreviewUrl] = createSignal<string | null>(null)
 
   createEffect(() => {
-    if (store) {
-      setFormState({
-        name: store?.name || '',
-        description: store?.description || '',
-        existingImages: store?.media?.map((media) => media.imageUrl) || [],
-        category: category ? [...category] : [],
-      })
-    }
+    setFormState({
+      name: store?.name || '',
+      description: store?.description || '',
+      existingImages: store?.media?.map((media) => media.imageUrl) || [],
+      category: store?.categories
+        ? [...store?.categories?.map((category) => category.id)]
+        : [],
+    })
   })
 
   const handleFileChange = (event: Event) => {
@@ -124,48 +124,65 @@ export const StoreForm = (props: Props) => {
   return (
     <div class="flex justify-center">
       <ToastComponent />
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 w-full">
         <form onSubmit={(e) => handleSubmit(e)}>
           <Stack size="md">
-            <For each={storeConfig}>
-              {(item) => {
-                return (
-                  <Stack size="md">
-                    <input
-                      class="input"
-                      name={item.name}
-                      type={item.type}
-                      placeholder={item.label}
-                      onChange={(event) =>
-                        setFormState({
-                          ...formState(),
-                          [item.name]: event.target.value,
-                        })
-                      }
-                      value={formState()?.[item.name] || ''}
-                    />
-                    {/*{errors[item.name] && (*/}
-                    {/*  <ErrorMessage error={errors[item.name]} />*/}
-                    {/*)}*/}
-                  </Stack>
-                )
-              }}
-            </For>
-            <select
-              name="category"
-              class="input"
-              onChange={(event) => {
-                setFormState({
-                  ...formState(),
-                  category: [event.target.value],
-                })
-              }}
-              value={formState().category[0] || ''}
-            >
-              {createCategoryOptions(props.categories).map((option) => (
-                <option value={option.value}>{option.label}</option>
-              ))}
-            </select>
+            <Stack size="md">
+              <For each={storeConfig}>
+                {(item) => {
+                  if (item.type === 'text') {
+                    return (
+                      <Stack size="sm">
+                        <p>{item.label}</p>
+                        <input
+                          class="input"
+                          name={item.name}
+                          type={item.type}
+                          placeholder={item.label}
+                          onChange={(event) =>
+                            setFormState({
+                              ...formState(),
+                              [item.name]: event.target.value,
+                            })
+                          }
+                          value={formState()?.[item.name] || ''}
+                        />
+                      </Stack>
+                    )
+                  }
+                  return (
+                    <Stack size="sm">
+                      <p>{item.label}</p>
+                      <textarea
+                        class="text-area"
+                        name={item.name}
+                        placeholder={item.label}
+                        onChange={(event) =>
+                          setFormState({
+                            ...formState(),
+                            [item.name]: event.target.value,
+                          })
+                        }
+                        value={formState()?.[item.name] || ''}
+                      />
+                    </Stack>
+                  )
+                }}
+              </For>
+            </Stack>
+            <Stack size="sm">
+              <p>Categories</p>
+              <MultiSelect
+                options={createCategoryOptions(props.categories)}
+                value={formState().category}
+                onChange={(value) => {
+                  setFormState({
+                    ...formState(),
+                    category: [...value],
+                  })
+                }}
+              />
+            </Stack>
             {formState()?.existingImages?.map((image) => (
               <div class="w-[120px] relative">
                 <div
@@ -191,13 +208,16 @@ export const StoreForm = (props: Props) => {
                 />
               </div>
             )}
-            <input
-              id="image-upload"
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFileChange}
-            />
+            <Stack size="sm">
+              <p>Select images</p>
+              <input
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange}
+              />
+            </Stack>
             <button class="btn-primary" type="submit">
               Submit
             </button>

@@ -11,7 +11,7 @@ export const storeConfig: FormConfig[] = [
   {
     label: 'Description',
     name: 'description',
-    type: 'text',
+    type: 'textarea',
     validation: [exists],
   },
 ]

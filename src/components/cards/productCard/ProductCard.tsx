@@ -7,27 +7,25 @@ interface Props {
 }
 
 export const ProductCard = (props: Props) => {
+  const product = props.product
+
   return (
     <div class="flex flex-col">
-      <a href={`/product/${props.product.id}`}>
+      <a href={`/product/${product.id}`}>
         <div class="w-full">
           <img
             class="w-full aspect-square object-cover hover:grow hover:shadow-lg"
-            src={
-              props.product.media.length > 0
-                ? props.product.media[0].imageUrl
-                : ''
-            }
-            alt="product image"
+            src={product.media.length > 0 ? product.media[0].imageUrl : ''}
+            alt="Product image"
           />
         </div>
       </a>
       <div class="pt-3 flex items-center justify-between">
-        <p class="">{props.product.name}</p>
+        <p class="">{product.name}</p>
         <div>{props.action || ''}</div>
       </div>
       <p class="pt-1 text-gray-900">
-        {props.product.price > 0 ? props.product.price : 'Free'}
+        {product.price > 0 ? product.price : 'Free'}
       </p>
     </div>
   )

@@ -35,6 +35,7 @@ export interface Store {
   media?: Media[]
   products?: Product[]
   address?: Address
+  categories: Category[]
 }
 
 export interface StoreRequest {

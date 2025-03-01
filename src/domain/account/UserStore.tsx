@@ -48,9 +48,7 @@ export const UserStore = () => {
 
   const [store] = createResource(() => fetchStore(params.id))
 
-  const [products, { refetch }] = createResource<FetchData<Product[]>>(() =>
-    fetchProducts(params.id)
-  )
+  const [products, { refetch }] = createResource(() => fetchProducts(params.id))
 
   const [presentProductForm, setPresentProductForm] = createSignal(false)
   const [presentStoreForm, setPresentStoreForm] = createSignal(false)
@@ -99,17 +97,19 @@ export const UserStore = () => {
         <ToastComponent />
         <Nav title="Your products" />
 
-        <Modal
-          isOpen={presentStoreForm()}
-          onClose={() => setPresentStoreForm(false)}
-          title={store()?.data.id ? 'Edit store' : 'Create store'}
-        >
-          <StoreForm
-            store={store()?.data}
-            categories={category()?.data}
-            onComplete={onModalClose}
-          />
-        </Modal>
+        {store() && (
+          <Modal
+            isOpen={presentStoreForm()}
+            onClose={() => setPresentStoreForm(false)}
+            title={store()?.data.id ? 'Edit store' : 'Create store'}
+          >
+            <StoreForm
+              store={store()?.data}
+              categories={category()?.data}
+              onComplete={onModalClose}
+            />
+          </Modal>
+        )}
 
         <Modal
           isOpen={presentProductForm()}
