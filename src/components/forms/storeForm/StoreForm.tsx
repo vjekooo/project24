@@ -30,10 +30,7 @@ const createCategoryOptions = (categories: Category[]): Option[] => {
 
 export const StoreForm = (props: Props) => {
   const store = props.store
-  const categories = props.categories
   const onComplete = props.onComplete
-
-  const category = categories?.map((category) => category.id)
 
   const [formState, setFormState] = createSignal<StoreRequest>({
     name: '',
