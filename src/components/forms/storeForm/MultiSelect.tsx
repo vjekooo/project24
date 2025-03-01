@@ -43,7 +43,7 @@ const MultiSelect = (props: MultiSelectProps) => {
   }
 
   return (
-    <div class="relative w-full max-w-sm">
+    <div class="relative w-full">
       <button
         type="button"
         class="w-full border border-gray-300 py-2 px-3 text-left focus:outline-none focus:ring-1 focus:ring-blue-500"
