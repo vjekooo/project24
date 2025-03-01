@@ -66,7 +66,7 @@ export interface Product {
   name: string
   description: string
   media?: Media[]
-  category: Category[]
+  categories: Category[]
   storeId?: string
   price: number
   discount: number

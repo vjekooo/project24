@@ -12,7 +12,6 @@ import { ErrorMessage } from '../../../ui/ErrorMessage'
 import { Toast } from '../../../lib/Toast'
 import { RequestMethod, useMultipart } from '../../../hooks/useMultipart'
 import MultiSelect from '../storeForm/MultiSelect'
-import { storeConfig } from '../storeForm/config'
 
 const url = 'product'
 
@@ -31,7 +30,6 @@ const createSubCategories = (categories: Category[]): Option[] => {
       subCategories.push(...category.subCategories)
     }
   })
-  subCategories.unshift({ id: '0L', name: 'Select category', description: '' })
   return subCategories.map((category) => ({
     value: category.id,
     label: category.name,
@@ -43,8 +41,6 @@ export const ProductForm = (props: Props) => {
   const product = props.product
   const onClose = props.onClose
 
-  const category = props.categories?.map((category) => category.id)
-
   const [formState, setFormState] = createSignal<ProductRequest>({
     name: '',
     description: '',
@@ -54,16 +50,18 @@ export const ProductForm = (props: Props) => {
   })
 
   createEffect(() => {
-    if (product) {
+    if (product()) {
       setFormState({
         name: product()?.name || '',
         description: product()?.description || '',
         price: product()?.price || 0,
         existingImages: product()?.media.map((media) => media.imageUrl) || [],
-        category: category ? [...category] : [],
+        category: product()?.categories
+          ? [...product()?.categories.map((category) => category.id)]
+          : [],
       })
     }
-  })
+  }, [product()?.id])
 
   const [newImages, setNewImages] = createSignal<File[]>([])
 
