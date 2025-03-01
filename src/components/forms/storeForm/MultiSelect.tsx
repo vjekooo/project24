@@ -18,11 +18,10 @@ const MultiSelect = (props: MultiSelectProps) => {
   )
 
   createEffect(() => {
-    console.log(props.value)
     if (props.value) {
       setSelectedOptions(props.value)
     }
-  })
+  }, [props.value.length])
 
   const toggleDropdown = () => setIsOpen(!isOpen())
 
@@ -34,6 +33,7 @@ const MultiSelect = (props: MultiSelectProps) => {
     } else {
       setSelectedOptions([...selectedOptions(), value])
     }
+    props.onChange && props.onChange(selectedOptions())
   }
 
   const removeTag = (value: string) => {

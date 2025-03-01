@@ -23,7 +23,7 @@ export const Modal = (props: ModalProps) => {
         <div class="flex items-center justify-between mb-8">
           <div>{props.title && <h1 class="h3">{props.title}</h1>}</div>
           <div class="cursor-pointer self-end" onClick={props.onClose}>
-            X
+            &#x2715;
           </div>
         </div>
         <div>{props.children}</div>

@@ -14,7 +14,6 @@ import { Nav } from '../../layout/Nav'
 import { About } from '../../layout/About'
 import { Loading } from '../../layout/Loading'
 import { Toast } from '../../lib/Toast'
-import { StoreCard } from '../../components/cards/storeCard/StoreCard'
 import { StoreForm } from '../../components/forms/storeForm/StoreForm'
 
 const storeUrl = 'store'
@@ -53,8 +52,7 @@ export const UserStore = () => {
   const [presentProductForm, setPresentProductForm] = createSignal(false)
   const [presentStoreForm, setPresentStoreForm] = createSignal(false)
 
-  const onModalClose = (message: string) => {
-    showToast(message)
+  const onModalClose = () => {
     refetch()
     setPresentProductForm(false)
   }

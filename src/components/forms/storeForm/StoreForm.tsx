@@ -1,13 +1,7 @@
 import { storeConfig } from './config'
-import {
-  Category,
-  MessageResponse,
-  Option,
-  Store,
-  StoreRequest,
-} from '../../../types'
+import { Category, Option, Store, StoreRequest } from '../../../types'
 import { Stack } from '../../../ui/Stack'
-import { Accessor, createEffect, createSignal, For } from 'solid-js'
+import { createEffect, createSignal, For } from 'solid-js'
 import { RequestMethod, useMultipart } from '../../../hooks/useMultipart'
 import { Toast } from '../../../lib/Toast'
 import MultiSelect from './MultiSelect'
@@ -17,7 +11,7 @@ const url = 'store'
 interface Props {
   store: Store
   categories: Category[]
-  onComplete: (message: string) => void
+  onComplete: () => void
 }
 
 const createCategoryOptions = (categories: Category[]): Option[] => {
@@ -52,7 +46,7 @@ export const StoreForm = (props: Props) => {
         ? [...store?.categories?.map((category) => category.id)]
         : [],
     })
-  })
+  }, [store?.id])
 
   const handleFileChange = (event: Event) => {
     const target = event.currentTarget as HTMLInputElement
@@ -87,7 +81,13 @@ export const StoreForm = (props: Props) => {
     }
 
     for (const key in newProduct) {
-      formData.append(key, newProduct[key])
+      const value = newProduct[key]
+
+      if (Array.isArray(value)) {
+        value.forEach((item) => formData.append(key, item))
+      } else {
+        formData.append(key, value)
+      }
     }
 
     if (store && store?.id) {
@@ -98,9 +98,9 @@ export const StoreForm = (props: Props) => {
         formData,
         RequestMethod.PUT
       )
-
       if (data) {
-        onComplete(data.message)
+        showToast('Store updated successfully')
+        onComplete()
       }
       if (error) {
         showToast(error.message)
@@ -108,7 +108,8 @@ export const StoreForm = (props: Props) => {
     } else {
       const { data, error } = await useMultipart(url, formData)
       if (data) {
-        onComplete(data.message)
+        showToast('Store created successfully')
+        onComplete()
       }
       if (error) {
         showToast(error.message)
@@ -175,7 +176,7 @@ export const StoreForm = (props: Props) => {
                 onChange={(value) => {
                   setFormState({
                     ...formState(),
-                    category: [...value],
+                    category: value,
                   })
                 }}
               />
@@ -186,7 +187,7 @@ export const StoreForm = (props: Props) => {
                   class="absolute top-[-5px] right-[-5px] bg-gray-50 rounded-full w-[25px] h-[25px] flex justify-center items-center cursor-pointer"
                   onClick={() => removeExistingImage(image)}
                 >
-                  X
+                  &#x2715;
                 </div>
                 <img
                   class="w-full aspect-square object-cover hover:grow hover:shadow-lg"
