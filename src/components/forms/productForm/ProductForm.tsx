@@ -11,6 +11,8 @@ import { Accessor, For, createEffect, createSignal } from 'solid-js'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
 import { Toast } from '../../../lib/Toast'
 import { RequestMethod, useMultipart } from '../../../hooks/useMultipart'
+import MultiSelect from '../storeForm/MultiSelect'
+import { storeConfig } from '../storeForm/config'
 
 const url = 'product'
 
@@ -137,45 +139,62 @@ export const ProductForm = (props: Props) => {
       <ToastComponent />
       <form onSubmit={(e) => handleSubmit(e)}>
         <Stack size="md">
-          <For each={config}>
-            {(item) => {
-              return (
-                <Stack size="md">
-                  <input
-                    class="input"
-                    name={item.name}
-                    type={item.type}
-                    placeholder={item.label}
-                    onChange={(event) =>
-                      setFormState({
-                        ...formState(),
-                        [item.name]: event.target.value,
-                      })
-                    }
-                    value={product()?.[item.name] || ''}
-                  />
-                  {/*{errors[item.name] && (*/}
-                  {/*  <ErrorMessage error={errors[item.name]} />*/}
-                  {/*)}*/}
-                </Stack>
-              )
-            }}
-          </For>
-          <select
-            name="category"
-            class="input"
-            onChange={(event) => {
-              setFormState({
-                ...formState(),
-                category: [event.target.value],
-              })
-            }}
-            value={formState().category[0] || ''}
-          >
-            {createSubCategories(props.categories).map((option) => (
-              <option value={option.value}>{option.label}</option>
-            ))}
-          </select>
+          <Stack size="md">
+            <For each={config}>
+              {(item) => {
+                if (item.type === 'text') {
+                  return (
+                    <Stack size="sm">
+                      <p>{item.label}</p>
+                      <input
+                        class="input"
+                        name={item.name}
+                        type={item.type}
+                        placeholder={item.label}
+                        onChange={(event) =>
+                          setFormState({
+                            ...formState(),
+                            [item.name]: event.target.value,
+                          })
+                        }
+                        value={formState()?.[item.name] || ''}
+                      />
+                    </Stack>
+                  )
+                }
+                return (
+                  <Stack size="sm">
+                    <p>{item.label}</p>
+                    <textarea
+                      class="text-area"
+                      name={item.name}
+                      placeholder={item.label}
+                      onChange={(event) =>
+                        setFormState({
+                          ...formState(),
+                          [item.name]: event.target.value,
+                        })
+                      }
+                      value={formState()?.[item.name] || ''}
+                    />
+                  </Stack>
+                )
+              }}
+            </For>
+          </Stack>
+          <Stack size="sm">
+            <p>Categories</p>
+            <MultiSelect
+              options={createSubCategories(props.categories)}
+              value={formState().category}
+              onChange={(value) => {
+                setFormState({
+                  ...formState(),
+                  category: value,
+                })
+              }}
+            />
+          </Stack>
           {formState()?.existingImages?.map((image) => (
             <div class="w-[120px] relative">
               <div
@@ -201,13 +220,16 @@ export const ProductForm = (props: Props) => {
               />
             </div>
           )}
-          <input
-            id="image-upload"
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFileChange}
-          />
+          <Stack size="sm">
+            <p>Select images</p>
+            <input
+              id="image-upload"
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+            />
+          </Stack>
           <button class="btn-primary" type="submit">
             Submit
           </button>
