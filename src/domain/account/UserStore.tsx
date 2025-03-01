@@ -60,6 +60,7 @@ export const UserStore = () => {
   const onEdit = (id: string) => {
     setProductToEdit(products().data.find((product) => product.id === id))
     setPresentProductForm(true)
+    document.body.style.overflow = 'hidden'
   }
 
   const deleteProduct = async (id: string) => {
@@ -85,7 +86,10 @@ export const UserStore = () => {
           />
           <div
             class="absolute bottom-5 right-10 cursor-pointer"
-            onClick={() => setPresentStoreForm(true)}
+            onClick={() => {
+              setPresentStoreForm(true)
+              document.body.style.overflow = 'hidden'
+            }}
           >
             <EditIcon />
           </div>
@@ -98,7 +102,10 @@ export const UserStore = () => {
         {store() && (
           <Modal
             isOpen={presentStoreForm()}
-            onClose={() => setPresentStoreForm(false)}
+            onClose={() => {
+              setPresentStoreForm(false)
+              document.body.style.overflow = 'auto'
+            }}
             title={store()?.data.id ? 'Edit store' : 'Create store'}
           >
             <StoreForm
@@ -111,7 +118,10 @@ export const UserStore = () => {
 
         <Modal
           isOpen={presentProductForm()}
-          onClose={() => setPresentProductForm(false)}
+          onClose={() => {
+            setPresentProductForm(false)
+            document.body.style.overflow = 'auto'
+          }}
           title={productToEdit() ? 'Edit product' : 'Add a product'}
         >
           {store() && (
@@ -151,7 +161,10 @@ export const UserStore = () => {
         <div class="mb-32 mt-16">
           <button
             class="btn-primary"
-            onClick={() => setPresentProductForm(true)}
+            onClick={() => {
+              setPresentProductForm(true)
+              document.body.style.overflow = 'hidden'
+            }}
           >
             Add a product
           </button>
