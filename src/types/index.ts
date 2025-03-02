@@ -4,7 +4,8 @@ export interface User {
   email: string
   address?: Address
   stores?: Store[]
-  favorites?: FavoriteProduct[]
+  favoriteProducts?: FavoriteProduct[]
+  favoriteStores?: FavoriteStore[]
 }
 
 export interface Category {

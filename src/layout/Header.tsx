@@ -35,12 +35,18 @@ export const Header = () => {
   const [presentMenu, setPresentMenu] = createSignal(false)
   const [presentUserMenu, setPresentUserMenu] = createSignal(false)
 
-  const { state } = useContext(AppContext)
+  const { state, setState } = useContext(AppContext)
 
   const logOut = () => {
     localStorage.removeItem('token')
     window.location.reload()
   }
+
+  createEffect(() => {
+    if (user()) {
+      setState({ ...state, user: user().data })
+    }
+  })
 
   return (
     <div class="w-full">

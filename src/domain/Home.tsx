@@ -1,6 +1,6 @@
 import { Suspense, createResource } from 'solid-js'
 import { Hero } from '../layout/Hero'
-import { $fetch, FetchData } from '../utils/fetch'
+import { $fetch } from '../utils/fetch'
 import { FavoriteStore, MessageResponse, Store } from '../types'
 import { HeartIcon } from '../icons/HeartIcon'
 import { Nav } from '../layout/Nav'
@@ -28,12 +28,11 @@ const fetchData = async () => {
   return await $fetch<any, Store[]>(url).get()
 }
 
-const setStoreFavorite = async (id: string) => {
+const toggleStoreFavorite = async (id: string) => {
   const fullUrl = 'store/toggle-favorite'
-  const { data, error } = await $fetch<{}, MessageResponse>(fullUrl).post({
+  await $fetch<{}, MessageResponse>(fullUrl).post({
     storeId: id,
   })
-  console.log({ data, error })
 }
 
 const fetchFavorites = async () => {
@@ -44,11 +43,10 @@ const fetchFavorites = async () => {
 export const Home = () => {
   const [stores] = createResource(fetchData)
 
-  const [favorites, { refetch }] =
-    createResource<FetchData<FavoriteStore[]>>(fetchFavorites)
+  const [favorites, { refetch }] = createResource(fetchFavorites)
 
   const onFavClick = (id: string) => {
-    setStoreFavorite(id).then(() => {
+    toggleStoreFavorite(id).then(() => {
       refetch()
     })
   }
