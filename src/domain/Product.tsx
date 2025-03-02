@@ -32,6 +32,12 @@ export const Product = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Content>
+        <div
+          class="font-semibold underline cursor-pointer mb-8"
+          onClick={() => window.history.back()}
+        >
+          Go back
+        </div>
         <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12 gap-6">
           <div class="flex-1">
             <img src={product()?.data.media[0]?.imageUrl} />
