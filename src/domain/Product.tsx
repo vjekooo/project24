@@ -36,7 +36,7 @@ export const Product = () => {
           class="font-semibold underline cursor-pointer mb-8"
           onClick={() => window.history.back()}
         >
-          Go back
+          &#8592; Go back
         </div>
         <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12 gap-6">
           <div class="flex-1">
