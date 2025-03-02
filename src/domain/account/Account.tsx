@@ -9,6 +9,7 @@ import { Modal } from '../../components/modal/Modal'
 import { StoreCard } from '../../components/cards/storeCard/StoreCard'
 import { EditIcon } from '../../icons/EditIcon'
 import { Loading } from '../../layout/Loading'
+import { ProductCard } from '../../components/cards/productCard/ProductCard'
 
 const userUrl = 'user'
 const categoryUrl = 'category'
@@ -103,6 +104,26 @@ export const Account = () => {
             Add Store
           </button>
         </div>
+        {user()?.favoriteStores && (
+          <Stack size="md">
+            <h3 class="h4">Your Favorite Stores</h3>
+            <div class="default-grid">
+              {user()?.favoriteStores?.map((store) => (
+                <StoreCard store={store} action={null} />
+              ))}
+            </div>
+          </Stack>
+        )}
+        {user()?.favoriteProducts && (
+          <Stack size="md">
+            <h3 class="h4">Your Favorite Products</h3>
+            <div class="default-grid">
+              {user()?.favoriteProducts?.map((product) => (
+                <ProductCard product={product} action={null} />
+              ))}
+            </div>
+          </Stack>
+        )}
         <Modal
           isOpen={presentStoreForm()}
           onClose={() => setPresentStoreForm(false)}
