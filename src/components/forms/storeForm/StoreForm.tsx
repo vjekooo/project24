@@ -122,7 +122,7 @@ export const StoreForm = (props: Props) => {
   return (
     <div class="flex justify-center">
       <ToastComponent />
-      <div class="flex flex-col gap-2 w-full">
+      <div class="w-full">
         <form onSubmit={(e) => handleSubmit(e)}>
           <Stack size="md">
             <Stack size="md">

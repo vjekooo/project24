@@ -84,18 +84,22 @@ export const UserStore = () => {
             name={store().data.name}
             image={store().data.media[0]?.imageUrl}
           />
+        </div>
+      )}
+      <Content>
+        <div class="w-full flex justify-end mb-6">
           <div
-            class="absolute bottom-5 right-10 cursor-pointer"
+            class="cursor-pointer flex gap-2 items-center bg-white p-2 rounded-md"
             onClick={() => {
               setPresentStoreForm(true)
               document.body.style.overflow = 'hidden'
             }}
           >
             <EditIcon />
+            <span>Edit store</span>
           </div>
         </div>
-      )}
-      <Content>
+
         <ToastComponent />
         <Nav title="Your products" />
 
