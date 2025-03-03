@@ -1,13 +1,14 @@
 import { Suspense, createResource } from 'solid-js'
 import { Hero } from '../layout/Hero'
 import { $fetch } from '../utils/fetch'
-import { FavoriteStore, MessageResponse, Store } from '../types'
+import { FavoriteStore, MessageResponse, Product, Store } from '../types'
 import { HeartIcon } from '../icons/HeartIcon'
 import { Nav } from '../layout/Nav'
 import { Content } from '../layout/Content'
 import { StoreCard } from '../components/cards/storeCard/StoreCard'
 import { Featured } from '../layout/Featured'
 import { Loading } from '../layout/Loading'
+import { ProductCard } from '../components/cards/productCard/ProductCard'
 
 interface HeroActionProps {
   storeId: string
@@ -23,9 +24,14 @@ const HeroAction = ({ storeId }: HeroActionProps) => (
 )
 
 const url = 'store/all'
+const urlLatestProducts = 'product/latest'
 
-const fetchData = async () => {
+const fetchStores = async () => {
   return await $fetch<any, Store[]>(url).get()
+}
+
+const fetchLatestProducts = async () => {
+  return await $fetch<any, Product[]>(urlLatestProducts).get()
 }
 
 const toggleStoreFavorite = async (id: string) => {
@@ -41,7 +47,8 @@ const fetchFavorites = async () => {
 }
 
 export const Home = () => {
-  const [stores] = createResource(fetchData)
+  const [stores] = createResource(fetchStores)
+  const [products] = createResource(fetchLatestProducts)
 
   const [favorites, { refetch }] = createResource(fetchFavorites)
 
@@ -81,18 +88,21 @@ export const Home = () => {
           ))}
         </div>
         {stores()?.data?.length > 1 && <Featured store={stores()?.data[1]} />}
+
+        <div class="h3 uppercase mb-12">Latest Products</div>
+
         <div class="default-grid pb-16">
-          {stores()?.data.map((store) => (
-            <StoreCard
-              store={store}
+          {products()?.data.map((product) => (
+            <ProductCard
+              product={product}
               action={
                 <HeartIcon
                   isFilled={() =>
                     favorites()?.data?.some(
-                      (favorite) => favorite.storeId === store.id
+                      (favorite) => favorite.storeId === product.id
                     )
                   }
-                  onClick={() => onFavClick(store.id)}
+                  onClick={() => onFavClick(product.id)}
                 />
               }
             />

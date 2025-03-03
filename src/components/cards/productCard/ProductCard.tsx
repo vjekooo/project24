@@ -6,6 +6,16 @@ interface Props {
   action: JSX.Element
 }
 
+const calculatePrice = (price: number, discount: number) => {
+  const discountedPrice = discount ? price - (price * discount) / 100 : null
+  return (
+    <div>
+      € <span class={discount ? 'line-through' : ''}>{price}</span>{' '}
+      {discountedPrice}
+    </div>
+  )
+}
+
 export const ProductCard = (props: Props) => {
   const product = props.product
 
@@ -25,7 +35,9 @@ export const ProductCard = (props: Props) => {
         <div>{props.action || ''}</div>
       </div>
       <p class="pt-1 text-gray-900">
-        {product.price > 0 ? product.price : 'Free'}
+        {product.price > 0
+          ? calculatePrice(product.price, product.discount)
+          : 'Free'}
       </p>
     </div>
   )
