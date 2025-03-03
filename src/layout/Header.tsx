@@ -12,6 +12,7 @@ import { Stack } from '../ui/Stack'
 import { Logo } from '../icons/Logo'
 import { $fetch } from '../utils/fetch'
 import { User } from '../types'
+import { ThemeSwitcher } from '../components/themeSwitcher/ThemeSwitcher'
 
 const url = 'user'
 
@@ -149,7 +150,8 @@ export const Header = () => {
             </a>
           </div>
 
-          <div class="w-1/3 flex justify-end content-center">
+          <div class="w-1/3 flex justify-end items-center gap-6">
+            <ThemeSwitcher />
             {state.token ? (
               <div class="relative inline-block text-left">
                 <div

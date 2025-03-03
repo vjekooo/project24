@@ -1,5 +1,4 @@
 import { Suspense, createResource } from 'solid-js'
-import { Hero } from '../layout/Hero'
 import { $fetch } from '../utils/fetch'
 import { FavoriteStore, MessageResponse, Product, Store } from '../types'
 import { HeartIcon } from '../icons/HeartIcon'
@@ -9,19 +8,7 @@ import { StoreCard } from '../components/cards/storeCard/StoreCard'
 import { Featured } from '../layout/Featured'
 import { Loading } from '../layout/Loading'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
-
-interface HeroActionProps {
-  storeId: string
-}
-
-const HeroAction = ({ storeId }: HeroActionProps) => (
-  <a
-    class="text-xl inline-block no-underline border-b border-gray-600 leading-relaxed hover:text-black hover:border-black"
-    href={`/store/${storeId}`}
-  >
-    go to store
-  </a>
-)
+import { HomeHero } from '../layout/HomeHero'
 
 const url = 'store/all'
 const urlLatestProducts = 'product/latest'
@@ -60,13 +47,7 @@ export const Home = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      {stores()?.data.length && (
-        <Hero
-          name={stores().data[0].name}
-          image={stores().data[0].media[0]?.imageUrl}
-          action={<HeroAction storeId={stores().data[0].id} />}
-        />
-      )}
+      {stores()?.data.length && <HomeHero stores={stores()?.data} />}
       <Content>
         <Nav title="Latest Stores" />
 
