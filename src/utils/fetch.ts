@@ -15,7 +15,7 @@ type Fetch = <TBody, TResponse>(url: string) => FetchMethods<TBody, TResponse>
 
 export interface FetchData<R> {
   data: R
-  error?: Error
+  err?: Error
 }
 
 interface Error {
@@ -49,7 +49,8 @@ export const $fetch: Fetch = (url: string) => {
         const res = await fetch(completeUrl, headers())
         if (!res.ok) {
           const data = await res.json()
-          throw new Error(data.message)
+
+          throw { status: res.status, message: data.message }
         }
         return { data: await res.json() }
       } catch (err) {

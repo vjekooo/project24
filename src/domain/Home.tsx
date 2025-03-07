@@ -47,12 +47,12 @@ export const Home = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      {stores()?.data.length && <HomeHero stores={stores()?.data} />}
+      {stores()?.data?.length && <HomeHero stores={stores()?.data} />}
       <Content>
         <Nav title="Latest Stores" />
 
         <div class="default-grid pb-16">
-          {stores()?.data.map((store) => (
+          {stores()?.data?.map((store) => (
             <StoreCard
               store={store}
               action={
@@ -73,7 +73,7 @@ export const Home = () => {
         <div class="h3 uppercase mb-12">Latest Products</div>
 
         <div class="default-grid pb-16">
-          {products()?.data.map((product) => (
+          {products()?.data?.map((product) => (
             <ProductCard
               product={product}
               action={
