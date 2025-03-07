@@ -18,13 +18,7 @@ const url = 'user'
 
 const fetchUserInfo = async () => {
   try {
-    const response = await $fetch<{}, User>(url).get()
-    if (response.err?.message === 'Token expired') {
-      localStorage.removeItem('token')
-      window.location.reload()
-      return
-    }
-    return response
+    return await $fetch<{}, User>(url).get()
   } catch (e) {
     console.log(e)
   }
