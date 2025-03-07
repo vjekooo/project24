@@ -57,6 +57,15 @@ const getCookie = (name: string): string | null => {
   return null
 }
 
+const onResponse = async (res: Response) => {
+  if (res.ok) {
+    return { data: await res.json() }
+  }
+  return res.json().then((data) => {
+    throw new Error(data.message)
+  })
+}
+
 // @ts-ignore
 export const $fetch: Fetch = (url: string) => {
   const apiDomain = import.meta.env.VITE_API_DOMAIN
@@ -65,12 +74,7 @@ export const $fetch: Fetch = (url: string) => {
     get: async () => {
       try {
         const res = await fetch(completeUrl, headers())
-        if (!res.ok) {
-          const data = await res.json()
-
-          throw { status: res.status, message: data.message }
-        }
-        return { data: await res.json() }
+        return await onResponse(res)
       } catch (err) {
         return { err: err }
       }
@@ -82,11 +86,7 @@ export const $fetch: Fetch = (url: string) => {
           ...headers(),
           body: JSON.stringify(body),
         })
-        if (!res.ok) {
-          const data = await res.json()
-          throw new Error(data.message)
-        }
-        return { data: await res.json() }
+        return await onResponse(res)
       } catch (err) {
         return { error: err }
       }
@@ -98,11 +98,7 @@ export const $fetch: Fetch = (url: string) => {
           ...headers(),
           body: JSON.stringify(body),
         })
-        if (!res.ok) {
-          const data = await res.json()
-          throw new Error(data.message)
-        }
-        return { data: await res.json() }
+        return await onResponse(res)
       } catch (err) {
         return { error: err }
       }
@@ -113,11 +109,7 @@ export const $fetch: Fetch = (url: string) => {
           method: 'DELETE',
           ...headers(),
         })
-        if (!res.ok) {
-          const data = await res.json()
-          throw new Error(data.message)
-        }
-        return { data: await res.json() }
+        return await onResponse(res)
       } catch (err) {
         return { err: err }
       }
