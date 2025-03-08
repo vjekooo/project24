@@ -1,24 +1,26 @@
 import { Suspense, createResource } from 'solid-js'
 import { $fetch } from '../utils/fetch'
-import { FavoriteStore, MessageResponse, Product, Store } from '../types'
+import {
+  FavoriteProduct,
+  FavoriteStore,
+  MessageResponse,
+  Store,
+} from '../types'
 import { HeartIcon } from '../icons/HeartIcon'
 import { Nav } from '../layout/Nav'
 import { Content } from '../layout/Content'
 import { StoreCard } from '../components/cards/storeCard/StoreCard'
 import { Featured } from '../layout/Featured'
 import { Loading } from '../layout/Loading'
-import { ProductCard } from '../components/cards/productCard/ProductCard'
 import { HomeHero } from '../layout/HomeHero'
+import { PopularProducts } from './PopularProducts'
+import { LatestProducts } from './LatestProducts'
+import { Stack } from '../ui/Stack'
 
 const url = 'store/all'
-const urlLatestProducts = 'product/latest'
 
 const fetchStores = async () => {
   return await $fetch<any, Store[]>(url).get()
-}
-
-const fetchLatestProducts = async () => {
-  return await $fetch<any, Product[]>(urlLatestProducts).get()
 }
 
 const toggleStoreFavorite = async (id: string) => {
@@ -28,20 +30,40 @@ const toggleStoreFavorite = async (id: string) => {
   })
 }
 
-const fetchFavorites = async () => {
+const toggleProductFavorite = async (id: string) => {
+  const fullUrl = 'product/toggle-favorite'
+  await $fetch<{}, MessageResponse>(fullUrl).post({
+    productId: id,
+  })
+}
+
+const fetchStoreFavorites = async () => {
   const fullUrl = 'store/favorite'
   return await $fetch<{}, FavoriteStore[]>(fullUrl).get()
 }
 
+const fetchProductFavorites = async () => {
+  const fullUrl = 'product/favorite'
+  return await $fetch<{}, FavoriteProduct[]>(fullUrl).get()
+}
+
 export const Home = () => {
   const [stores] = createResource(fetchStores)
-  const [products] = createResource(fetchLatestProducts)
 
-  const [favorites, { refetch }] = createResource(fetchFavorites)
+  const [storeFavorites, { refetch: refetchStoreFavorites }] =
+    createResource(fetchStoreFavorites)
+  const [productFavorites, { refetch: refetchProductFavorites }] =
+    createResource(fetchProductFavorites)
 
-  const onFavClick = (id: string) => {
+  const onFavStoreClick = (id: string) => {
     toggleStoreFavorite(id).then(() => {
-      refetch()
+      refetchStoreFavorites()
+    })
+  }
+
+  const onFavProductClick = (id: string) => {
+    toggleProductFavorite(id).then(() => {
+      refetchProductFavorites()
     })
   }
 
@@ -58,11 +80,11 @@ export const Home = () => {
               action={
                 <HeartIcon
                   isFilled={() =>
-                    favorites()?.data?.some(
+                    storeFavorites()?.data?.some(
                       (favorite) => favorite.storeId === store.id
                     )
                   }
-                  onClick={() => onFavClick(store.id)}
+                  onClick={() => onFavStoreClick(store.id)}
                 />
               }
             />
@@ -70,25 +92,15 @@ export const Home = () => {
         </div>
         {stores()?.data?.length > 1 && <Featured store={stores()?.data[1]} />}
 
-        <div class="h3 uppercase mb-12">Latest Products</div>
-
-        <div class="default-grid pb-16">
-          {products()?.data?.map((product) => (
-            <ProductCard
-              product={product}
-              action={
-                <HeartIcon
-                  isFilled={() =>
-                    favorites()?.data?.some(
-                      (favorite) => favorite.storeId === product.id
-                    )
-                  }
-                  onClick={() => onFavClick(product.id)}
-                />
-              }
+        <Stack size="md">
+          <PopularProducts />
+          {productFavorites() && (
+            <LatestProducts
+              onFavClick={onFavProductClick}
+              favorites={productFavorites().data}
             />
-          ))}
-        </div>
+          )}
+        </Stack>
       </Content>
     </Suspense>
   )
