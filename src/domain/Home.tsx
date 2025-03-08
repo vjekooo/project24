@@ -94,12 +94,10 @@ export const Home = () => {
 
         <Stack size="md">
           <PopularProducts />
-          {productFavorites() && (
-            <LatestProducts
-              onFavClick={onFavProductClick}
-              favorites={productFavorites().data}
-            />
-          )}
+          <LatestProducts
+            onFavClick={onFavProductClick}
+            favorites={productFavorites}
+          />
         </Stack>
       </Content>
     </Suspense>

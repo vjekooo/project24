@@ -1,6 +1,6 @@
-import { $fetch } from '../utils/fetch'
-import { FavoriteProduct, FavoriteStore, Product } from '../types'
-import { createResource } from 'solid-js'
+import { $fetch, FetchData } from '../utils/fetch'
+import { FavoriteProduct, Product } from '../types'
+import { createResource, Resource } from 'solid-js'
 import { Stack } from '../ui/Stack'
 import { ProductCard } from '../components/cards/productCard/ProductCard'
 import { HeartIcon } from '../icons/HeartIcon'
@@ -12,7 +12,7 @@ const fetchLatestProducts = async () => {
 }
 
 interface Props {
-  favorites: FavoriteProduct[]
+  favorites: Resource<FetchData<FavoriteProduct[]>>
   onFavClick: (id: string) => void
 }
 
@@ -31,7 +31,7 @@ export const LatestProducts = (props: Props) => {
             action={
               <HeartIcon
                 isFilled={() =>
-                  favorites?.some(
+                  favorites()?.data.some(
                     (favorite) => favorite.productId === product.id
                   )
                 }
