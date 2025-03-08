@@ -18,9 +18,14 @@ import { LatestProducts } from './LatestProducts'
 import { Stack } from '../ui/Stack'
 
 const url = 'store/all'
+const latestUrl = 'store/latest'
 
 const fetchStores = async () => {
   return await $fetch<any, Store[]>(url).get()
+}
+
+const fetchLatestStores = async () => {
+  return await $fetch<any, Store[]>(latestUrl).get()
 }
 
 const toggleStoreFavorite = async (id: string) => {
@@ -49,6 +54,7 @@ const fetchProductFavorites = async () => {
 
 export const Home = () => {
   const [stores] = createResource(fetchStores)
+  const [latestStores] = createResource(fetchLatestStores)
 
   const [storeFavorites, { refetch: refetchStoreFavorites }] =
     createResource(fetchStoreFavorites)
@@ -74,7 +80,7 @@ export const Home = () => {
         <Nav title="Latest Stores" />
 
         <div class="default-grid pb-16">
-          {stores()?.data?.map((store) => (
+          {latestStores()?.data?.map((store) => (
             <StoreCard
               store={store}
               action={
