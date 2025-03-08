@@ -6,26 +6,19 @@ import {
   MessageResponse,
   Store,
 } from '../types'
-import { HeartIcon } from '../icons/HeartIcon'
-import { Nav } from '../layout/Nav'
 import { Content } from '../layout/Content'
-import { StoreCard } from '../components/cards/storeCard/StoreCard'
 import { Featured } from '../layout/Featured'
 import { Loading } from '../layout/Loading'
 import { HomeHero } from '../layout/HomeHero'
 import { PopularProducts } from './PopularProducts'
 import { LatestProducts } from './LatestProducts'
 import { Stack } from '../ui/Stack'
+import { LatestStores } from './LatestStores'
 
 const url = 'store/all'
-const latestUrl = 'store/latest'
 
 const fetchStores = async () => {
   return await $fetch<any, Store[]>(url).get()
-}
-
-const fetchLatestStores = async () => {
-  return await $fetch<any, Store[]>(latestUrl).get()
 }
 
 const toggleStoreFavorite = async (id: string) => {
@@ -54,7 +47,6 @@ const fetchProductFavorites = async () => {
 
 export const Home = () => {
   const [stores] = createResource(fetchStores)
-  const [latestStores] = createResource(fetchLatestStores)
 
   const [storeFavorites, { refetch: refetchStoreFavorites }] =
     createResource(fetchStoreFavorites)
@@ -77,25 +69,7 @@ export const Home = () => {
     <Suspense fallback={<Loading />}>
       {stores()?.data?.length && <HomeHero stores={stores()?.data} />}
       <Content>
-        <Nav title="Latest Stores" />
-
-        <div class="default-grid pb-16">
-          {latestStores()?.data?.map((store) => (
-            <StoreCard
-              store={store}
-              action={
-                <HeartIcon
-                  isFilled={() =>
-                    storeFavorites()?.data?.some(
-                      (favorite) => favorite.storeId === store.id
-                    )
-                  }
-                  onClick={() => onFavStoreClick(store.id)}
-                />
-              }
-            />
-          ))}
-        </div>
+        <LatestStores favorites={storeFavorites} onFavClick={onFavStoreClick} />
         {stores()?.data?.length > 1 && <Featured store={stores()?.data[1]} />}
 
         <Stack size="md">

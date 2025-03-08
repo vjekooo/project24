@@ -1,18 +1,18 @@
 import { Stack } from '../ui/Stack'
 import { HeartIcon } from '../icons/HeartIcon'
-import { $fetch } from '../utils/fetch'
+import { $fetch, FetchData } from '../utils/fetch'
 import { FavoriteStore, Store } from '../types'
-import { createResource } from 'solid-js'
+import { createResource, Resource } from 'solid-js'
 import { StoreCard } from '../components/cards/storeCard/StoreCard'
 
-const url = 'store/all'
+const url = 'store/latest'
 
 const fetchStores = async () => {
   return await $fetch<any, Store[]>(url).get()
 }
 
 interface Props {
-  favorites: FavoriteStore[]
+  favorites: Resource<FetchData<FavoriteStore[]>>
   onFavClick: (id: string) => void
 }
 
@@ -32,7 +32,9 @@ export const LatestStores = (props: Props) => {
             action={
               <HeartIcon
                 isFilled={() =>
-                  favorites?.some((favorite) => favorite.storeId === store.id)
+                  favorites()?.data.some(
+                    (favorite) => favorite.storeId === store.id
+                  )
                 }
                 onClick={() => onFavClick(store.id)}
               />
