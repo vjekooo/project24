@@ -9,7 +9,7 @@ import MultiSelect from './MultiSelect'
 const url = 'store'
 
 interface Props {
-  store: Store
+  store?: Store
   categories: Category[]
   onComplete: () => void
 }

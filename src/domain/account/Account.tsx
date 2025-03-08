@@ -1,8 +1,6 @@
 import { Suspense, createEffect, createResource, createSignal } from 'solid-js'
-import { AddressForm } from '../../components/forms/addressForm/AddressForm'
-import { Category, User } from '../../types'
+import { MessageResponse, User } from '../../types'
 import { $fetch } from '../../utils/fetch'
-import { StoreForm } from '../../components/forms/storeForm/StoreForm'
 import { Content } from '../../layout/Content'
 import { Stack } from '../../ui/Stack'
 import { Modal } from '../../components/modal/Modal'
@@ -10,33 +8,50 @@ import { StoreCard } from '../../components/cards/storeCard/StoreCard'
 import { EditIcon } from '../../icons/EditIcon'
 import { Loading } from '../../layout/Loading'
 import { ProductCard } from '../../components/cards/productCard/ProductCard'
+import { CreateStore } from './CreateStore'
+import { DeleteIcon } from '../../icons/DeleteIcon'
+import { Toast } from '../../lib/Toast'
 
 const userUrl = 'user'
-const categoryUrl = 'category'
 
 async function fetchData() {
   return await $fetch<any, User>(userUrl).get()
 }
 
-async function fetchCategories() {
-  return await $fetch<any, Category[]>(categoryUrl).get()
+const deleteStore = async (id: string) => {
+  const fullUrl = `store/${id}`
+  return await $fetch<{}, MessageResponse>(fullUrl).delete()
 }
 
 export const Account = () => {
+  const { ToastComponent, showToast } = Toast()
+
   const [user, setUser] = createSignal<User | null>(null)
 
-  const [presentAddressForm, setPresentAddressForm] = createSignal(false)
   const [presentStoreForm, setPresentStoreForm] = createSignal(false)
 
-  const [data] = createResource(fetchData)
-
-  const [category] = createResource(fetchCategories)
+  const [data, { refetch }] = createResource(fetchData)
 
   createEffect(() => {
     if (data()) {
       setUser(data().data)
     }
   })
+
+  const onDelete = async (id: string) => {
+    const { data, error } = await deleteStore(id)
+    if (data) {
+      showToast(data.message)
+      refetch()
+    } else {
+      showToast(error.message)
+    }
+  }
+
+  const onComplete = () => {
+    refetch()
+    setPresentStoreForm(false)
+  }
 
   const error = <div>Error loading data...</div>
 
@@ -45,40 +60,12 @@ export const Account = () => {
       <div>Loading...</div>
     ) : (
       <div class="flex flex-col gap-3">
+        <ToastComponent />
         {user()?.firstName && (
           <p>
             Hello {user().firstName} this is your Account page, where you can
             edit your account details
           </p>
-        )}
-        {!user()?.address ? (
-          <div class="flex flex-row gap-3">
-            <p>You have no address on file</p>
-            <div>
-              <button
-                class="btn-primary"
-                onClick={() => setPresentAddressForm(true)}
-              >
-                Add Address
-              </button>
-            </div>
-            <Modal
-              isOpen={presentAddressForm()}
-              onClose={() => setPresentAddressForm(false)}
-            >
-              <AddressForm />
-            </Modal>
-          </div>
-        ) : (
-          <Stack>
-            <h3 class="h3">Address</h3>
-            <Stack horizontal>
-              <span>{user()?.address.street}</span>
-              <span>{user().address.houseNumber}</span>
-            </Stack>
-            <span>{user().address.postalCode}</span>
-            <span>{user().address.city}</span>
-          </Stack>
         )}
         {!user()?.stores?.length ? (
           <div class="flex flex-row gap-3">
@@ -87,16 +74,28 @@ export const Account = () => {
         ) : (
           <Stack>
             <h3 class="h3">Your Store</h3>
-            <div class="w-56">
-              <StoreCard
-                store={user()?.stores[0]}
-                action={
-                  <a href={`/account/store/${user()?.stores[0].id}`}>
-                    <EditIcon />
-                  </a>
-                }
-              />
-            </div>
+            {user()?.stores && (
+              <div class="default-grid">
+                {user()?.stores.map((store) => (
+                  <StoreCard
+                    store={store}
+                    action={
+                      <div class="flex gap-4">
+                        <a href={`/account/store/${store.id}`}>
+                          <EditIcon />
+                        </a>
+                        <div
+                          class="cursor-pointer"
+                          onClick={() => onDelete(store.id)}
+                        >
+                          <DeleteIcon />
+                        </div>
+                      </div>
+                    }
+                  />
+                ))}
+              </div>
+            )}
           </Stack>
         )}
         <div class="mb-8 mt-16">
@@ -127,13 +126,9 @@ export const Account = () => {
         <Modal
           isOpen={presentStoreForm()}
           onClose={() => setPresentStoreForm(false)}
-          title="Add a store"
+          title="Create a store"
         >
-          <StoreForm
-            store={null}
-            categories={category()?.data}
-            onComplete={() => setPresentStoreForm(false)}
-          />
+          <CreateStore onComplete={onComplete} />
         </Modal>
       </div>
     )
