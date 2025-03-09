@@ -10,12 +10,12 @@ interface ModalProps {
 export const Modal = (props: ModalProps) => {
   return (
     <div
-      class={`fixed inset-0 flex items-center justify-center ${
+      class={`fixed inset-0 flex items-center justify-center z-20 ${
         props.isOpen ? 'block' : 'hidden'
       }`}
     >
       <div
-        class="fixed inset-0 bg-black opacity-50"
+        class="fixed inset-0 bg-black opacity-60 z-30"
         onClick={props.onClose}
       ></div>
 
