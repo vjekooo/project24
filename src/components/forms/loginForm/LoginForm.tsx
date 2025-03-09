@@ -1,10 +1,9 @@
 import { useContext } from 'solid-js'
-import { useNavigate } from '@solidjs/router'
 
 import { AppContext } from '../../../index'
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { LoginResponse, MessageResponse } from '../../../types'
+import { MessageResponse } from '../../../types'
 import { loginConfig } from './config'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
 
@@ -21,7 +20,6 @@ interface LoginForm {
 const loginUrl = 'auth/login'
 
 export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
-  const navigate = useNavigate()
   const { state, setState } = useContext(AppContext)
   const { formSubmit, errors, updateFormField } = useForm<LoginForm>({
     config: loginConfig,
@@ -34,7 +32,7 @@ export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
 
     if (data.message) {
       setState({ ...state, isAuthenticated: true })
-      navigate('/')
+      window.location.reload()
       onComplete()
     }
   }
