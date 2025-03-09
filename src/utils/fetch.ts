@@ -1,30 +1,28 @@
 const originalFetch = window.fetch
 
 const TOKEN_EXPIRED = 'Token expired'
-const TOKEN_KEY = 'token'
 
 window.fetch = async (...args) => {
   let [resource, config] = args
+
   const response = await originalFetch(resource, config)
   if (response.status === 401) {
     const responseText = await response.text()
     const message = JSON.parse(responseText).message
-    if (message === TOKEN_EXPIRED && localStorage.getItem(TOKEN_KEY)) {
-      localStorage.removeItem(TOKEN_KEY)
+    if (message === TOKEN_EXPIRED) {
+      window.location.reload()
     }
   }
   return response
 }
 
 const headers = () => {
-  const token = localStorage.getItem(TOKEN_KEY)
-  const authHeader = token ? { Authorization: `Bearer ${token}` } : ''
   return {
+    credentials: 'include' as RequestCredentials,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
-      ...authHeader,
     },
   }
 }

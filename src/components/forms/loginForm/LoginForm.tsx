@@ -4,7 +4,7 @@ import { useNavigate } from '@solidjs/router'
 import { AppContext } from '../../../index'
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { LoginResponse } from '../../../types'
+import { LoginResponse, MessageResponse } from '../../../types'
 import { loginConfig } from './config'
 import { ErrorMessage } from '../../../ui/ErrorMessage'
 
@@ -28,11 +28,12 @@ export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
   })
 
   const handleSubmit = async (_: Event, form: LoginForm) => {
-    const { data } = await $fetch<LoginForm, LoginResponse>(loginUrl).post(form)
+    const { data } = await $fetch<LoginForm, MessageResponse>(loginUrl).post(
+      form
+    )
 
-    if (data?.accessToken) {
-      localStorage.setItem('token', data?.accessToken)
-      setState({ ...state, token: data?.accessToken })
+    if (data.message) {
+      setState({ ...state, isAuthenticated: true })
       navigate('/')
       onComplete()
     }

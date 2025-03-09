@@ -11,7 +11,7 @@ import { AppContext } from '../index'
 import { Stack } from '../ui/Stack'
 import { Logo } from '../icons/Logo'
 import { $fetch } from '../utils/fetch'
-import { User } from '../types'
+import { MessageResponse, User } from '../types'
 import { ThemeSwitcher } from '../components/themeSwitcher/ThemeSwitcher'
 
 const url = 'user'
@@ -22,6 +22,11 @@ const fetchUserInfo = async () => {
   } catch (e) {
     console.log(e)
   }
+}
+
+const logout = async () => {
+  const fullUrl = `auth/logout`
+  return await $fetch<{}, MessageResponse>(fullUrl).get()
 }
 
 export const Header = () => {
@@ -36,13 +41,14 @@ export const Header = () => {
   const { state, setState } = useContext(AppContext)
 
   const logOut = () => {
-    localStorage.removeItem('token')
-    window.location.reload()
+    logout().then(() => {
+      window.location.reload()
+    })
   }
 
   createEffect(() => {
-    if (user()) {
-      setState({ ...state, user: user().data })
+    if (user().data && user().data.email) {
+      setState({ ...state, user: user().data, isAuthenticated: true })
     }
   })
 
@@ -149,7 +155,7 @@ export const Header = () => {
 
           <div class="w-1/3 flex justify-end items-center gap-6">
             <ThemeSwitcher />
-            {state.token ? (
+            {state.isAuthenticated ? (
               <div class="relative inline-block text-left">
                 <div
                   class="relative group"

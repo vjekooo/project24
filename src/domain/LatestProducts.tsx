@@ -12,7 +12,7 @@ const fetchLatestProducts = async () => {
 }
 
 interface Props {
-  favorites: Resource<FetchData<FavoriteProduct[]>>
+  favorites?: Resource<FetchData<FavoriteProduct[]>>
   onFavClick: (id: string) => void
 }
 
@@ -31,7 +31,7 @@ export const LatestProducts = (props: Props) => {
             action={
               <HeartIcon
                 isFilled={() =>
-                  favorites()?.data.some(
+                  favorites()?.data?.some(
                     (favorite) => favorite.productId === product.id
                   )
                 }

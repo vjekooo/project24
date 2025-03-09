@@ -19,11 +19,11 @@ import './index.css'
 
 interface State {
   user: User
-  token: string
+  isAuthenticated: boolean
 }
 
 interface ContextState {
-  state: { user: User; token: string }
+  state: State
   setState: (state: State) => void
 }
 
@@ -40,7 +40,7 @@ const App = (props: Props) => {
       lastName: '',
       email: '',
     },
-    token: localStorage.getItem('token'),
+    isAuthenticated: false,
   })
 
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY

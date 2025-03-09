@@ -24,7 +24,7 @@ export const LatestStores = (props: Props) => {
 
   return (
     <Stack size="md">
-      <h3 class="h3 uppercase">Popular products</h3>
+      <h3 class="h3 uppercase">Latest Stores</h3>
       <div class="default-grid pb-16">
         {stores()?.data?.map((store) => (
           <StoreCard
@@ -32,7 +32,7 @@ export const LatestStores = (props: Props) => {
             action={
               <HeartIcon
                 isFilled={() =>
-                  favorites()?.data.some(
+                  favorites()?.data?.some(
                     (favorite) => favorite.storeId === store.id
                   )
                 }
