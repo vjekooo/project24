@@ -55,7 +55,7 @@ export const HomeHero = (props: Props) => {
         )}
       </For>
 
-      <div class="flex flex-col justify-center items-start p-6 tracking-wide bg-white opacity-60 z-10 relative">
+      <div class="flex flex-col justify-center items-start p-6 tracking-wide bg-white opacity-70 z-10 relative">
         <Stack>
           <h1 class="text-black h1">{currentStore().name}</h1>
           <HeroAction storeId={currentStore().id} />
