@@ -11,7 +11,7 @@ export const Featured = ({ store }: Props) => {
       class="w-full mx-auto flex items-start p-12 md:pt-0 bg-cover bg-right relative mb-52"
       style={`max-width:1600px; height: 32rem; background-image: url('${store?.media[0]?.imageUrl}');`}
     >
-      <div class="flex flex-col justify-center p-6 tracking-wide bg-white opacity-90">
+      <div class="flex flex-col justify-center p-6 tracking-wide bg-white opacity-95">
         <Stack>
           <h1 class="text-black h1">{store.name}</h1>
         </Stack>
