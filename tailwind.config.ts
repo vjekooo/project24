@@ -6,7 +6,7 @@ const config: Config = {
     './src/**/*.{js,ts,jsx,tsx,css,md,mdx,html,json,scss}',
   ],
   presets: [],
-  darkMode: 'media', // or 'class'
+  darkMode: 'class',
   theme: {
     screens: {
       sm: '640px',

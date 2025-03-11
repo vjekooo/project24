@@ -1,18 +1,17 @@
-export interface StoreConfig {
-  label: string
-  name: string
-  type: string
-}
+import { exists } from '../registerForm/validators'
+import { FormConfig } from '../../../lib/form/useForm'
 
-export const storeConfig: StoreConfig[] = [
+export const storeConfig: FormConfig[] = [
   {
     label: 'Name',
     name: 'name',
     type: 'text',
+    validation: [exists],
   },
   {
     label: 'Description',
     name: 'description',
-    type: 'text',
+    type: 'textarea',
+    validation: [exists],
   },
 ]

@@ -1,12 +1,14 @@
-export const eMailValidator = (value: string) => {
+export const eMailValidator = ({ value }) => {
   if (!value) return 'Email is required'
   if (!value.includes('@')) return 'Email is invalid'
   return ''
 }
 
+export const exists = ({ value }): string => (value ? '' : 'Field is required')
+
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
 
-export const passwordValidator = (value: string) => {
+export const passwordValidator = ({ value }): string => {
   if (!value) return 'Password is required'
   if (value.length < 8) return 'Password must be at least 8 characters'
   if (!passwordRegex.test(value))

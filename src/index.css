@@ -5,24 +5,33 @@
 @layer components {
   
   .h1 {
-    @apply text-3xl font-bold;
+    @apply text-6xl font-bold;
   }
   .h2 {
-    @apply text-2xl font-bold;
+    @apply text-4xl font-bold;
   }
   .h3 {
-    @apply text-xl font-bold;
+    @apply text-2xl font-bold;
   }
   .h4 {
-    @apply text-lg font-bold;
+    @apply text-xl font-bold;
   }
   
   .btn-primary {
-    @apply py-2 px-5 bg-black text-white font-light rounded-l shadow-md hover:bg-gray-700;
+    @apply py-2 px-5 bg-black text-white font-light rounded-l shadow-md hover:bg-gray-700 cursor-pointer;
   }
   .btn-primary-inverse {
     @apply py-2 px-5 bg-white text-black font-light rounded-l shadow-md hover:bg-gray-100;
   }
+  
+  button:disabled {
+    background-color: #d6d6d6;
+    color: #9e9e9e;
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  
   .card {
     background-color: theme(colors.white);
     border-radius: theme(borderRadius.md);
@@ -34,5 +43,20 @@
     border-radius: theme(borderRadius.sm);
     border: 1px solid theme(colors.gray.300);
     padding: theme(spacing.2);
+  }
+  
+  .text-area {
+    border-radius: theme(borderRadius.sm);
+    border: 1px solid theme(colors.gray.300);
+    padding: theme(spacing.2);
+    min-height: 200px;
+  }
+  
+  .error-input {
+    @apply border-red-500;
+  }
+  
+  .default-grid {
+    @apply w-full grid gap-6 mb-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4;
   }
 }

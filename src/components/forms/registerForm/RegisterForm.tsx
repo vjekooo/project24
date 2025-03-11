@@ -1,6 +1,8 @@
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { registerConfig, RegisterConfig } from './config'
+import { registerConfig } from './config'
+import { ErrorMessage } from '../../../ui/ErrorMessage'
+import { Stack } from '../../../ui/Stack'
 
 interface Props {
   formSwitcher: (value: string) => void
@@ -13,18 +15,13 @@ interface RegisterForm {
 
 const url = 'auth/register'
 
-const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
-
 export const RegisterForm = ({ formSwitcher }: Props) => {
-  const { form, errors, validate, updateFormField, isFormValid } = useForm<
-    RegisterConfig,
-    RegisterForm
-  >({
-    config: registerConfig,
-  })
+  const { errors, validate, formSubmit, updateFormField, isFormValid } =
+    useForm<RegisterForm>({
+      config: registerConfig,
+    })
 
-  const handleSubmit = async (event: Event) => {
-    event.preventDefault()
+  const handleSubmit = async (_: Event, form: RegisterForm) => {
     await $fetch<RegisterForm, null>(url)
       .post(form)
       .then((data) => {
@@ -35,13 +32,15 @@ export const RegisterForm = ({ formSwitcher }: Props) => {
   return (
     <div class="flex justify-center">
       <div class="flex flex-col gap-2">
-        <form onSubmit={handleSubmit}>
+        {/*@ts-ignore*/}
+        <form use:formSubmit={handleSubmit}>
           <div class="flex flex-col gap-6">
             {registerConfig.map((field) => {
               return (
-                <div class="field-block ">
+                <Stack size="sm">
                   <input
-                    {...validate(field)}
+                    // @ts-ignore
+                    use:validate={field.validation}
                     class="input"
                     type={field.type}
                     placeholder={field.placeholder}
@@ -50,10 +49,10 @@ export const RegisterForm = ({ formSwitcher }: Props) => {
                   {errors[field.name] && (
                     <ErrorMessage error={errors[field.name]} />
                   )}
-                </div>
+                </Stack>
               )
             })}
-            <button class="btn-primary" type="submit" disabled={!isFormValid}>
+            <button class="btn-primary" type="submit" disabled={!isFormValid()}>
               Submit
             </button>
             <div class="flex justify-center">or</div>

@@ -1,14 +1,15 @@
 import { useContext } from 'solid-js'
-import { useNavigate } from '@solidjs/router'
 
 import { AppContext } from '../../../index'
 import { $fetch } from '../../../utils/fetch'
 import { useForm } from '../../../lib/form/useForm'
-import { LoginResponse } from '../../../types'
-import { LoginConfig, loginConfig } from './config'
+import { MessageResponse } from '../../../types'
+import { loginConfig } from './config'
+import { ErrorMessage } from '../../../ui/ErrorMessage'
 
 interface Props {
   formSwitcher: (value: string) => void
+  onComplete: () => void
 }
 
 interface LoginForm {
@@ -18,31 +19,27 @@ interface LoginForm {
 
 const loginUrl = 'auth/login'
 
-const ErrorMessage = ({ error }) => <span class="error-message">{error}</span>
-
-export const LoginForm = ({ formSwitcher }: Props) => {
-  const navigate = useNavigate()
+export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
   const { state, setState } = useContext(AppContext)
-  const { validate, formSubmit, errors, updateFormField, form } = useForm<
-    LoginConfig,
-    LoginForm
-  >({
+  const { formSubmit, errors, updateFormField } = useForm<LoginForm>({
     config: loginConfig,
   })
 
-  const handleSubmit = async (event: Event) => {
-    event.preventDefault()
-    const { data } = await $fetch<LoginForm, LoginResponse>(loginUrl).post(form)
+  const handleSubmit = async (_: Event, form: LoginForm) => {
+    const { data } = await $fetch<LoginForm, MessageResponse>(loginUrl).post(
+      form
+    )
 
-    if (data?.accessToken) {
-      localStorage.setItem('token', data?.accessToken)
-      setState({ ...state, token: data?.accessToken })
-      navigate('/')
+    if (data.message) {
+      setState({ ...state, isAuthenticated: true })
+      window.location.reload()
+      onComplete()
     }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    // @ts-ignore
+    <form use:formSubmit={handleSubmit}>
       <div class="flex flex-col gap-6 mt-5">
         {loginConfig.map((field) => {
           return (
