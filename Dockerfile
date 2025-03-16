@@ -7,7 +7,7 @@ COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile
 
 COPY src/ ./src/
-COPY vite.config.ts tsconfig.json index.html ./
+COPY vite.config.mjs tsconfig.json tailwind.config.ts index.html ./
 
 RUN pnpm build
 FROM nginx:stable-alpine
