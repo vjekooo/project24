@@ -1,8 +1,8 @@
-import { $fetch } from '../../../utils/fetch'
-import { useForm } from '../../../lib/form/useForm'
+import { $fetch } from '~/utils/fetch'
+import { useForm } from '~/lib/form/useForm'
 import { registerConfig } from './config'
-import { ErrorMessage } from '../../../ui/ErrorMessage'
-import { Stack } from '../../../ui/Stack'
+import { ErrorMessage } from '~/ui/ErrorMessage'
+import { Stack } from '~/ui/Stack'
 
 interface Props {
   formSwitcher: (value: string) => void
