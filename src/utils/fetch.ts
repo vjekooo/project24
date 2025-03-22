@@ -1,22 +1,22 @@
-import { getApiDomain } from '../lib/getApiDomain'
+import { getApiDomain } from '~/lib/getApiDomain'
 
-const originalFetch = window.fetch
-
-const TOKEN_EXPIRED = 'Token expired'
-
-window.fetch = async (...args) => {
-  let [resource, config] = args
-
-  const response = await originalFetch(resource, config)
-  if (response.status === 401) {
-    const responseText = await response.text()
-    const message = JSON.parse(responseText).message
-    if (message === TOKEN_EXPIRED) {
-      window.location.reload()
-    }
-  }
-  return response
-}
+// const originalFetch = window.fetch
+//
+// const TOKEN_EXPIRED = 'Token expired'
+//
+// window.fetch = async (...args) => {
+//   let [resource, config] = args
+//
+//   const response = await originalFetch(resource, config)
+//   if (response.status === 401) {
+//     const responseText = await response.text()
+//     const message = JSON.parse(responseText).message
+//     if (message === TOKEN_EXPIRED) {
+//       // window.location.reload()
+//     }
+//   }
+//   return response
+// }
 
 const headers = () => {
   return {

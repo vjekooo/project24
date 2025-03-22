@@ -1,25 +1,14 @@
 import { Suspense, createResource } from 'solid-js'
-import { $fetch } from '../utils/fetch'
-import {
-  FavoriteProduct,
-  FavoriteStore,
-  MessageResponse,
-  Store,
-} from '../types'
-import { Content } from '../layout/Content'
-import { Featured } from '../layout/Featured'
-import { Loading } from '../layout/Loading'
-import { HomeHero } from '../layout/HomeHero'
+import { $fetch } from '~/utils/fetch'
+import { FavoriteProduct, FavoriteStore, MessageResponse, Store } from '~/types'
+import { Content } from '~/layout/Content'
+import { Featured } from '~/layout/Featured'
+import { Loading } from '~/layout/Loading'
+import { HomeHero } from '~/layout/HomeHero'
 import { PopularProducts } from './PopularProducts'
 import { LatestProducts } from './LatestProducts'
-import { Stack } from '../ui/Stack'
+import { Stack } from '~/ui/Stack'
 import { LatestStores } from './LatestStores'
-
-const url = 'store/all'
-
-const fetchStores = async () => {
-  return await $fetch<any, Store[]>(url).get()
-}
 
 const toggleStoreFavorite = async (id: string) => {
   const fullUrl = 'store/toggle-favorite'
@@ -45,9 +34,11 @@ const fetchProductFavorites = async () => {
   return await $fetch<{}, FavoriteProduct[]>(fullUrl).get()
 }
 
-export const Home = () => {
-  const [stores] = createResource(fetchStores)
+interface Props {
+  stores: Store[]
+}
 
+export const Home = (props: Props) => {
   const [storeFavorites, { refetch: refetchStoreFavorites }] =
     createResource(fetchStoreFavorites)
   const [productFavorites, { refetch: refetchProductFavorites }] =
@@ -67,10 +58,10 @@ export const Home = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      {stores()?.data?.length && <HomeHero stores={stores()?.data} />}
+      {props.stores?.length && <HomeHero stores={props.stores} />}
       <Content>
         <LatestStores favorites={storeFavorites} onFavClick={onFavStoreClick} />
-        {stores()?.data?.length > 1 && <Featured store={stores()?.data[1]} />}
+        {props.stores?.length > 1 && <Featured store={props.stores[1]} />}
 
         <Stack size="md">
           <PopularProducts />

@@ -1,11 +1,9 @@
-import { useContext } from 'solid-js'
-
-import { AppContext } from '../../../index'
-import { $fetch } from '../../../utils/fetch'
-import { useForm } from '../../../lib/form/useForm'
-import { MessageResponse } from '../../../types'
+import { $fetch } from '~/utils/fetch'
+import { useForm } from '~/lib/form/useForm'
+import { MessageResponse } from '~/types'
 import { loginConfig } from './config'
-import { ErrorMessage } from '../../../ui/ErrorMessage'
+import { ErrorMessage } from '~/ui/ErrorMessage'
+import { useAppState } from '~/context'
 
 interface Props {
   formSwitcher: (value: string) => void
@@ -20,7 +18,7 @@ interface LoginForm {
 const loginUrl = 'auth/login'
 
 export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
-  const { state, setState } = useContext(AppContext)
+  const [state, { updateIsAuthenticated }] = useAppState()
   const { formSubmit, errors, updateFormField } = useForm<LoginForm>({
     config: loginConfig,
   })
@@ -30,8 +28,8 @@ export const LoginForm = ({ formSwitcher, onComplete }: Props) => {
       form
     )
 
-    if (data.message) {
-      setState({ ...state, isAuthenticated: true })
+    if (data?.message) {
+      updateIsAuthenticated(true)
       window.location.reload()
       onComplete()
     }

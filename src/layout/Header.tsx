@@ -1,18 +1,13 @@
-import {
-  createEffect,
-  createResource,
-  createSignal,
-  useContext,
-} from 'solid-js'
-import { Modal } from '../components/modal/Modal'
-import { LoginForm } from '../components/forms/loginForm/LoginForm'
-import { RegisterForm } from '../components/forms/registerForm/RegisterForm'
-import { AppContext } from '../index'
-import { Stack } from '../ui/Stack'
-import { Logo } from '../icons/Logo'
-import { $fetch } from '../utils/fetch'
-import { MessageResponse, User } from '../types'
-import { ThemeSwitcher } from '../components/themeSwitcher/ThemeSwitcher'
+import { createEffect, createResource, createSignal } from 'solid-js'
+import { Modal } from '~/components/modal/Modal'
+import { LoginForm } from '~/components/forms/loginForm/LoginForm'
+import { RegisterForm } from '~/components/forms/registerForm/RegisterForm'
+import { Stack } from '~/ui/Stack'
+import { Logo } from '~/icons/Logo'
+import { $fetch } from '~/utils/fetch'
+import { MessageResponse, User } from '~/types'
+import { ThemeSwitcher } from '~/components/themeSwitcher/ThemeSwitcher'
+import { useAppState } from '~/context'
 
 const url = 'user'
 
@@ -38,7 +33,7 @@ export const Header = () => {
   const [presentMenu, setPresentMenu] = createSignal(false)
   const [presentUserMenu, setPresentUserMenu] = createSignal(false)
 
-  const { state, setState } = useContext(AppContext)
+  const [state, { updateUser, updateIsAuthenticated }] = useAppState()
 
   const logOut = () => {
     logout().then(() => {
@@ -47,8 +42,9 @@ export const Header = () => {
   }
 
   createEffect(() => {
-    if (user().data && user().data.email) {
-      setState({ ...state, user: user().data, isAuthenticated: true })
+    if (user()?.data && user()?.data?.email) {
+      updateUser(user()?.data as User)
+      updateIsAuthenticated(true)
     }
   })
 
