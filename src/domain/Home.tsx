@@ -1,4 +1,5 @@
 import { Suspense, createResource } from 'solid-js'
+
 import { $fetch } from '~/utils/fetch'
 import { FavoriteProduct, FavoriteStore, MessageResponse, Store } from '~/types'
 import { Content } from '~/layout/Content'

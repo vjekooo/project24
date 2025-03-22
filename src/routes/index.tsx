@@ -1,5 +1,6 @@
 import { Title } from '@solidjs/meta'
 import { createAsync, query } from '@solidjs/router'
+
 import { HomePage } from '~/pages/HomePage'
 import { Store } from '~/types'
 import { getApiDomain } from '~/lib/getApiDomain'

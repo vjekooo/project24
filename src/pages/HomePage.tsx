@@ -1,4 +1,5 @@
 import { ErrorBoundary } from 'solid-js'
+
 import { Home } from '~/domain/Home'
 import { Error } from '~/layout/Error'
 import { Store } from '~/types'
