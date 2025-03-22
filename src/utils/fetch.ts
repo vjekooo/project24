@@ -1,3 +1,5 @@
+import { getApiDomain } from '../lib/getApiDomain'
+
 const originalFetch = window.fetch
 
 const TOKEN_EXPIRED = 'Token expired'
@@ -66,7 +68,7 @@ const onResponse = async (res: Response) => {
 
 // @ts-ignore
 export const $fetch: Fetch = (url: string) => {
-  const apiDomain = import.meta.env.VITE_API_DOMAIN
+  const apiDomain = getApiDomain()
   const completeUrl = apiDomain + url
   return {
     get: async () => {

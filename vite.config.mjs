@@ -11,5 +11,15 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    rollupOptions: {
+      output: {
+        format: 'es',
+        manualChunks(id) {
+          if (/envVariables.ts/.test(id)) {
+            return 'envVariables'
+          }
+        },
+      },
+    },
   },
 })

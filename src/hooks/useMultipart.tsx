@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js'
+import { getApiDomain } from '../lib/getApiDomain'
 
 export enum RequestMethod {
   'POST' = 'POST',
@@ -22,7 +23,7 @@ export const useMultipart = async (
     ...authHeader,
   }
 
-  const apiDomain = import.meta.env.VITE_API_DOMAIN
+  const apiDomain = getApiDomain()
   const completeUrl = apiDomain + url
 
   try {
