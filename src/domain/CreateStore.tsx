@@ -1,8 +1,9 @@
 import { createResource, createSignal } from 'solid-js'
-import { StoreForm } from '../../components/forms/storeForm/StoreForm'
-import { AddressForm } from '../../components/forms/addressForm/AddressForm'
-import { $fetch } from '../../utils/fetch'
-import { Category } from '../../types'
+
+import { StoreForm } from '~/components/forms/storeForm/StoreForm'
+import { AddressForm } from '~/components/forms/addressForm/AddressForm'
+import { $fetch } from '~/utils/fetch'
+import { Category } from '~/types'
 
 const categoryUrl = 'category'
 

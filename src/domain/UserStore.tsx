@@ -1,29 +1,23 @@
 import { Suspense, createResource, createSignal } from 'solid-js'
-import { useParams } from '@solidjs/router'
-import { $fetch, FetchData } from '../../utils/fetch'
-import { Hero } from '../../layout/Hero'
-import { Category, MessageResponse, Product, Store } from '../../types'
-import { ProductForm } from '../../components/forms/productForm/ProductForm'
-import { Modal } from '../../components/modal/Modal'
-import { ProductCard } from '../../components/cards/productCard/ProductCard'
-import { Stack } from '../../ui/Stack'
-import { EditIcon } from '../../icons/EditIcon'
-import { DeleteIcon } from '../../icons/DeleteIcon'
-import { Content } from '../../layout/Content'
-import { Nav } from '../../layout/Nav'
-import { About } from '../../layout/About'
-import { Loading } from '../../layout/Loading'
-import { Toast } from '../../lib/Toast'
-import { StoreForm } from '../../components/forms/storeForm/StoreForm'
 
-const storeUrl = 'store'
+import { $fetch } from '~/utils/fetch'
+import { Hero } from '~/layout/Hero'
+import { Category, MessageResponse, Product, Store } from '~/types'
+import { ProductForm } from '~/components/forms/productForm/ProductForm'
+import { Modal } from '~/components/modal/Modal'
+import { ProductCard } from '~/components/cards/productCard/ProductCard'
+import { Stack } from '~/ui/Stack'
+import { EditIcon } from '~/icons/EditIcon'
+import { DeleteIcon } from '~/icons/DeleteIcon'
+import { Content } from '~/layout/Content'
+import { Nav } from '~/layout/Nav'
+import { About } from '~/layout/About'
+import { Loading } from '~/layout/Loading'
+import { Toast } from '~/lib/Toast'
+import { StoreForm } from '~/components/forms/storeForm/StoreForm'
+
 const productUrl = 'product'
 const categoryUrl = 'category'
-
-const fetchStore = async (id: string) => {
-  const fullUrl = `${storeUrl}/${id}`
-  return await $fetch<{}, Store>(fullUrl).get()
-}
 
 const fetchProducts = async (id: string) => {
   return await $fetch<{}, Product[]>(`${productUrl}/store/${id}`).get()
@@ -33,10 +27,13 @@ async function fetchCategories() {
   return await $fetch<any, Category[]>(categoryUrl).get()
 }
 
-export const UserStore = () => {
-  const params = useParams()
-  if (!params.id) {
-    throw new Error('No id provided')
+interface Props {
+  store?: Store
+}
+
+export const UserStore = (props: Props) => {
+  if (!props.store) {
+    return <Content>No Data</Content>
   }
 
   const [productToEdit, setProductToEdit] = createSignal<Product | null>(null)
@@ -45,9 +42,9 @@ export const UserStore = () => {
 
   const { ToastComponent, showToast } = Toast()
 
-  const [store] = createResource(() => fetchStore(params.id))
-
-  const [products, { refetch }] = createResource(() => fetchProducts(params.id))
+  const [products, { refetch }] = createResource(() =>
+    fetchProducts(props.store.id)
+  )
 
   const [presentProductForm, setPresentProductForm] = createSignal(false)
   const [presentStoreForm, setPresentStoreForm] = createSignal(false)
@@ -78,11 +75,11 @@ export const UserStore = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      {store()?.data.name && (
+      {props.store.media && (
         <div class="relative">
           <Hero
-            name={store().data.name}
-            image={store().data.media[0]?.imageUrl}
+            name={props.store.name}
+            image={props.store.media[0]?.imageUrl}
           />
         </div>
       )}
@@ -103,17 +100,17 @@ export const UserStore = () => {
         <ToastComponent />
         <Nav title="Your products" />
 
-        {store() && (
+        {props.store && (
           <Modal
             isOpen={presentStoreForm()}
             onClose={() => {
               setPresentStoreForm(false)
               document.body.style.overflow = 'auto'
             }}
-            title={store()?.data.id ? 'Edit store' : 'Create store'}
+            title={props.store.id ? 'Edit store' : 'Create store'}
           >
             <StoreForm
-              store={store()?.data}
+              store={props.store}
               categories={category()?.data}
               onComplete={onModalClose}
             />
@@ -128,9 +125,9 @@ export const UserStore = () => {
           }}
           title={productToEdit() ? 'Edit product' : 'Add a product'}
         >
-          {store() && (
+          {props.store && (
             <ProductForm
-              store={store()?.data}
+              store={props.store}
               product={productToEdit}
               categories={category()?.data}
               onClose={onModalClose}
@@ -174,8 +171,8 @@ export const UserStore = () => {
           </button>
         </div>
 
-        {store()?.data.description && (
-          <About description={store()?.data.description} />
+        {props.store?.description && (
+          <About description={props.store.description} address={null} />
         )}
       </Content>
     </Suspense>

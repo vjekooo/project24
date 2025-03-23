@@ -7,7 +7,6 @@ import { getApiDomain } from '~/lib/getApiDomain'
 import { headers } from '~/utils/headers'
 import { Content } from '~/layout/Content'
 import { Error } from '~/layout/Error'
-import { Categories } from '~/domain/Categories'
 import { Search } from '~/domain/Search'
 
 const url = 'search?'
