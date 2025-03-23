@@ -4,7 +4,7 @@ import { Error } from '~/layout/Error'
 import { Store } from '~/types'
 
 interface Props {
-  store?: Store
+  store: Store
 }
 
 export const SingleStorePage = (props: Props) => {

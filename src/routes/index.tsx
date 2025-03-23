@@ -4,17 +4,7 @@ import { createAsync, query } from '@solidjs/router'
 import { HomePage } from '~/pages/HomePage'
 import { Store } from '~/types'
 import { getApiDomain } from '~/lib/getApiDomain'
-
-const headers = () => {
-  return {
-    credentials: 'include' as RequestCredentials,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-  }
-}
+import { headers } from '~/utils/headers'
 
 const url = 'store/all'
 

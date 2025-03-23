@@ -4,17 +4,7 @@ import { createAsync, query, useParams } from '@solidjs/router'
 import { Store } from '~/types'
 import { getApiDomain } from '~/lib/getApiDomain'
 import { SingleStorePage } from '~/pages/StorePage'
-
-const headers = () => {
-  return {
-    credentials: 'include' as RequestCredentials,
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
-  }
-}
+import { headers } from '~/utils/headers'
 
 const url = 'store/'
 
@@ -34,12 +24,14 @@ const getStore = query(async (id: string) => {
 
 export default function StorePage() {
   const params = useParams()
-  const store = createAsync<Response>(() => getStore(params.id as string))
+  const response = createAsync<Response>(() => getStore(params.id as string))
+
+  const store = response()?.data
 
   return (
     <main>
       <Title>Local Link - Store Page</Title>
-      {store()?.data && <SingleStorePage store={store()?.data} />}
+      {store && <SingleStorePage store={store} />}
     </main>
   )
 }
