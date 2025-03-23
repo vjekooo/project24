@@ -1,9 +1,9 @@
-import { JSX, Show } from 'solid-js'
+import { JSX } from 'solid-js'
 import { Stack } from '~/ui/Stack'
 
 interface Props {
   description: string
-  address?: JSX.Element
+  address: JSX.Element
 }
 
 export const About = (props: Props) => {
@@ -14,9 +14,7 @@ export const About = (props: Props) => {
           About
         </span>
         <p>{props.description}</p>
-        <Show when={props.address} fallback={''}>
-          {props.address}
-        </Show>
+        {props.address}
       </Stack>
     </div>
   )
