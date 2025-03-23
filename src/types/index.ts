@@ -98,7 +98,7 @@ export interface Option {
   label: string
 }
 
-export interface SearchResponse {
+export interface Search {
   products: Product[]
   stores: Store[]
 }
