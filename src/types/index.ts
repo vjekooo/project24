@@ -35,7 +35,7 @@ export interface Store {
   userId: string
   media?: Media[]
   products?: Product[]
-  address?: Address
+  address: Address
   categories: Category[]
 }
 

@@ -1,5 +1,5 @@
 import { JSX, Show } from 'solid-js'
-import { Stack } from '../ui/Stack'
+import { Stack } from '~/ui/Stack'
 
 interface Props {
   description: string
