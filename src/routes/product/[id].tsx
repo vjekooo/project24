@@ -2,7 +2,7 @@ import { Title } from '@solidjs/meta'
 import { createAsync, query, useParams } from '@solidjs/router'
 import { createSignal, createEffect, ErrorBoundary, Suspense } from 'solid-js'
 
-import { Product as ProductType } from '~/types'
+import { Product } from '~/types'
 import { getApiDomain } from '~/lib/getApiDomain'
 import { headers } from '~/utils/headers'
 import { Content } from '~/layout/Content'
@@ -12,7 +12,7 @@ import { Error } from '~/layout/Error'
 const url = 'product/'
 
 interface Response {
-  data?: ProductType
+  data?: Product
   error?: number
 }
 
@@ -22,7 +22,7 @@ const getProduct = query(async (id: string) => {
   if (!response.ok) {
     return { error: response.status, data: undefined }
   }
-  return { data: (await response.json()) as ProductType, error: undefined }
+  return { data: (await response.json()) as Product, error: undefined }
 }, 'product')
 
 export default function ProductPage() {

@@ -1,10 +1,10 @@
 import { Title } from '@solidjs/meta'
 import { createAsync, query } from '@solidjs/router'
 
-import { HomePage } from '~/pages/HomePage'
 import { Store } from '~/types'
 import { getApiDomain } from '~/lib/getApiDomain'
 import { headers } from '~/utils/headers'
+import { Home } from '~/domain/Home'
 
 const url = 'store/all'
 
@@ -24,7 +24,7 @@ export default function Page() {
   return (
     <main>
       <Title>Local Link - Home Page</Title>
-      <HomePage stores={stores() || []} />
+      <Home stores={stores() || []} />
     </main>
   )
 }

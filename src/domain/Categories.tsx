@@ -1,24 +1,26 @@
-import { Show, createResource } from 'solid-js'
-import { Content } from '../layout/Content'
-import { $fetch } from '../utils/fetch'
-import { Category } from '../types'
-import { Stack } from '../ui/Stack'
-import { A } from '@solidjs/router'
+import { Show } from 'solid-js'
 
-const fetchData = async () => {
-  return await $fetch<{}, Category[]>('category').get()
+import { Content } from '~/layout/Content'
+import { Stack } from '~/ui/Stack'
+import { A } from '@solidjs/router'
+import { Category } from '~/types'
+
+interface Props {
+  categories?: Category[]
 }
 
-export const CategoryPage = () => {
-  const [categories] = createResource(fetchData)
+export const Categories = (props: Props) => {
+  if (!props.categories) {
+    return null
+  }
 
   return (
     <Content>
       <Stack size="xl">
         <h1>Categories</h1>
-        <Show when={categories()?.data} fallback={<div>Loading...</div>}>
+        <Show when={props.categories.length} fallback={''}>
           <div class="default-grid">
-            {categories()?.data.map((category) => {
+            {props.categories.map((category) => {
               const encodedCategory = encodeURIComponent(category.name)
               return (
                 <Stack>

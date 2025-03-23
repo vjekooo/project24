@@ -1,11 +1,11 @@
 import { useSearchParams } from '@solidjs/router'
 import { createEffect, createSignal } from 'solid-js'
-import { Content } from '../layout/Content'
-import { $fetch } from '../utils/fetch'
-import { Stack } from '../ui/Stack'
-import { SearchResponse } from '../types'
-import { StoreCard } from '../components/cards/storeCard/StoreCard'
-import { ProductCard } from '../components/cards/productCard/ProductCard'
+import { Content } from '~/layout/Content'
+import { $fetch } from '~/utils/fetch'
+import { Stack } from '~/ui/Stack'
+import { SearchResponse } from '~/types'
+import { StoreCard } from '~/components/cards/storeCard/StoreCard'
+import { ProductCard } from '~/components/cards/productCard/ProductCard'
 
 const fetchData = async (query: Partial<URLSearchParams>) => {
   const queryString = new URLSearchParams(query as URLSearchParams).toString()
