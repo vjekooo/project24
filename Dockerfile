@@ -1,8 +1,5 @@
 FROM node:21-alpine as build
 
-ARG API_DOMAIN
-ENV API_DOMAIN=$API_DOMAIN
-
 WORKDIR /app
 
 RUN npm install -g pnpm
