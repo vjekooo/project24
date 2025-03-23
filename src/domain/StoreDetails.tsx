@@ -1,8 +1,8 @@
 import { Suspense, createResource } from 'solid-js'
+
 import { $fetch, FetchData } from '~/utils/fetch'
 import { Hero } from '~/layout/Hero'
-import { FavoriteProduct, MessageResponse, Store as StoreType } from '../types'
-import { useParams } from '@solidjs/router'
+import { FavoriteProduct, MessageResponse, Store } from '~/types'
 import { HeartIcon } from '~/icons/HeartIcon'
 import { ProductCard } from '~/components/cards/productCard/ProductCard'
 import { Content } from '~/layout/Content'
@@ -46,20 +46,18 @@ const fetchFavorites = async () => {
 }
 
 const fetchRelatedStores = async (id: string) => {
-  return await $fetch<{}, StoreType[]>(`${url}/${id}/related`).get()
+  return await $fetch<{}, Store[]>(`${url}/${id}/related`).get()
 }
 
 interface Props {
-  store?: StoreType
+  store: Store
 }
 
-export const SingleStore = (props: Props) => {
-  const params = useParams()
-  if (!params.id) {
-    throw new Error('No store id provided')
-  }
-
-  const [relatedStores] = createResource(() => params.id, fetchRelatedStores)
+export const StoreDetails = (props: Props) => {
+  const [relatedStores] = createResource(
+    () => props.store.id,
+    fetchRelatedStores
+  )
 
   const [favorites, { refetch: refetchFavorites }] =
     createResource<FetchData<FavoriteProduct[]>>(fetchFavorites)
@@ -70,41 +68,35 @@ export const SingleStore = (props: Props) => {
     })
   }
 
-  const store = props.store
-
-  if (!store) {
-    return <>No Store Found</>
-  }
-
   return (
     <Suspense fallback={<Loading />}>
-      {store.media && (
-        <Hero name={store.name} image={store.media[0]?.imageUrl} />
+      {props.store.media && (
+        <Hero name={props.store.name} image={props.store.media[0]?.imageUrl} />
       )}
       <Content>
         <div class="w-full flex mb-6 flex-wrap sm:flex-nowrap gap-6">
           <div class="w-1/2">
-            {store?.address && (
-              <Map address={addressToString(store?.address)} />
+            {props.store.address && (
+              <Map address={addressToString(props.store.address)} />
             )}
           </div>
           <div class="w-1/2 bg-gray-50">
             <About
-              description={store.description}
-              address={<Address address={store.address} />}
+              description={props.store.description}
+              address={<Address address={props.store.address} />}
             />
           </div>
         </div>
 
         <Nav title="Latest Products" />
-        {!store?.products?.length && (
+        {!props.store?.products?.length && (
           <div class="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
             This store has no products
           </div>
         )}
 
         <div class="default-grid">
-          {store?.products?.map((product) => {
+          {props.store?.products?.map((product) => {
             const isFavorite = favorites()?.data?.some(
               (favorite) => favorite.productId === product.id
             ) as boolean

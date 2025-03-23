@@ -69,7 +69,6 @@ const onResponse = async (res: Response) => {
 // @ts-ignore
 export const $fetch: Fetch = (url: string) => {
   const apiDomain = getApiDomain()
-  console.log(apiDomain)
   const completeUrl = apiDomain + url
   return {
     get: async () => {

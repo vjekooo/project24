@@ -1,35 +1,31 @@
 import { Title } from '@solidjs/meta'
-import { createAsync, query, RouteDefinition, useParams } from '@solidjs/router'
-import { createEffect, createSignal, ErrorBoundary, Suspense } from 'solid-js'
+import { createAsync, query, useParams } from '@solidjs/router'
+import { createSignal, createEffect, ErrorBoundary, Suspense } from 'solid-js'
 
-import { Store } from '~/types'
+import { Product as ProductType } from '~/types'
 import { getApiDomain } from '~/lib/getApiDomain'
 import { headers } from '~/utils/headers'
-import { StoreDetails } from '~/domain/StoreDetails'
 import { Content } from '~/layout/Content'
+import { ProductDetails } from '~/domain/ProductDetails'
 import { Error } from '~/layout/Error'
 
-const url = 'store/'
+const url = 'product/'
 
 interface Response {
-  data?: Store
+  data?: ProductType
   error?: number
 }
 
-const getStore = query(async (id: string) => {
+const getProduct = query(async (id: string) => {
   const fullUrl = getApiDomain() + url + id
   const response = await fetch(fullUrl, headers())
   if (!response.ok) {
     return { error: response.status, data: undefined }
   }
-  return { data: (await response.json()) as Store, error: undefined }
-}, 'store')
+  return { data: (await response.json()) as ProductType, error: undefined }
+}, 'product')
 
-export const route = {
-  preload: ({ params }) => getStore(params.id),
-} satisfies RouteDefinition
-
-export default function StorePage() {
+export default function ProductPage() {
   const params = useParams()
   const [currentId, setCurrentId] = createSignal(params.id as string)
 
@@ -39,15 +35,16 @@ export default function StorePage() {
     }
   })
 
-  const response = createAsync<Response>(() => getStore(currentId()))
-  const store = () => response()?.data
+  const response = createAsync<Response>(() => getProduct(currentId()))
+
+  const product = () => response()?.data
 
   return (
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback="Loading...">
         <main>
-          <Title>Local Link - Store Page</Title>
-          {store() && <StoreDetails store={store() as Store} />}
+          <Title>Local Link - Product Page</Title>
+          {product() && <ProductDetails product={product()} />}
           <Content>
             {response()?.error && <div>Error: {response()?.error}</div>}
           </Content>
