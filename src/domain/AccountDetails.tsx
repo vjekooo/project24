@@ -1,4 +1,5 @@
 import { Suspense, createSignal } from 'solid-js'
+
 import { MessageResponse, User } from '~/types'
 import { $fetch } from '~/utils/fetch'
 import { Content } from '~/layout/Content'

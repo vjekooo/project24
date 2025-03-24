@@ -36,7 +36,7 @@ export const UserStore = (props: Props) => {
     return <Content>No Data</Content>
   }
 
-  const [productToEdit, setProductToEdit] = createSignal<Product | null>(null)
+  const [productToEdit, setProductToEdit] = createSignal<Product>({} as Product)
 
   const [category] = createResource(fetchCategories)
 
@@ -55,7 +55,10 @@ export const UserStore = (props: Props) => {
   }
 
   const onEdit = (id: string) => {
-    setProductToEdit(products().data.find((product) => product.id === id))
+    const product = products()?.data?.find((product) => product.id === id)
+    if (product) {
+      setProductToEdit(product)
+    }
     setPresentProductForm(true)
     document.body.style.overflow = 'hidden'
   }
@@ -111,7 +114,7 @@ export const UserStore = (props: Props) => {
           >
             <StoreForm
               store={props.store}
-              categories={category()?.data}
+              categories={category()?.data || []}
               onComplete={onModalClose}
             />
           </Modal>
@@ -129,7 +132,7 @@ export const UserStore = (props: Props) => {
             <ProductForm
               store={props.store}
               product={productToEdit}
-              categories={category()?.data}
+              categories={category()?.data || []}
               onClose={onModalClose}
             />
           )}

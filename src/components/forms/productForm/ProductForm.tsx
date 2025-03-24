@@ -1,16 +1,10 @@
-import {
-  Category,
-  Option,
-  Product,
-  ProductRequest,
-  Store,
-} from '../../../types'
-import { productConfig as config } from './config'
-import { Stack } from '../../../ui/Stack'
 import { Accessor, For, createEffect, createSignal } from 'solid-js'
-import { ErrorMessage } from '../../../ui/ErrorMessage'
-import { Toast } from '../../../lib/Toast'
-import { RequestMethod, useMultipart } from '../../../hooks/useMultipart'
+
+import { Category, Option, Product, ProductRequest, Store } from '~/types'
+import { productConfig as config } from './config'
+import { Stack } from '~/ui/Stack'
+import { Toast } from '~/lib/Toast'
+import { RequestMethod, useMultipart } from '~/hooks/useMultipart'
 import MultiSelect from '../storeForm/MultiSelect'
 
 const url = 'product'
@@ -50,18 +44,18 @@ export const ProductForm = (props: Props) => {
   })
 
   createEffect(() => {
-    if (product()) {
+    if (product && product()) {
       setFormState({
         name: product()?.name || '',
         description: product()?.description || '',
         price: product()?.price || 0,
-        existingImages: product()?.media.map((media) => media.imageUrl) || [],
+        existingImages: product()?.media?.map((media) => media.imageUrl) || [],
         category: product()?.categories
           ? [...product()?.categories.map((category) => category.id)]
           : [],
       })
     }
-  }, [product()?.id])
+  }, [product && product()?.id])
 
   const [newImages, setNewImages] = createSignal<File[]>([])
 
