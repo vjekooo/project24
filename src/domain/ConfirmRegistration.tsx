@@ -1,8 +1,9 @@
-import { $fetch } from '../utils/fetch'
 import { useLocation, useNavigate } from '@solidjs/router'
-import { Content } from '../layout/Content'
 
-export const ConfirmRegistration = () => {
+import { $fetch } from '~/utils/fetch'
+import { Content } from '~/layout/Content'
+
+export default function ConfirmRegistration() {
   const location = useLocation()
   const navigate = useNavigate()
 
